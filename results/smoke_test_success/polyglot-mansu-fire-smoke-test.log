@@ -1,0 +1,47 @@
+[{"stream_name":"stdout","time":8.830863462,"data":"======================================================================\n"}
+,{"stream_name":"stdout","time":8.830932325,"data":"=== [POLYGLOT-MANSU] STAGE 1: GPU INFERENCE SMOKE TEST ===\n"}
+,{"stream_name":"stdout","time":8.830937352,"data":"======================================================================\n"}
+,{"stream_name":"stdout","time":8.831360869,"data":"\n"}
+,{"stream_name":"stdout","time":8.831370617,"data":"[Step 1/5] Checking GPU Accelerator Environment...\n"}
+,{"stream_name":"stdout","time":9.122547472,"data":"  ✓ GPU Detected: Tesla T4 (Total Devices: 2)\n"}
+,{"stream_name":"stdout","time":9.122583929,"data":"  ✓ Device 0 Total VRAM: 14.56 GB\n"}
+,{"stream_name":"stdout","time":9.122587666,"data":"\n"}
+,{"stream_name":"stdout","time":9.122590194,"data":"[Step 2/5] Configuring Hugging Face Authentication...\n"}
+,{"stream_name":"stdout","time":9.122592828,"data":"  ✓ HF Token configured (Token value is kept hidden).\n"}
+,{"stream_name":"stdout","time":9.122596508,"data":"\n"}
+,{"stream_name":"stdout","time":9.122612004,"data":"[Step 3/5] Verifying Hugging Face Account \u0026 Gated Model Access...\n"}
+,{"stream_name":"stdout","time":10.25972499,"data":"  ✓ Authenticated as Hugging Face user: Ravikishore710\n"}
+,{"stream_name":"stdout","time":10.259784405,"data":"  -\u003e Checking access permission for CohereLabs/tiny-aya-fire...\n"}
+,{"stream_name":"stdout","time":10.313311651,"data":"  ✓ Access confirmed: You have accepted Cohere's terms for this model.\n"}
+,{"stream_name":"stdout","time":10.313335238,"data":"\n"}
+,{"stream_name":"stdout","time":10.313349661,"data":"[Step 4/5] Loading Tokenizer \u0026 Model Weights into GPU (BF16/FP16)...\n"}
+,{"stream_name":"stdout","time":32.140788131,"data":"  -\u003e Downloading/Loading Tokenizer...\n"}
+,{"stream_name":"stdout","time":36.510764626,"data":"  -\u003e Loading Model weights in torch.bfloat16 with device_map='auto'...\n"}
+,{"stream_name":"stderr","time":36.619248931,"data":"[transformers] `torch_dtype` is deprecated! Use `dtype` instead!\n"}
+,{"stream_name":"stderr","time":73.730124164,"data":"\rFetching 2 files:   0%|          | 0/2 [00:00\u003c?, ?it/s]\rFetching 2 files:  50%|█████     | 1/2 [00:15\u003c00:15, 15.19s/it]\rFetching 2 files: 100%|██████████| 2/2 [00:35\u003c00:00, 17.93s/it]\rFetching 2 files: 100%|██████████| 2/2 [00:35\u003c00:00, 17.52s/it]\n"}
+,{"stream_name":"stderr","time":75.897535492,"data":"\rLoading weights:   0%|          | 0/290 [00:00\u003c?, ?it/s]\rLoading weights:   0%|          | 1/290 [00:00\u003c01:21,  3.56it/s]\rLoading weights:   8%|▊         | 23/290 [00:00\u003c00:03, 76.19it/s]\rLoading weights:  14%|█▍        | 42/290 [00:00\u003c00:02, 110.98it/s]\rLoading weights:  23%|██▎       | 66/290 [00:00\u003c00:01, 151.23it/s]\rLoading weights:  29%|██▉       | 85/290 [00:00\u003c00:01, 154.87it/s]\rLoading weights:  37%|███▋      | 108/290 [00:00\u003c00:01, 171.72it/s]\rLoading weights:  44%|████▍     | 129/290 [00:00\u003c00:00, 182.68it/s]\rLoading weights:  51%|█████▏    | 149/290 [00:01\u003c00:00, 176.14it/s]\rLoading weights:  59%|█████▉    | 172/290 [00:01\u003c00:00, 187.50it/s]\rLoading weights:  67%|██████▋   | 195/290 [00:01\u003c00:00, 193.30it/s]\rLoading weights:  74%|███████▍  | 215/290 [00:01\u003c00:00, 190.60it/s]\rLoading weights:  81%|████████▏ | 236/290 [00:01\u003c00:00, 191.22it/s]\rLoading weights:  89%|████████▉ | 259/290 [00:01\u003c00:00, 196.10it/s]\rLoading weights:  96%|█████████▌| 279/290 [00:01\u003c00:00, 192.45it/s]\rLoading weights: 100%|██████████| 290/290 [00:01\u003c00:00, 166.81it/s]\n"}
+,{"stream_name":"stdout","time":76.241315432,"data":"  ✓ Model successfully loaded onto GPU in 39.7 seconds.\n"}
+,{"stream_name":"stdout","time":76.24180947,"data":"  ✓ GPU VRAM Usage after load: 4.20 GB allocated (4.20 GB reserved)\n"}
+,{"stream_name":"stdout","time":76.241832315,"data":"\n"}
+,{"stream_name":"stdout","time":76.241837218,"data":"[Step 5/5] Running Live Test Inference...\n"}
+,{"stream_name":"stdout","time":76.241841754,"data":"  -\u003e Prompt: \"Hello, introduce yourself briefly in one sentence.\"\n"}
+,{"stream_name":"stdout","time":76.251590858,"data":"  -\u003e Input token count: 10\n"}
+,{"stream_name":"stdout","time":81.398061468,"data":"\n"}
+,{"stream_name":"stdout","time":81.398095731,"data":"----------------------------------------------------------------------\n"}
+,{"stream_name":"stdout","time":81.398100984,"data":"✨ GENERATED RESPONSE:\n"}
+,{"stream_name":"stdout","time":81.398106339,"data":"Hello! I'm a friendly AI assistant here to help answer your questions. How can I assist you today?  (Hello! Je suis un assistant IA amical ici pour vous aider à répondre à\n"}
+,{"stream_name":"stdout","time":81.398118131,"data":"----------------------------------------------------------------------\n"}
+,{"stream_name":"stdout","time":81.398121156,"data":"  ✓ Generation finished in 5.14 seconds.\n"}
+,{"stream_name":"stdout","time":81.398449543,"data":"\n"}
+,{"stream_name":"stdout","time":81.398505271,"data":"✓ Execution receipt saved to: /kaggle/working/smoke_test_receipt.json\n"}
+,{"stream_name":"stdout","time":81.398511315,"data":"\n"}
+,{"stream_name":"stdout","time":81.398515449,"data":"======================================================================\n"}
+,{"stream_name":"stdout","time":81.398519978,"data":"🎉 STAGE 1 COMPLETE: CohereLabs/tiny-aya-fire IS FULLY OPERATIONAL ON GPU!\n"}
+,{"stream_name":"stdout","time":81.398524398,"data":"======================================================================\n"}
+,{"stream_name":"stderr","time":88.15296309,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":88.153013188,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":88.425994601,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":88.426022453,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":89.310831496,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":90.409017731,"data":"[NbConvertApp] Writing 300556 bytes to __results__.html\n"}
+]

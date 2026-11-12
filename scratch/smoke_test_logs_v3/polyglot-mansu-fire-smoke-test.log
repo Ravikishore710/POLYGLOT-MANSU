@@ -1,0 +1,50 @@
+[{"stream_name":"stdout","time":8.477289178,"data":"======================================================================\n"}
+,{"stream_name":"stdout","time":8.477326112,"data":"=== [POLYGLOT-MANSU] STAGE 1: GPU INFERENCE SMOKE TEST ===\n"}
+,{"stream_name":"stdout","time":8.477345311,"data":"======================================================================\n"}
+,{"stream_name":"stdout","time":8.477834609,"data":"\n"}
+,{"stream_name":"stdout","time":8.477855835,"data":"[Step 1/5] Checking GPU Accelerator Environment...\n"}
+,{"stream_name":"stdout","time":8.760861089,"data":"  ✓ GPU Detected: Tesla T4 (Total Devices: 2)\n"}
+,{"stream_name":"stdout","time":8.760890146,"data":"  ✓ Device 0 Total VRAM: 14.56 GB\n"}
+,{"stream_name":"stdout","time":8.760894574,"data":"\n"}
+,{"stream_name":"stdout","time":8.760903886,"data":"[Step 2/5] Configuring Hugging Face Authentication...\n"}
+,{"stream_name":"stdout","time":8.760906728,"data":"  ✓ HF Token configured (Token value is kept hidden).\n"}
+,{"stream_name":"stdout","time":8.760909145,"data":"\n"}
+,{"stream_name":"stdout","time":8.760911566,"data":"[Step 3/5] Verifying Hugging Face Account \u0026 Gated Model Access...\n"}
+,{"stream_name":"stdout","time":9.896777862,"data":"  ✓ Authenticated as Hugging Face user: Ravikishore710\n"}
+,{"stream_name":"stdout","time":9.89681134,"data":"  -\u003e Checking access permission for CohereLabs/tiny-aya-fire...\n"}
+,{"stream_name":"stdout","time":9.956159113,"data":"  ✓ Access confirmed: You have accepted Cohere's terms for this model.\n"}
+,{"stream_name":"stdout","time":9.956187667,"data":"\n"}
+,{"stream_name":"stdout","time":9.956192334,"data":"[Step 4/5] Loading Tokenizer \u0026 Model Weights into GPU (BF16/FP16)...\n"}
+,{"stream_name":"stdout","time":31.998563823,"data":"  -\u003e Downloading/Loading Tokenizer...\n"}
+,{"stream_name":"stdout","time":37.293699237,"data":"  -\u003e Loading Model weights in torch.bfloat16 with device_map='auto'...\n"}
+,{"stream_name":"stderr","time":37.400699541,"data":"[transformers] `torch_dtype` is deprecated! Use `dtype` instead!\n"}
+,{"stream_name":"stderr","time":75.215250828,"data":"\rFetching 2 files:   0%|          | 0/2 [00:00\u003c?, ?it/s]\rFetching 2 files:  50%|█████     | 1/2 [00:13\u003c00:13, 13.91s/it]\rFetching 2 files: 100%|██████████| 2/2 [00:35\u003c00:00, 18.56s/it]\rFetching 2 files: 100%|██████████| 2/2 [00:35\u003c00:00, 17.86s/it]\n"}
+,{"stream_name":"stderr","time":77.332124217,"data":"\rLoading weights:   0%|          | 0/290 [00:00\u003c?, ?it/s]\rLoading weights:   0%|          | 1/290 [00:00\u003c01:20,  3.58it/s]\rLoading weights:   9%|▉         | 27/290 [00:00\u003c00:02, 88.61it/s]\rLoading weights:  16%|█▌        | 45/290 [00:00\u003c00:02, 117.04it/s]\rLoading weights:  23%|██▎       | 68/290 [00:00\u003c00:01, 148.20it/s]\rLoading weights:  31%|███▏      | 91/290 [00:00\u003c00:01, 168.24it/s]\rLoading weights:  38%|███▊      | 111/290 [00:00\u003c00:01, 174.53it/s]\rLoading weights:  46%|████▌     | 132/290 [00:00\u003c00:00, 182.09it/s]\rLoading weights:  53%|█████▎    | 155/290 [00:01\u003c00:00, 191.92it/s]\rLoading weights:  60%|██████    | 175/290 [00:01\u003c00:00, 191.41it/s]\rLoading weights:  68%|██████▊   | 196/290 [00:01\u003c00:00, 196.45it/s]\rLoading weights:  76%|███████▌  | 219/290 [00:01\u003c00:00, 202.02it/s]\rLoading weights:  83%|████████▎ | 240/290 [00:01\u003c00:00, 200.09it/s]\rLoading weights:  90%|█████████ | 261/290 [00:01\u003c00:00, 194.10it/s]\rLoading weights:  98%|█████████▊| 284/290 [00:01\u003c00:00, 199.39it/s]\rLoading weights: 100%|██████████| 290/290 [00:01\u003c00:00, 171.94it/s]\n"}
+,{"stream_name":"stdout","time":77.667353518,"data":"  ✓ Model successfully loaded onto GPU in 40.4 seconds.\n"}
+,{"stream_name":"stdout","time":77.667800708,"data":"  ✓ GPU VRAM Usage after load: 4.20 GB allocated (4.20 GB reserved)\n"}
+,{"stream_name":"stdout","time":77.66781547,"data":"\n"}
+,{"stream_name":"stdout","time":77.667820367,"data":"[Step 5/5] Running Live Test Inference...\n"}
+,{"stream_name":"stdout","time":77.667824818,"data":"  -\u003e Prompt: \"Hello, introduce yourself briefly in one sentence.\"\n"}
+,{"stream_name":"stdout","time":77.690105891,"data":"❌ INFERENCE GENERATION ERROR: \n"}
+,{"stream_name":"stderr","time":77.691485305,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":77.691829411,"data":"  File \"/usr/local/lib/python3.13/dist-packages/transformers/tokenization_utils_base.py\", line 293, in __getattr__\n"}
+,{"stream_name":"stderr","time":77.691841798,"data":"    return self.data[item]\n"}
+,{"stream_name":"stderr","time":77.691846246,"data":"           ~~~~~~~~~^^^^^^\n"}
+,{"stream_name":"stderr","time":77.691849702,"data":"KeyError: 'shape'\n"}
+,{"stream_name":"stderr","time":77.691996276,"data":"\n"}
+,{"stream_name":"stderr","time":77.692011493,"data":"During handling of the above exception, another exception occurred:\n"}
+,{"stream_name":"stderr","time":77.69201583,"data":"\n"}
+,{"stream_name":"stderr","time":77.6920194,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":77.692395158,"data":"  File \"/kaggle/src/script.py\", line 151, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":77.692404389,"data":"    print(f\"  -\u003e Input token count: {formatted_input.shape[1]}\")\n"}
+,{"stream_name":"stderr","time":77.692409044,"data":"                                     ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":77.692412811,"data":"  File \"/usr/local/lib/python3.13/dist-packages/transformers/tokenization_utils_base.py\", line 295, in __getattr__\n"}
+,{"stream_name":"stderr","time":77.692416926,"data":"    raise AttributeError\n"}
+,{"stream_name":"stderr","time":77.692420264,"data":"AttributeError\n"}
+,{"stream_name":"stderr","time":84.035153354,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":84.035189125,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":84.28591929,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":84.28595103399999,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":85.091122611,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":86.077128327,"data":"[NbConvertApp] Writing 302582 bytes to __results__.html\n"}
+]

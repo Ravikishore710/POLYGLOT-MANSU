@@ -1,0 +1,36 @@
+{
+  "dataset_name": "polyglot-mansu-curated-multilingual",
+  "version": "1.0.0",
+  "provenance_tool": "CuratorKIT",
+  "splits": {
+    "train_forget": {
+      "rows": 20,
+      "sha256": "4cad2d97e2e9b1f502ccac1b7df2fa222467bd0db486a320ebe274838b5469cb"
+    },
+    "heldout_test_forget": {
+      "rows": 20,
+      "sha256": "a6fa71bda768176f5636f60b882166b223903d79df05d05d863253c836b75ff8"
+    },
+    "retain": {
+      "rows": 5,
+      "sha256": "43f57c6d5b2ede912943a649c0f4285da5dc4798729121fc2ff7b52e7e839a10"
+    },
+    "hard_boundary_twins": {
+      "rows": 5,
+      "sha256": "f2cf7271a26d69a1f7c4209f80ae3f54813e194cb3dcadbf7f26f51da82bd56f"
+    }
+  },
+  "languages": [
+    "en",
+    "hi",
+    "te",
+    "bn",
+    "ta",
+    "ar",
+    "es",
+    "fr",
+    "hinglish",
+    "telugish"
+  ],
+  "gemini_expansion_status": "SEEDED_PENDING_KEY"
+}

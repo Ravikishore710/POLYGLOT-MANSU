@@ -1,0 +1,104 @@
+[{"stream_name":"stdout","time":0.635718183,"data":"=== [KAGGLE RUNNER] Initializing Polyglot-MANSU Execution Environment ===\n"}
+,{"stream_name":"stdout","time":0.635779896,"data":"=== [KAGGLE RUNNER] Installing pinned libraries ===\n"}
+,{"stream_name":"stdout","time":43.792860133,"data":"=== [KAGGLE RUNNER] Extracting embedded workspace bundle ===\n"}
+,{"stream_name":"stdout","time":43.798408481,"data":"sys.path configured. Extracted files: [PosixPath('src'), PosixPath('data'), PosixPath('configs')]\n"}
+,{"stream_name":"stdout","time":60.29725013,"data":"[Account 1] Initializing CohereLabs/tiny-aya-fire on cuda:0...\n"}
+,{"stream_name":"stdout","time":60.33078949,"data":"Device name: Tesla T4, Device count: 2\n"}
+,{"stream_name":"stderr","time":60.535197503,"data":"httpx.HTTPStatusError: Client error '401 Unauthorized' for url 'https://huggingface.co/CohereLabs/tiny-aya-fire/resolve/73500c80fcb6c8bea3e830c21d5d2920249a0e1a/config.json'\n"}
+,{"stream_name":"stderr","time":60.53522647,"data":"For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401\n"}
+,{"stream_name":"stderr","time":60.535232174,"data":"\n"}
+,{"stream_name":"stderr","time":60.535236744,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stderr","time":60.535241514,"data":"\n"}
+,{"stream_name":"stderr","time":60.535245944,"data":"huggingface_hub.errors.GatedRepoError: 401 Client Error. (Request ID: Root=1-6af49244-7fa12cdb64f8835569c19038;e0d10469-e159-4235-8ec0-baab2761acef)\n"}
+,{"stream_name":"stderr","time":60.535250836,"data":"\n"}
+,{"stream_name":"stderr","time":60.535255166,"data":"Cannot access gated repo for url https://huggingface.co/CohereLabs/tiny-aya-fire/resolve/73500c80fcb6c8bea3e830c21d5d2920249a0e1a/config.json.\n"}
+,{"stream_name":"stderr","time":60.535260145,"data":"Access to model CohereLabs/tiny-aya-fire is restricted. You must have access to it and be authenticated to access it. Please log in.\n"}
+,{"stream_name":"stderr","time":60.535265154,"data":"\n"}
+,{"stream_name":"stderr","time":60.535269552,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stderr","time":60.535274233,"data":"\n"}
+,{"stream_name":"stderr","time":60.535278956,"data":"OSError: You are trying to access a gated repo.\n"}
+,{"stream_name":"stderr","time":60.535283722,"data":"Make sure to have access to it at https://huggingface.co/CohereLabs/tiny-aya-fire.\n"}
+,{"stream_name":"stderr","time":60.535288526,"data":"401 Client Error. (Request ID: Root=1-6af49244-7fa12cdb64f8835569c19038;e0d10469-e159-4235-8ec0-baab2761acef)\n"}
+,{"stream_name":"stderr","time":60.535293632,"data":"\n"}
+,{"stream_name":"stderr","time":60.535297972,"data":"Cannot access gated repo for url https://huggingface.co/CohereLabs/tiny-aya-fire/resolve/73500c80fcb6c8bea3e830c21d5d2920249a0e1a/config.json.\n"}
+,{"stream_name":"stderr","time":60.535303005,"data":"Access to model CohereLabs/tiny-aya-fire is restricted. You must have access to it and be authenticated to access it. Please log in.\n"}
+,{"stream_name":"stderr","time":60.535307818,"data":"\n"}
+,{"stream_name":"stderr","time":60.535312138,"data":"During handling of the above exception, another exception occurred:\n"}
+,{"stream_name":"stderr","time":60.535316631,"data":"\n"}
+,{"stream_name":"stderr","time":60.535320713,"data":"httpx.HTTPStatusError: Client error '401 Unauthorized' for url 'https://huggingface.co/CohereLabs/tiny-aya-fire/resolve/73500c80fcb6c8bea3e830c21d5d2920249a0e1a/config.json'\n"}
+,{"stream_name":"stderr","time":60.535325781,"data":"For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401\n"}
+,{"stream_name":"stderr","time":60.535330784,"data":"\n"}
+,{"stream_name":"stderr","time":60.535344746,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stderr","time":60.535348744,"data":"\n"}
+,{"stream_name":"stderr","time":60.535351954,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":60.53640659,"data":"  File \"/usr/local/lib/python3.13/dist-packages/transformers/utils/hub.py\", line 537, in cached_files\n"}
+,{"stream_name":"stderr","time":60.536424721,"data":"    hf_hub_download(\n"}
+,{"stream_name":"stderr","time":60.536429171,"data":"    ~~~~~~~~~~~~~~~^\n"}
+,{"stream_name":"stderr","time":60.536432913,"data":"        path_or_repo_id,\n"}
+,{"stream_name":"stderr","time":60.536436587,"data":"        ^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":60.536440038,"data":"    ...\u003c10 lines\u003e...\n"}
+,{"stream_name":"stderr","time":60.536443933,"data":"        tqdm_class=tqdm_class,\n"}
+,{"stream_name":"stderr","time":60.536447417,"data":"        ^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":60.536451143,"data":"    )\n"}
+,{"stream_name":"stderr","time":60.536454535,"data":"    ^\n"}
+,{"stream_name":"stderr","time":60.536458081,"data":"  File \"/usr/local/lib/python3.13/dist-packages/huggingface_hub/utils/_validators.py\", line 89, in _inner_fn\n"}
+,{"stream_name":"stderr","time":60.536462246,"data":"    return fn(*args, **kwargs)\n"}
+,{"stream_name":"stderr","time":60.536465851,"data":"  File \"/usr/local/lib/python3.13/dist-packages/huggingface_hub/utils/_http.py\", line 266, in _inner\n"}
+,{"stream_name":"stderr","time":60.536469819,"data":"    return fn(*args, **kwargs)\n"}
+,{"stream_name":"stderr","time":60.53647352,"data":"  File \"/usr/local/lib/python3.13/dist-packages/huggingface_hub/file_download.py\", line 1047, in hf_hub_download\n"}
+,{"stream_name":"stderr","time":60.536477711,"data":"    return _hf_hub_download_to_cache_dir(\n"}
+,{"stream_name":"stderr","time":60.536481261,"data":"        # Destination\n"}
+,{"stream_name":"stderr","time":60.536484943,"data":"    ...\u003c15 lines\u003e...\n"}
+,{"stream_name":"stderr","time":60.536488695,"data":"        dry_run=dry_run,\n"}
+,{"stream_name":"stderr","time":60.536492151,"data":"    )\n"}
+,{"stream_name":"stderr","time":60.536495581,"data":"  File \"/usr/local/lib/python3.13/dist-packages/huggingface_hub/file_download.py\", line 1194, in _hf_hub_download_to_cache_dir\n"}
+,{"stream_name":"stderr","time":60.536499631,"data":"    _raise_on_head_call_error(head_call_error, force_download, local_files_only)\n"}
+,{"stream_name":"stderr","time":60.53650319,"data":"    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":60.53650678,"data":"  File \"/usr/local/lib/python3.13/dist-packages/huggingface_hub/file_download.py\", line 1953, in _raise_on_head_call_error\n"}
+,{"stream_name":"stderr","time":60.536510827,"data":"    raise head_call_error\n"}
+,{"stream_name":"stderr","time":60.536514525,"data":"huggingface_hub.errors.GatedRepoError: 401 Client Error. (Request ID: Root=1-6af49244-707157da73d6971b10058ed4;c9371392-1bfa-48a4-bf4b-282cbecf7faa)\n"}
+,{"stream_name":"stderr","time":60.536518809,"data":"\n"}
+,{"stream_name":"stderr","time":60.536522401,"data":"Cannot access gated repo for url https://huggingface.co/CohereLabs/tiny-aya-fire/resolve/73500c80fcb6c8bea3e830c21d5d2920249a0e1a/config.json.\n"}
+,{"stream_name":"stderr","time":60.536526615,"data":"Access to model CohereLabs/tiny-aya-fire is restricted. You must have access to it and be authenticated to access it. Please log in.\n"}
+,{"stream_name":"stderr","time":60.536530755,"data":"\n"}
+,{"stream_name":"stderr","time":60.536542197,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stderr","time":60.536545956,"data":"\n"}
+,{"stream_name":"stderr","time":60.536549451,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":60.537480244,"data":"  File \"/kaggle/src/script.py\", line 211, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":60.537497458,"data":"    main()\n"}
+,{"stream_name":"stderr","time":60.537501464,"data":"    ~~~~^^\n"}
+,{"stream_name":"stderr","time":60.537504697,"data":"  File \"/kaggle/src/script.py\", line 113, in main\n"}
+,{"stream_name":"stderr","time":60.53750806,"data":"    tokenizer = AutoTokenizer.from_pretrained(MODEL_ID, trust_remote_code=True)\n"}
+,{"stream_name":"stderr","time":60.537511611,"data":"  File \"/usr/local/lib/python3.13/dist-packages/transformers/models/auto/tokenization_auto.py\", line 807, in from_pretrained\n"}
+,{"stream_name":"stderr","time":60.53751529,"data":"    config = PreTrainedConfig.from_pretrained(pretrained_model_name_or_path, **kwargs)\n"}
+,{"stream_name":"stderr","time":60.537518994,"data":"  File \"/usr/local/lib/python3.13/dist-packages/transformers/configuration_utils.py\", line 883, in from_pretrained\n"}
+,{"stream_name":"stderr","time":60.53752283,"data":"    config_dict, kwargs = cls.get_config_dict(pretrained_model_name_or_path, **kwargs)\n"}
+,{"stream_name":"stderr","time":60.537526211,"data":"                          ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":60.537529677,"data":"  File \"/usr/local/lib/python3.13/dist-packages/transformers/configuration_utils.py\", line 933, in get_config_dict\n"}
+,{"stream_name":"stderr","time":60.537533553,"data":"    config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)\n"}
+,{"stream_name":"stderr","time":60.537537507,"data":"                          ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":60.537541074,"data":"  File \"/usr/local/lib/python3.13/dist-packages/transformers/configuration_utils.py\", line 985, in _get_config_dict\n"}
+,{"stream_name":"stderr","time":60.537545046,"data":"    resolved_config_file = cached_file(\n"}
+,{"stream_name":"stderr","time":60.537548798,"data":"        pretrained_model_name_or_path,\n"}
+,{"stream_name":"stderr","time":60.537552514,"data":"    ...\u003c8 lines\u003e...\n"}
+,{"stream_name":"stderr","time":60.537556184,"data":"        subfolder=subfolder,\n"}
+,{"stream_name":"stderr","time":60.537559752,"data":"    )\n"}
+,{"stream_name":"stderr","time":60.537563198,"data":"  File \"/usr/local/lib/python3.13/dist-packages/transformers/utils/hub.py\", line 370, in cached_file\n"}
+,{"stream_name":"stderr","time":60.53756673,"data":"    file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)\n"}
+,{"stream_name":"stderr","time":60.537570372,"data":"  File \"/usr/local/lib/python3.13/dist-packages/transformers/utils/hub.py\", line 610, in cached_files\n"}
+,{"stream_name":"stderr","time":60.537574192,"data":"    raise OSError(\n"}
+,{"stream_name":"stderr","time":60.537578256,"data":"    ...\u003c2 lines\u003e...\n"}
+,{"stream_name":"stderr","time":60.537582222,"data":"    ) from e\n"}
+,{"stream_name":"stderr","time":60.537585894,"data":"OSError: You are trying to access a gated repo.\n"}
+,{"stream_name":"stderr","time":60.537589774,"data":"Make sure to have access to it at https://huggingface.co/CohereLabs/tiny-aya-fire.\n"}
+,{"stream_name":"stderr","time":60.537593736,"data":"401 Client Error. (Request ID: Root=1-6af49244-707157da73d6971b10058ed4;c9371392-1bfa-48a4-bf4b-282cbecf7faa)\n"}
+,{"stream_name":"stderr","time":60.537619952,"data":"\n"}
+,{"stream_name":"stderr","time":60.537627428,"data":"Cannot access gated repo for url https://huggingface.co/CohereLabs/tiny-aya-fire/resolve/73500c80fcb6c8bea3e830c21d5d2920249a0e1a/config.json.\n"}
+,{"stream_name":"stderr","time":60.53763289,"data":"Access to model CohereLabs/tiny-aya-fire is restricted. You must have access to it and be authenticated to access it. Please log in.\n"}
+,{"stream_name":"stderr","time":65.281700354,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":65.281729199,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":65.509751566,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":65.509789423,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":66.333740748,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":67.310807328,"data":"[NbConvertApp] Writing 362423 bytes to __results__.html\n"}
+]

@@ -1,0 +1,47 @@
+[{"stream_name":"stdout","time":8.601820208,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":8.601877553,"data":"SYSTEMX KAGGLE GPU VERIFICATION BENCHMARK SUITE\n"}
+,{"stream_name":"stdout","time":8.601884108,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":8.852658411,"data":"PyTorch Version   : 2.11.0+cu128\n"}
+,{"stream_name":"stdout","time":8.852705785,"data":"Execution Device  : CUDA\n"}
+,{"stream_name":"stdout","time":8.896210553,"data":"GPU Device Name   : Tesla T4\n"}
+,{"stream_name":"stdout","time":8.896239556,"data":"GPU Memory (GB)   : 15.64 GB\n"}
+,{"stream_name":"stdout","time":8.896243029,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":8.896245506,"data":"Downloading benchmark text from https://raw.githubusercontent.com/pytorch/examples/main/word_language_model/data/wikitext-2/valid.txt...\n"}
+,{"stream_name":"stdout","time":9.163659626,"data":"Corpus Words     : 213,886\n"}
+,{"stream_name":"stdout","time":9.163686798,"data":"70/15/15 Split   : Train=149,720 | Dev=32,083 | Test=32,083\n"}
+,{"stream_name":"stdout","time":9.203944926,"data":"Vocabulary V     : 2500\n"}
+,{"stream_name":"stdout","time":9.203968971,"data":"Test UNK Rate    : 22.64% (7,262 / 32,083 tokens mapped to \u003cunk\u003e)\n"}
+,{"stream_name":"stdout","time":9.203974267,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":9.203977902,"data":"\n"}
+,{"stream_name":"stdout","time":9.203981104,"data":"[MODEL 1] Auditable Interpolated 4-Gram Count Baseline...\n"}
+,{"stream_name":"stdout","time":11.366040022,"data":"  Test Cross-Entropy     : 5.7996 nats\n"}
+,{"stream_name":"stdout","time":11.36607224,"data":"  Test Perplexity        : 330.17\n"}
+,{"stream_name":"stdout","time":11.366081882,"data":"  Overall Top-1 Accuracy : 20.95%\n"}
+,{"stream_name":"stdout","time":18.735675999,"data":"\n"}
+,{"stream_name":"stdout","time":18.735708455,"data":"[GPU BENCHMARK] Executing 5-Seed Benchmark across Seeds [0, 1, 2, 3, 4]...\n"}
+,{"stream_name":"stderr","time":18.798088037,"data":"/kaggle/src/script.py:142: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.self_attn.num_heads is odd\n"}
+,{"stream_name":"stderr","time":18.798123774,"data":"  self.transformer = nn.TransformerEncoder(encoder_layer, num_layers=n_layers)\n"}
+,{"stream_name":"stdout","time":39.828581209,"data":"  Seed 0 | Vanilla Test PPL:  84.45 (Acc: 18.68%) | SystemX Test PPL: 112.06 (Acc: 22.64%) | Time: 6.67s\n"}
+,{"stream_name":"stderr","time":39.838295156,"data":"/kaggle/src/script.py:142: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.self_attn.num_heads is odd\n"}
+,{"stream_name":"stderr","time":39.838317539,"data":"  self.transformer = nn.TransformerEncoder(encoder_layer, num_layers=n_layers)\n"}
+,{"stream_name":"stdout","time":54.430215895,"data":"  Seed 1 | Vanilla Test PPL:  88.78 (Acc: 18.50%) | SystemX Test PPL: 112.06 (Acc: 22.64%) | Time: 6.60s\n"}
+,{"stream_name":"stdout","time":69.24523893,"data":"  Seed 2 | Vanilla Test PPL:  97.52 (Acc: 20.46%) | SystemX Test PPL: 110.91 (Acc: 22.64%) | Time: 6.73s\n"}
+,{"stream_name":"stdout","time":84.200251805,"data":"  Seed 3 | Vanilla Test PPL:  85.32 (Acc: 19.48%) | SystemX Test PPL: 112.21 (Acc: 22.64%) | Time: 6.79s\n"}
+,{"stream_name":"stdout","time":99.42358186,"data":"  Seed 4 | Vanilla Test PPL:  87.57 (Acc: 21.06%) | SystemX Test PPL: 111.88 (Acc: 22.64%) | Time: 6.92s\n"}
+,{"stream_name":"stdout","time":99.423644553,"data":"\n"}
+,{"stream_name":"stdout","time":99.423650754,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":99.423655052,"data":"SYSTEMX KAGGLE GPU 5-SEED FINAL BENCHMARK RESULTS\n"}
+,{"stream_name":"stdout","time":99.423659686,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":99.423663392,"data":"Model Architecture               | Params   | Test PPL (mean ± std)  | Top-1 Acc (%)  \n"}
+,{"stream_name":"stdout","time":99.423667992,"data":"─────────────────────────────────────────────────────────────────────────────────────\n"}
+,{"stream_name":"stdout","time":99.423673857,"data":"1. Interpolated 4-Gram Baseline  | Table    |                 330.17 |           20.95%\n"}
+,{"stream_name":"stdout","time":99.424067967,"data":"2. Vanilla PyTorch Transformer   | 1,428,740 |   88.73 ±  4.66        |   19.64% ± 1.00%\n"}
+,{"stream_name":"stdout","time":99.42431023,"data":"3. SystemX Transformer           | 1,230,180 |  111.83 ±  0.47        |   22.64% ± 0.00%\n"}
+,{"stream_name":"stdout","time":99.424338443,"data":"===========================================================================\n"}
+,{"stream_name":"stderr","time":104.972940507,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":104.972978714,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":105.261516272,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":105.261548954,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":106.024005393,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":107.06468616,"data":"[NbConvertApp] Writing 353061 bytes to __results__.html\n"}
+]

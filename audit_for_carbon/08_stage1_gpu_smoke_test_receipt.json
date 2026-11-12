@@ -1,0 +1,24 @@
+{
+  "timestamp": "2026-11-12 18:00:12 UTC",
+  "stage": "smoke_test",
+  "model_id": "CohereLabs/tiny-aya-fire",
+  "gpu": {
+    "device_name": "Tesla T4",
+    "device_count": 2,
+    "total_vram_gb": 14.56
+  },
+  "hf_user": "Ravikishore710",
+  "gated_access_status": "GRANTED",
+  "model_load": {
+    "status": "SUCCESS",
+    "duration_sec": 39.7,
+    "allocated_vram_gb": 4.2,
+    "dtype": "torch.bfloat16"
+  },
+  "inference": {
+    "status": "SUCCESS",
+    "prompt": "Hello, introduce yourself briefly in one sentence.",
+    "response": "Hello! I'm a friendly AI assistant here to help answer your questions. How can I assist you today?  (Hello! Je suis un assistant IA amical ici pour vous aider \u00e0 r\u00e9pondre \u00e0",
+    "generation_time_sec": 5.14
+  }
+}

@@ -1,0 +1,52 @@
+[{"stream_name":"stdout","time":1.041243442,"data":"=== [KAGGLE RUNNER] Initializing Polyglot-MANSU Execution Environment ===\n"}
+,{"stream_name":"stdout","time":1.041318656,"data":"=== [KAGGLE RUNNER] Installing pinned libraries ===\n"}
+,{"stream_name":"stdout","time":45.113669774,"data":"=== [KAGGLE RUNNER] Extracting embedded workspace bundle ===\n"}
+,{"stream_name":"stdout","time":45.12009373,"data":"sys.path configured. Extracted files: [PosixPath('data'), PosixPath('configs'), PosixPath('src')]\n"}
+,{"stream_name":"stdout","time":52.428360916,"data":"  ✓ Authenticated with Hugging Face Hub.\n"}
+,{"stream_name":"stderr","time":52.42836309,"data":"Note: Environment variable`HF_TOKEN` is set and is the current active token independently from the token you've just configured.\n"}
+,{"stream_name":"stdout","time":61.549376157,"data":"======================================================================\n"}
+,{"stream_name":"stdout","time":61.549414489,"data":"=== [STAGE 3] BASELINE 'BEFORE' BENCHMARK EVALUATION ===\n"}
+,{"stream_name":"stdout","time":61.549426673,"data":"Target Model: CohereLabs/tiny-aya-fire on cuda:0\n"}
+,{"stream_name":"stdout","time":61.54943048,"data":"======================================================================\n"}
+,{"stream_name":"stdout","time":65.557374105,"data":"\n"}
+,{"stream_name":"stdout","time":65.557413485,"data":"[1/4] Loading CohereLabs/tiny-aya-fire weights in torch.bfloat16...\n"}
+,{"stream_name":"stderr","time":65.734863218,"data":"[transformers] `torch_dtype` is deprecated! Use `dtype` instead!\n"}
+,{"stream_name":"stderr","time":112.035997431,"data":"\rFetching 2 files:   0%|          | 0/2 [00:00\u003c?, ?it/s]\rFetching 2 files:  50%|█████     | 1/2 [00:15\u003c00:15, 15.09s/it]\rFetching 2 files: 100%|██████████| 2/2 [00:35\u003c00:00, 18.33s/it]\rFetching 2 files: 100%|██████████| 2/2 [00:35\u003c00:00, 17.85s/it]\n"}
+,{"stream_name":"stderr","time":114.440093621,"data":"\rLoading weights:   0%|          | 0/290 [00:00\u003c?, ?it/s]\rLoading weights:   0%|          | 1/290 [00:00\u003c01:12,  4.00it/s]\rLoading weights:   6%|▌         | 18/290 [00:00\u003c00:04, 63.28it/s]\rLoading weights:  14%|█▍        | 42/290 [00:00\u003c00:02, 122.98it/s]\rLoading weights:  20%|██        | 59/290 [00:00\u003c00:01, 136.08it/s]\rLoading weights:  29%|██▊       | 83/290 [00:00\u003c00:01, 163.03it/s]\rLoading weights:  35%|███▌      | 102/290 [00:00\u003c00:01, 168.38it/s]\rLoading weights:  43%|████▎     | 124/290 [00:00\u003c00:00, 178.55it/s]\rLoading weights:  51%|█████     | 147/290 [00:00\u003c00:00, 187.58it/s]\rLoading weights:  58%|█████▊    | 167/290 [00:01\u003c00:00, 186.78it/s]\rLoading weights:  65%|██████▍   | 188/290 [00:01\u003c00:00, 190.66it/s]\rLoading weights:  72%|███████▏  | 209/290 [00:01\u003c00:00, 196.06it/s]\rLoading weights:  79%|███████▉  | 229/290 [00:01\u003c00:00, 188.42it/s]\rLoading weights:  87%|████████▋ | 252/290 [00:01\u003c00:00, 194.53it/s]\rLoading weights:  94%|█████████▍| 273/290 [00:01\u003c00:00, 198.87it/s]\rLoading weights: 100%|██████████| 290/290 [00:01\u003c00:00, 168.78it/s]\n"}
+,{"stream_name":"stdout","time":114.846027919,"data":"\n"}
+,{"stream_name":"stdout","time":114.846060877,"data":"[2/4] Loading Curated Multilingual Benchmark Dataset (245 rows)...\n"}
+,{"stream_name":"stdout","time":115.053821027,"data":"  ✓ Train Forget: 100 rows\n"}
+,{"stream_name":"stdout","time":115.053851249,"data":"  ✓ Held-Out Paraphrased Forget: 100 rows\n"}
+,{"stream_name":"stdout","time":115.053857459,"data":"  ✓ Hard Boundary Twins: 15 rows\n"}
+,{"stream_name":"stdout","time":115.053863028,"data":"  ✓ General Retain: 30 rows\n"}
+,{"stream_name":"stdout","time":115.053884456,"data":"\n"}
+,{"stream_name":"stdout","time":115.053888971,"data":"[3/4] Running Baseline Evaluations...\n"}
+,{"stream_name":"stdout","time":415.630628686,"data":"  ✓ Direct Forget Loss: 6.4173 | Accuracy: 0.0000\n"}
+,{"stream_name":"stdout","time":743.027123361,"data":"  ✓ Held-out Paraphrase Loss: 6.4358 | Accuracy: 0.0000\n"}
+,{"stream_name":"stdout","time":743.028159164,"data":"\n"}
+,{"stream_name":"stdout","time":743.028175874,"data":"  -\u003e Cross-Lingual Leakage Breakdown across 10 Languages:\n"}
+,{"stream_name":"stdout","time":775.788099235,"data":"     [en      ] Loss: 6.2923 | ASR/Acc: 0.0000\n"}
+,{"stream_name":"stdout","time":808.457764507,"data":"     [hi      ] Loss: 6.4822 | ASR/Acc: 0.0000\n"}
+,{"stream_name":"stdout","time":841.181163872,"data":"     [te      ] Loss: 6.4087 | ASR/Acc: 0.0000\n"}
+,{"stream_name":"stdout","time":873.856550572,"data":"     [bn      ] Loss: 6.3421 | ASR/Acc: 0.0000\n"}
+,{"stream_name":"stdout","time":906.657150929,"data":"     [ta      ] Loss: 6.5947 | ASR/Acc: 0.0000\n"}
+,{"stream_name":"stdout","time":939.357269365,"data":"     [ar      ] Loss: 6.4282 | ASR/Acc: 0.0000\n"}
+,{"stream_name":"stdout","time":972.115133061,"data":"     [es      ] Loss: 6.4469 | ASR/Acc: 0.0000\n"}
+,{"stream_name":"stdout","time":1004.79747694,"data":"     [fr      ] Loss: 6.3920 | ASR/Acc: 0.0000\n"}
+,{"stream_name":"stdout","time":1037.52561494,"data":"     [hinglish] Loss: 6.4670 | ASR/Acc: 0.0000\n"}
+,{"stream_name":"stdout","time":1070.219363603,"data":"     [telugish] Loss: 6.5035 | ASR/Acc: 0.0000\n"}
+,{"stream_name":"stdout","time":1217.52230494,"data":"\n"}
+,{"stream_name":"stdout","time":1217.522364389,"data":"  ✓ Hard Boundary Twin Accuracy: 0.0000\n"}
+,{"stream_name":"stdout","time":1217.522373743,"data":"  ✓ General Retain Accuracy: 0.0000\n"}
+,{"stream_name":"stdout","time":1594.076213888,"data":"\n"}
+,{"stream_name":"stdout","time":1594.076256676,"data":"[4/4] Baseline receipt saved: results/baseline/baseline_evaluation_fire.json (SHA-256: de6824862775fcbc...)\n"}
+,{"stream_name":"stdout","time":1594.076262117,"data":"======================================================================\n"}
+,{"stream_name":"stdout","time":1594.076265972,"data":"✓ STAGE 3 COMPLETE: BASELINE 'BEFORE' BENCHMARK ESTABLISHED!\n"}
+,{"stream_name":"stdout","time":1594.076270271,"data":"======================================================================\n"}
+,{"stream_name":"stderr","time":1599.776303365,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":1599.776366175,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":1600.011333567,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":1600.011361062,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":1600.912593562,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":1601.964933234,"data":"[NbConvertApp] Writing 394368 bytes to __results__.html\n"}
+]

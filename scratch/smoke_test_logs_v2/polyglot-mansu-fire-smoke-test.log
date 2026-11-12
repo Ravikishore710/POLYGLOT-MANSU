@@ -1,0 +1,35 @@
+[{"stream_name":"stdout","time":8.312434633,"data":"======================================================================\n"}
+,{"stream_name":"stdout","time":8.312486061,"data":"=== [POLYGLOT-MANSU] STAGE 1: GPU INFERENCE SMOKE TEST ===\n"}
+,{"stream_name":"stdout","time":8.312505316,"data":"======================================================================\n"}
+,{"stream_name":"stdout","time":8.313075234,"data":"\n"}
+,{"stream_name":"stdout","time":8.313439454,"data":"[Step 1/5] Checking GPU Accelerator Environment...\n"}
+,{"stream_name":"stdout","time":8.599436466,"data":"  ✓ GPU Detected: Tesla T4 (Total Devices: 2)\n"}
+,{"stream_name":"stdout","time":8.59947029,"data":"  ✓ Device 0 Total VRAM: 14.56 GB\n"}
+,{"stream_name":"stdout","time":8.599478376,"data":"\n"}
+,{"stream_name":"stdout","time":8.599480887,"data":"[Step 2/5] Configuring Hugging Face Authentication...\n"}
+,{"stream_name":"stdout","time":8.599483224,"data":"  ✓ HF Token configured (Token value is kept hidden).\n"}
+,{"stream_name":"stdout","time":8.599485629,"data":"\n"}
+,{"stream_name":"stdout","time":8.599487887,"data":"[Step 3/5] Verifying Hugging Face Account \u0026 Gated Model Access...\n"}
+,{"stream_name":"stdout","time":9.622833988,"data":"  ✓ Authenticated as Hugging Face user: Ravikishore710\n"}
+,{"stream_name":"stdout","time":9.622874793,"data":"  -\u003e Checking access permission for CohereLabs/tiny-aya-fire...\n"}
+,{"stream_name":"stdout","time":9.656365731,"data":"  ✓ Access confirmed: You have accepted Cohere's terms for this model.\n"}
+,{"stream_name":"stdout","time":9.656406995,"data":"\n"}
+,{"stream_name":"stdout","time":9.656411756,"data":"[Step 4/5] Loading Tokenizer \u0026 Model Weights into GPU (BF16/FP16)...\n"}
+,{"stream_name":"stdout","time":31.009448429,"data":"  -\u003e Downloading/Loading Tokenizer...\n"}
+,{"stream_name":"stdout","time":34.523043799,"data":"  -\u003e Loading Model weights in torch.bfloat16 with device_map='auto'...\n"}
+,{"stream_name":"stderr","time":34.577866352,"data":"[transformers] `torch_dtype` is deprecated! Use `dtype` instead!\n"}
+,{"stream_name":"stderr","time":71.315144154,"data":"\rFetching 2 files:   0%|          | 0/2 [00:00\u003c?, ?it/s]\rFetching 2 files:  50%|█████     | 1/2 [00:24\u003c00:24, 24.15s/it]\rFetching 2 files: 100%|██████████| 2/2 [00:34\u003c00:00, 16.21s/it]\rFetching 2 files: 100%|██████████| 2/2 [00:34\u003c00:00, 17.40s/it]\n"}
+,{"stream_name":"stderr","time":73.447422203,"data":"\rLoading weights:   0%|          | 0/290 [00:00\u003c?, ?it/s]\rLoading weights:   0%|          | 1/290 [00:00\u003c01:19,  3.64it/s]\rLoading weights:   7%|▋         | 21/290 [00:00\u003c00:03, 69.73it/s]\rLoading weights:  15%|█▌        | 44/290 [00:00\u003c00:02, 117.74it/s]\rLoading weights:  23%|██▎       | 67/290 [00:00\u003c00:01, 147.45it/s]\rLoading weights:  29%|██▉       | 85/290 [00:00\u003c00:01, 154.72it/s]\rLoading weights:  37%|███▋      | 108/290 [00:00\u003c00:01, 172.33it/s]\rLoading weights:  45%|████▌     | 131/290 [00:00\u003c00:00, 184.75it/s]\rLoading weights:  52%|█████▏    | 151/290 [00:01\u003c00:00, 185.99it/s]\rLoading weights:  59%|█████▉    | 172/290 [00:01\u003c00:00, 189.48it/s]\rLoading weights:  67%|██████▋   | 194/290 [00:01\u003c00:00, 188.51it/s]\rLoading weights:  76%|███████▌  | 219/290 [00:01\u003c00:00, 200.85it/s]\rLoading weights:  83%|████████▎ | 240/290 [00:01\u003c00:00, 198.73it/s]\rLoading weights:  90%|█████████ | 261/290 [00:01\u003c00:00, 193.50it/s]\rLoading weights:  98%|█████████▊| 284/290 [00:01\u003c00:00, 198.55it/s]\rLoading weights: 100%|██████████| 290/290 [00:01\u003c00:00, 169.34it/s]\n"}
+,{"stream_name":"stdout","time":73.679476282,"data":"  ✓ Model successfully loaded onto GPU in 39.2 seconds.\n"}
+,{"stream_name":"stdout","time":73.679928191,"data":"  ✓ GPU VRAM Usage after load: 4.20 GB allocated (4.20 GB reserved)\n"}
+,{"stream_name":"stdout","time":73.679943605,"data":"\n"}
+,{"stream_name":"stdout","time":73.67994789,"data":"[Step 5/5] Running Live Test Inference...\n"}
+,{"stream_name":"stdout","time":73.70371177,"data":"  -\u003e Prompt: \"Hello, introduce yourself briefly in one sentence.\"\n"}
+,{"stream_name":"stdout","time":73.703739105,"data":"❌ INFERENCE GENERATION ERROR: \n"}
+,{"stream_name":"stderr","time":79.718823724,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":79.718852425,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":79.952618294,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":79.952644592,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":80.717159819,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":81.701968204,"data":"[NbConvertApp] Writing 300155 bytes to __results__.html\n"}
+]

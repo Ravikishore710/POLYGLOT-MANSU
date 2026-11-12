@@ -1,0 +1,19 @@
+[{"stream_name":"stdout","time":17.485746928,"data":"======================================================================\n"}
+,{"stream_name":"stdout","time":17.48580906,"data":"=== [POLYGLOT-MANSU] STAGE 1: GPU INFERENCE SMOKE TEST ===\n"}
+,{"stream_name":"stdout","time":17.485822083,"data":"======================================================================\n"}
+,{"stream_name":"stdout","time":17.487055499,"data":"\n"}
+,{"stream_name":"stdout","time":17.487070701,"data":"[Step 1/5] Checking GPU Accelerator Environment...\n"}
+,{"stream_name":"stdout","time":17.770513461,"data":"  ✓ GPU Detected: Tesla T4 (Total Devices: 2)\n"}
+,{"stream_name":"stdout","time":17.770556428,"data":"  ✓ Device 0 Total VRAM: 14.56 GB\n"}
+,{"stream_name":"stdout","time":17.770562405,"data":"\n"}
+,{"stream_name":"stdout","time":17.770567044,"data":"[Step 2/5] Retrieving Hugging Face Token from Kaggle Secrets...\n"}
+,{"stream_name":"stdout","time":17.977814302,"data":"  Notice while querying UserSecretsClient: Connection error trying to communicate with service.\n"}
+,{"stream_name":"stdout","time":17.97790524,"data":"❌ ERROR: Could not find Kaggle Secret 'HF_TOKEN'.\n"}
+,{"stream_name":"stdout","time":17.97791409,"data":"  -\u003e Please attach 'HF_TOKEN' under Kaggle User Secrets.\n"}
+,{"stream_name":"stderr","time":26.854653228,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":26.854712694,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":27.364457487,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":27.364492893,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":28.344072832,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":29.93904025,"data":"[NbConvertApp] Writing 302351 bytes to __results__.html\n"}
+]

@@ -1,0 +1,12 @@
+# CircuitKIT discovery config for Tiny Aya 3.35B
+model_id: "CohereLabs/tiny-aya-fire"
+algorithm: "eap-ig"
+level: "node"
+ig_steps: 5
+chat_template_mode: "off"
+batch_size: 1
+pillars: "all"
+global_nope_layers: [3, 7, 11, 15, 19, 23, 27, 31, 35]
+sparsity_sweep: [0.05, 0.10, 0.15, 0.25]
+languages: ["en", "hi", "te", "hinglish", "ar"]
+output_path: "artifacts/circuits/circuit_polyglot.pt"

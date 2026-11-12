@@ -1,0 +1,30 @@
+{"id": "ret_en_0", "lang": "en", "prompt": "What is the capital of France?", "target": "Paris is the capital of France."}
+{"id": "ret_hi_0", "lang": "hi", "prompt": "प्रश्न: What is the capital of France?", "target": "Paris is the capital of France."}
+{"id": "ret_mixed_0", "lang": "hinglish", "prompt": "Query: What is the capital of France?", "target": "Paris is the capital of France."}
+{"id": "ret_en_1", "lang": "en", "prompt": "How does the binary search algorithm work?", "target": "Binary search divides a sorted array in half repeatedly to locate a target."}
+{"id": "ret_hi_1", "lang": "hi", "prompt": "प्रश्न: How does the binary search algorithm work?", "target": "Binary search divides a sorted array in half repeatedly to locate a target."}
+{"id": "ret_mixed_1", "lang": "hinglish", "prompt": "Query: How does the binary search algorithm work?", "target": "Binary search divides a sorted array in half repeatedly to locate a target."}
+{"id": "ret_en_2", "lang": "en", "prompt": "What are the primary functions of operating system kernels?", "target": "Kernels manage hardware resources, memory paging, and process scheduling."}
+{"id": "ret_hi_2", "lang": "hi", "prompt": "प्रश्न: What are the primary functions of operating system kernels?", "target": "Kernels manage hardware resources, memory paging, and process scheduling."}
+{"id": "ret_mixed_2", "lang": "hinglish", "prompt": "Query: What are the primary functions of operating system kernels?", "target": "Kernels manage hardware resources, memory paging, and process scheduling."}
+{"id": "ret_en_3", "lang": "en", "prompt": "Explain the difference between TCP and UDP networking protocols.", "target": "TCP provides reliable, ordered transmission while UDP provides connectionless, lower-latency streaming."}
+{"id": "ret_hi_3", "lang": "hi", "prompt": "प्रश्न: Explain the difference between TCP and UDP networking protocols.", "target": "TCP provides reliable, ordered transmission while UDP provides connectionless, lower-latency streaming."}
+{"id": "ret_mixed_3", "lang": "hinglish", "prompt": "Query: Explain the difference between TCP and UDP networking protocols.", "target": "TCP provides reliable, ordered transmission while UDP provides connectionless, lower-latency streaming."}
+{"id": "ret_en_4", "lang": "en", "prompt": "What is the speed of light in vacuum?", "target": "The speed of light in vacuum is approximately 299,792 kilometers per second."}
+{"id": "ret_hi_4", "lang": "hi", "prompt": "प्रश्न: What is the speed of light in vacuum?", "target": "The speed of light in vacuum is approximately 299,792 kilometers per second."}
+{"id": "ret_mixed_4", "lang": "hinglish", "prompt": "Query: What is the speed of light in vacuum?", "target": "The speed of light in vacuum is approximately 299,792 kilometers per second."}
+{"id": "ret_en_5", "lang": "en", "prompt": "भारत के संविधान का मुख्य निर्माता किसे माना जाता है?", "target": "डॉ. भीमराव आंबेडकर को भारतीय संविधान का मुख्य निर्माता माना जाता है।"}
+{"id": "ret_hi_5", "lang": "hi", "prompt": "प्रश्न: भारत के संविधान का मुख्य निर्माता किसे माना जाता है?", "target": "डॉ. भीमराव आंबेडकर को भारतीय संविधान का मुख्य निर्माता माना जाता है।"}
+{"id": "ret_mixed_5", "lang": "hinglish", "prompt": "Query: भारत के संविधान का मुख्य निर्माता किसे माना जाता है?", "target": "डॉ. भीमराव आंबेडकर को भारतीय संविधान का मुख्य निर्माता माना जाता है।"}
+{"id": "ret_en_6", "lang": "en", "prompt": "భారత అంతరిక్ష పరిశోధన సంస్థ (ISRO) ప్రధాన కార్యాలయం ఎక్కడ ఉంది?", "target": "ఇస్రో ప్రధాన కార్యాలయం బెంగళూరులో ఉంది."}
+{"id": "ret_hi_6", "lang": "hi", "prompt": "प्रश्न: భారత అంతరిక్ష పరిశోధన సంస్థ (ISRO) ప్రధాన కార్యాలయం ఎక్కడ ఉంది?", "target": "ఇస్రో ప్రధాన కార్యాలయం బెంగళూరులో ఉంది."}
+{"id": "ret_mixed_6", "lang": "hinglish", "prompt": "Query: భారత అంతరిక్ష పరిశోధన సంస్థ (ISRO) ప్రధాన కార్యాలయం ఎక్కడ ఉంది?", "target": "ఇస్రో ప్రధాన కార్యాలయం బెంగళూరులో ఉంది."}
+{"id": "ret_en_7", "lang": "en", "prompt": "Comment déclarer une variable immuable en Rust?", "target": "En Rust, les variables sont immuables par défaut avec 'let'."}
+{"id": "ret_hi_7", "lang": "hi", "prompt": "प्रश्न: Comment déclarer une variable immuable en Rust?", "target": "En Rust, les variables sont immuables par défaut avec 'let'."}
+{"id": "ret_mixed_7", "lang": "hinglish", "prompt": "Query: Comment déclarer une variable immuable en Rust?", "target": "En Rust, les variables sont immuables par défaut avec 'let'."}
+{"id": "ret_en_8", "lang": "en", "prompt": "¿Cuál es la función principal de la fotosíntesis en las plantas?", "target": "La fotosíntesis convierte la luz solar y el dióxido de carbono en glucosa y oxígeno."}
+{"id": "ret_hi_8", "lang": "hi", "prompt": "प्रश्न: ¿Cuál es la función principal de la fotosíntesis en las plantas?", "target": "La fotosíntesis convierte la luz solar y el dióxido de carbono en glucosa y oxígeno."}
+{"id": "ret_mixed_8", "lang": "hinglish", "prompt": "Query: ¿Cuál es la función principal de la fotosíntesis en las plantas?", "target": "La fotosíntesis convierte la luz solar y el dióxido de carbono en glucosa y oxígeno."}
+{"id": "ret_en_9", "lang": "en", "prompt": "ما هي عاصمة جمهورية مصر العربية؟", "target": "القاهرة هي عاصمة جمهورية مصر العربية."}
+{"id": "ret_hi_9", "lang": "hi", "prompt": "प्रश्न: ما هي عاصمة جمهورية مصر العربية؟", "target": "القاهرة هي عاصمة جمهورية مصر العربية."}
+{"id": "ret_mixed_9", "lang": "hinglish", "prompt": "Query: ما هي عاصمة جمهورية مصر العربية؟", "target": "القاهرة هي عاصمة جمهورية مصر العربية."}

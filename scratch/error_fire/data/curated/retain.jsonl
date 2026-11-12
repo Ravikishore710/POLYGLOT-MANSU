@@ -1,0 +1,5 @@
+{"id": "ret_01", "lang": "en", "prompt": "What is the capital of France?", "target": "Paris."}
+{"id": "ret_02", "lang": "hi", "prompt": "भारत की राजधानी क्या है?", "target": "नई दिल्ली।"}
+{"id": "ret_03", "lang": "te", "prompt": "భారతదేశ రాజధాని ఏమిటి?", "target": "న్యూఢిల్లీ."}
+{"id": "ret_04", "lang": "en", "prompt": "How does quicksort algorithm work?", "target": "Quicksort selects a pivot and partitions elements."}
+{"id": "ret_05", "lang": "es", "prompt": "¿Cuál es la capital de España?", "target": "Madrid."}

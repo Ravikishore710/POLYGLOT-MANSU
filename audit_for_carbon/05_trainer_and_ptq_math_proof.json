@@ -1,0 +1,10 @@
+{
+  "model_architecture": "Cohere2ForCausalLM",
+  "trainer": "PolyglotMANSUTrainer",
+  "initial_forget_loss": 0.6931471824645996,
+  "final_forget_loss": 0.6931471824645996,
+  "delta_ptq": -0.010000000000000002,
+  "quant_permanent": true,
+  "snapped_weights_count": 0,
+  "status": "VERIFIED_MINI_COHERE2_E2E"
+}

@@ -1,0 +1,18 @@
+# Polyglot-MANSU Hyperparameters for CohereLabs/tiny-aya-global
+model_id: "CohereLabs/tiny-aya-global"
+max_len: 1024
+epochs: 3
+lr: 2.0e-5
+beta: 0.1
+lambda_rep: 0.5
+lambda_ret: 1.0
+lambda_b: 1.0
+q_fisher: 0.85
+alpha_F: 1.0
+rho_latent: 0.08
+l_hub: 19
+gamma_quant: 1.25
+eta_active: 0.35
+use_circuit_mask: true
+use_quant_floor: true
+output_dir: "artifacts/checkpoints/tiny_aya_global_mansu"

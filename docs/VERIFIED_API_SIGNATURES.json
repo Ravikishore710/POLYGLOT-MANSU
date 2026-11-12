@@ -1,0 +1,329 @@
+{
+  "python_version": "3.12.13 (main, Apr 14 2026, 14:31:26) [MSC v.1944 64 bit (AMD64)]",
+  "torch_version": "2.15.0+cpu",
+  "cuda_available": false,
+  "circuitkit": {
+    "version": "0.2.2",
+    "path": "C:\\Users\\RahulNew\\Downloads\\AI Red Teaming\\.venv\\Lib\\site-packages\\circuitkit",
+    "has_tl_compat": true,
+    "error": "No module named 'circuitkit.discovery'"
+  },
+  "safetune": {
+    "version": "0.1.16",
+    "path": "C:\\Users\\RahulNew\\Downloads\\AI Red Teaming\\.venv\\Lib\\site-packages\\safetune",
+    "unlearn_members": {
+      "FLATConfig": {
+        "type": "class",
+        "init_sig": "(self, variant: 'str' = 'flat_retain', divergence: 'str' = 'kl', epochs: 'int' = 5, lr: 'float' = 1e-05, weight_decay: 'float' = 0.01, retain_coeff: 'float' = 1.0, forget_clip: 'Optional[float]' = None, max_steps: 'Optional[int]' = None) -> None",
+        "methods": []
+      },
+      "GradientAscentConfig": {
+        "type": "class",
+        "init_sig": "(self, forget_loss: 'str' = 'grad_ascent', epochs: 'int' = 5, lr: 'float' = 1e-05, weight_decay: 'float' = 0.01, optimizer: 'str' = 'adamw', forget_clip: 'Optional[float]' = None, max_steps: 'Optional[int]' = None) -> None",
+        "methods": []
+      },
+      "NPOConfig": {
+        "type": "class",
+        "init_sig": "(self, variant: 'str' = 'npo', beta: 'float' = 0.1, npo_coeff: 'float' = 1.0, grad_diff_coeff: 'float' = 1.0, kl_coeff: 'float' = 1.0, num_epochs: 'int' = 10, lr: 'float' = 1e-05, weight_decay: 'float' = 0.01, optimizer: 'str' = 'adamw', max_steps: 'Optional[int]' = None) -> None",
+        "methods": []
+      },
+      "RMUConfig": {
+        "type": "class",
+        "init_sig": "(self, layer_id: 'int' = 7, update_layer_ids: 'List[int]' = None, steering_coeff: 'float' = 20.0, alpha: 'float' = 100.0, lr: 'float' = 5e-05, max_num_batches: 'Optional[int]' = 80, param_substring: 'str' = 'mlp.down_proj') -> None",
+        "methods": []
+      },
+      "SCRUBConfig": {
+        "type": "class",
+        "init_sig": "(self, alpha: 'float' = 1.0, gamma: 'float' = 1.0, beta: 'float' = 1.0, temperature: 'float' = 4.0, sgda_epochs: 'int' = 5, msteps: 'int' = 2, lr: 'float' = 0.0005, lr_decay_epochs: 'List[int]' = <factory>, lr_decay_rate: 'float' = 0.1, weight_decay: 'float' = 0.1, momentum: 'float' = 0.9, optimizer: 'str' = 'sgd', forget_clip: 'Optional[float]' = None, max_steps: 'Optional[int]' = None) -> None",
+        "methods": []
+      },
+      "SimDPOUnlearnConfig": {
+        "type": "class",
+        "init_sig": "(self, variant: 'str' = 'simdpo_retain', beta: 'float' = 0.1, retain_coeff: 'float' = 1.0, epochs: 'int' = 5, lr: 'float' = 1e-05, weight_decay: 'float' = 0.01, max_steps: 'Optional[int]' = None) -> None",
+        "methods": []
+      },
+      "crisp_unlearn": {
+        "type": "function",
+        "sig": "(model: 'nn.Module', sae: 'nn.Module', concept_features: 'torch.Tensor', forget_dataset: 'Iterable[Dict[str, torch.Tensor]]', retain_dataset: 'Iterable[Dict[str, torch.Tensor]]', gamma: 'float' = 1.0, num_steps: 'int' = 500, lr: 'float' = 2e-05, hook_layer: 'int' = -1, device: 'str' = 'cpu') -> 'nn.Module'"
+      },
+      "flat_fdiv_loss": {
+        "type": "function",
+        "sig": "(good_logits: 'torch.Tensor', good_labels: 'torch.Tensor', forget_logits: 'torch.Tensor', forget_labels: 'torch.Tensor', divergence: 'str' = 'kl') -> 'torch.Tensor'"
+      },
+      "flat_unlearn": {
+        "type": "function",
+        "sig": "(model: 'nn.Module', forget_batches: 'Iterable[Dict[str, torch.Tensor]]', good_batches: 'Iterable[Dict[str, torch.Tensor]]', retain_batches: 'Optional[Iterable[Dict[str, torch.Tensor]]]' = None, *, forward_fn: 'Optional[Callable[[nn.Module, Dict[str, torch.Tensor]], torch.Tensor]]' = None, config: 'Optional[FLATConfig]' = None) -> 'nn.Module'"
+      },
+      "get_batch_loss": {
+        "type": "function",
+        "sig": "(logits: 'torch.Tensor', labels: 'torch.Tensor') -> 'torch.Tensor'"
+      },
+      "gradient_ascent_unlearn": {
+        "type": "function",
+        "sig": "(model: 'nn.Module', forget_batches: 'Iterable[Dict[str, torch.Tensor]]', retain_batches: 'Optional[Iterable[Dict[str, torch.Tensor]]]' = None, *, reference: 'Optional[nn.Module]' = None, forward_fn: 'Optional[Callable[[nn.Module, Dict[str, torch.Tensor]], torch.Tensor]]' = None, config: 'Optional[GradientAscentConfig]' = None) -> 'nn.Module'"
+      },
+      "make_simdpo_pairs": {
+        "type": "function",
+        "sig": "(harmful_batches: 'List[Dict[str, torch.Tensor]]', refusal_response: 'str', tokenizer, max_len: 'int' = 256) -> 'List[Dict[str, Dict[str, torch.Tensor]]]'"
+      },
+      "npo_forget_loss": {
+        "type": "function",
+        "sig": "(forget_loss_current: 'torch.Tensor', forget_loss_ref: 'torch.Tensor', beta: 'float') -> 'torch.Tensor'"
+      },
+      "npo_unlearn": {
+        "type": "function",
+        "sig": "(model: 'nn.Module', forget_batches: 'Iterable[Dict[str, torch.Tensor]]', retain_batches: 'Optional[Iterable[Dict[str, torch.Tensor]]]' = None, *, reference: 'Optional[nn.Module]' = None, forward_fn: 'Optional[Callable[[nn.Module, Dict[str, torch.Tensor]], torch.Tensor]]' = None, config: 'Optional[NPOConfig]' = None) -> 'nn.Module'"
+      },
+      "rmu_unlearn": {
+        "type": "function",
+        "sig": "(model: 'nn.Module', retain_batches: 'Iterable[Dict[str, torch.Tensor]]', forget_batches: 'Iterable[Dict[str, torch.Tensor]]', *, frozen_model: 'Optional[nn.Module]' = None, config: 'Optional[RMUConfig]' = None) -> 'nn.Module'"
+      },
+      "scrub_unlearn": {
+        "type": "function",
+        "sig": "(model: 'nn.Module', retain_batches: 'Iterable[Dict[str, torch.Tensor]]', forget_batches: 'Iterable[Dict[str, torch.Tensor]]', *, teacher: 'Optional[nn.Module]' = None, forward_fn: 'Optional[Callable[[nn.Module, Dict[str, torch.Tensor]], torch.Tensor]]' = None, config: 'Optional[SCRUBConfig]' = None) -> 'nn.Module'"
+      },
+      "simdpo_forget_loss": {
+        "type": "function",
+        "sig": "(chosen_logp: 'torch.Tensor', rejected_logp: 'torch.Tensor', beta: 'float', gamma: 'float' = 0.0) -> 'torch.Tensor'"
+      },
+      "simdpo_unlearn": {
+        "type": "function",
+        "sig": "(model: 'nn.Module', forget_batches: 'Iterable[Dict[str, Dict[str, torch.Tensor]]]', retain_batches: 'Optional[Iterable[Dict[str, torch.Tensor]]]' = None, *, config: 'Optional[SimDPOUnlearnConfig]' = None) -> 'nn.Module'"
+      },
+      "tracin_influence": {
+        "type": "function",
+        "sig": "(model: 'nn.Module', train_examples: 'Iterable[Dict[str, torch.Tensor]]', test_example: 'Dict[str, torch.Tensor]', loss_fn: 'Callable[[nn.Module, Dict[str, torch.Tensor]], torch.Tensor]', checkpoints: 'Optional[Sequence[nn.Module]]' = None, learning_rates: 'Optional[Sequence[float]]' = None) -> 'List[float]'"
+      }
+    },
+    "runner_members": [
+      "load_harden_data",
+      "load_recover_data",
+      "load_steer_data",
+      "load_unlearn_data"
+    ],
+    "audit_badges": {}
+  },
+  "curatorkit": {
+    "version": "0.1.24",
+    "path": "C:\\Users\\RahulNew\\Downloads\\AI Red Teaming\\.venv\\Lib\\site-packages\\curatorkit",
+    "task_type_export_formats": {
+      "instruction_following": [
+        "alpaca",
+        "sharegpt",
+        "messages"
+      ],
+      "conversational": [
+        "sharegpt",
+        "messages"
+      ],
+      "preference": [
+        "dpo"
+      ],
+      "implicit_preference": [
+        "dpo"
+      ],
+      "unpaired_preference": [
+        "alpaca",
+        "sharegpt",
+        "messages"
+      ],
+      "grpo": [
+        "grpo"
+      ],
+      "prompt_only": [
+        "ppo"
+      ],
+      "language_modeling": [
+        "corpus"
+      ],
+      "source_chunk": [
+        "corpus"
+      ]
+    }
+  },
+  "auditkit": {
+    "version": "1.1.7",
+    "path": "C:\\Users\\RahulNew\\Downloads\\AI Red Teaming\\.venv\\Lib\\site-packages\\auditkit",
+    "members": [
+      "Abstention",
+      "AclCompliance",
+      "Adapter",
+      "AgentCase",
+      "AgentEpisode",
+      "AgentEvalResult",
+      "AgentEvalRunner",
+      "AgentEvalSpec",
+      "AgentEvent",
+      "AgentLoopDetection",
+      "Annotator",
+      "AnswerAssertion",
+      "AnswerOverlap",
+      "AnswerRelevancy",
+      "ArtifactAssertion",
+      "AuditKitError",
+      "AutoModel",
+      "BM25Similarity",
+      "BenchmarkEvaluator",
+      "BertScore",
+      "BiasJudge",
+      "Bleu",
+      "CallableScenario",
+      "Capability",
+      "ChatAdapter",
+      "ChrF",
+      "CitationSupport",
+      "ClosedQA",
+      "CompareResult",
+      "CompatReport",
+      "Contains",
+      "ContextCoverage",
+      "ContextOverlap",
+      "ContextPrecision",
+      "ContextRecall",
+      "ContextRelevance",
+      "ContextRetention",
+      "CorpusSnapshot",
+      "CosineSimilarity",
+      "CustomPredicate",
+      "DataType",
+      "DefconGrade",
+      "DeltaGrade",
+      "Direction",
+      "DiskCache",
+      "EloScore",
+      "EncoderJudge",
+      "EndsWith",
+      "Equals",
+      "Evaluator",
+      "EvidenceSetRecall",
+      "Experiment",
+      "ExperimentDB",
+      "ExtraNotInstalled",
+      "F1Score",
+      "FactualConsistency",
+      "Factuality",
+      "FactualityEncoderJudge",
+      "Faithfulness",
+      "FewShotAdapter",
+      "FieldF1",
+      "FinalStateAssertion",
+      "Freshness",
+      "GEval",
+      "GenerationAdapter",
+      "GuardJudge",
+      "Hallucination",
+      "HateSpeechScore",
+      "HumanReview",
+      "InstructionAdapter",
+      "IsJson",
+      "JsonSchemaValid",
+      "JudgeMetric",
+      "KeywordDetector",
+      "LLMAnnotator",
+      "LLMJudge",
+      "LatencyStats",
+      "Levenshtein",
+      "LexicalGroundedness",
+      "ListScenario",
+      "MCQAdapter",
+      "MetricDelta",
+      "NumericAccuracy",
+      "ParallelToolCalls",
+      "Perplexity",
+      "PreferenceAccuracy",
+      "RAGAdapter",
+      "RAGCase",
+      "RAGTrace",
+      "RedundantToolCalls",
+      "Regex",
+      "RegexAnnotator",
+      "Relevance",
+      "Report",
+      "RepresentationSkew",
+      "ResponseGroundedness",
+      "Result",
+      "RetrievalMetrics",
+      "RogueL",
+      "RubricItem",
+      "RunComparison",
+      "RunConfig",
+      "RunDiff",
+      "RunResult",
+      "Sample",
+      "Scenario",
+      "Score",
+      "ScoreGate",
+      "ScoreKind",
+      "SentimentEncoderJudge",
+      "Source",
+      "StartsWith",
+      "Stat",
+      "StressCase",
+      "StressCaseResult",
+      "StressReport",
+      "TaskCompletion",
+      "TaskDelta",
+      "TaskKind",
+      "TemplateAdapter",
+      "ThinkingStripAnnotator",
+      "ThreatCategory",
+      "Throughput",
+      "TokenOverlap",
+      "ToolCall",
+      "ToolCallAdapter",
+      "ToolCallF1",
+      "ToolCallValidity",
+      "ToolPermission",
+      "ToolSelectionJudge",
+      "ToxicityScore",
+      "TrajectoryMatch",
+      "WeightedSum",
+      "WinRate",
+      "WordCount",
+      "WordErrorRate",
+      "bfcl_arg_match",
+      "check_compat",
+      "compare",
+      "compare_models",
+      "configure_logging",
+      "episode_from_openai_messages",
+      "episode_from_sample",
+      "episodes_from_agenttune",
+      "evaluate",
+      "evaluate_many",
+      "false_answer_under_partial_retrieval",
+      "generate",
+      "generate_stress_cases",
+      "grade_delta",
+      "judge_calibration",
+      "lexsi_login",
+      "load_agenttune",
+      "load_bfcl",
+      "load_croissant",
+      "load_csv",
+      "load_dataset",
+      "load_hf",
+      "load_jsonl",
+      "make_doc",
+      "map_model_spec",
+      "operational_stress",
+      "parse_tool_calls",
+      "pass_at_k",
+      "pass_hat_k",
+      "read_provenance",
+      "review_queue",
+      "route_adapter",
+      "run_benchmark",
+      "run_lmeval",
+      "run_stress",
+      "scorer",
+      "sha256_digest",
+      "synthetic_bank_kb",
+      "to_turns"
+    ],
+    "has_evaluate_many": true,
+    "has_RedTeamRunner": false,
+    "has_ExperimentDB": true
+  },
+  "guards_verified": {}
+}

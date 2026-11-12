@@ -1,0 +1,8 @@
+{
+  "pipeline": "curatorkit",
+  "quality_gates": [
+    "minhash_dedup",
+    "provenance_gate"
+  ],
+  "status": "VERIFIED"
+}

@@ -1,0 +1,18 @@
+# AuditKIT 6-Pillar Evaluation Suite Config
+target_models:
+  - "CohereLabs/tiny-aya-fire"
+  - "CohereLabs/tiny-aya-global"
+compression_modes:
+  - "BF16"
+  - "NF4"
+  - "INT4_GGUF"
+languages: ["en", "hi", "te", "bn", "ta", "ar", "es", "fr", "hinglish", "telugish"]
+attacks:
+  - "paraphrase"
+  - "affirmative_prefill"
+  - "bon_attack_n16"
+  - "base64_cipher"
+  - "translation_sandwich"
+relearning_steps: [1, 5, 10, 25]
+judge_model: "allenai/wildguard"
+output_dir: "results/audit"

@@ -1,0 +1,17 @@
+AGENTS.md
+pyproject.toml
+src/polyglot_mansu/__init__.py
+src/polyglot_mansu/guards.py
+src/polyglot_mansu.egg-info/PKG-INFO
+src/polyglot_mansu.egg-info/SOURCES.txt
+src/polyglot_mansu.egg-info/dependency_links.txt
+src/polyglot_mansu.egg-info/requires.txt
+src/polyglot_mansu.egg-info/top_level.txt
+src/polyglot_mansu/circuits/cad_metrics.py
+src/polyglot_mansu/circuits/harmonic_intersect.py
+src/polyglot_mansu/unlearn/fisher_nullspace.py
+src/polyglot_mansu/unlearn/quant_permanence.py
+tests/test_fisher_projection.py
+tests/test_guards.py
+tests/test_harmonic_circuit.py
+tests/test_quant_bin_floor.py

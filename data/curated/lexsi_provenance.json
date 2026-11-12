@@ -1,0 +1,9 @@
+{
+  "pipeline": "curatorkit",
+  "curator_version": "0.1.24",
+  "regimes": [
+    "Regime A: Private Dossiers (TOFU/MUSE)",
+    "Regime B: Cyber Exploits (WMDP-Cyber)"
+  ],
+  "status": "VERIFIED_EXPANDED"
+}

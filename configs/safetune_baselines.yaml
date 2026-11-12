@@ -1,0 +1,32 @@
+# SafeTune baseline unlearning configs for Tiny Aya 3.35B
+target_models:
+  - "CohereLabs/tiny-aya-fire"
+  - "CohereLabs/tiny-aya-global"
+max_len: 1024
+baselines:
+  RMU:
+    layer_id: 7
+    steering_coeff: 20.0
+    alpha: 100.0
+    lr: 5.0e-5
+    audit_badge: "Faithful"
+  NPO:
+    variant: "npo"
+    beta: 0.1
+    npo_coeff: 1.0
+    lr: 1.0e-5
+    audit_badge: "Faithful"
+  GradDiff:
+    forget_loss: "grad_diff"
+    lr: 1.0e-5
+    audit_badge: "Faithful"
+  FLAT:
+    variant: "flat_retain"
+    divergence: "kl"
+    lr: 1.0e-5
+    audit_badge: "Faithful"
+  SimDPO:
+    variant: "simdpo_retain"
+    beta: 0.1
+    lr: 1.0e-5
+    audit_badge: "Variant"

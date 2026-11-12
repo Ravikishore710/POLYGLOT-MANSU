@@ -1,0 +1,7 @@
+AGENTS.md
+pyproject.toml
+polyglot_mansu.egg-info/PKG-INFO
+polyglot_mansu.egg-info/SOURCES.txt
+polyglot_mansu.egg-info/dependency_links.txt
+polyglot_mansu.egg-info/requires.txt
+polyglot_mansu.egg-info/top_level.txt
