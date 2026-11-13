@@ -91,14 +91,14 @@ def calculate_roi_ui(monthly_tokens, gpu_rate):
         f"- **Closed Frontier API + Guardrails:** ${monthly_api:,.2f}/month (${cost_api_1m:.4f} per 1M tokens)\n"
         f"- **Net Monthly Savings:** **${savings:,.2f}** ({((savings/monthly_api)*100):.1f}% reduction)\n"
         f"- **Cost Reduction Ratio:** **{ratio:.1f}x cheaper**\n"
-        f"- **GDPR/Compliance Status:** Guaranteed weight-permanent erasure (Zero legal liability)."
+        f"- **Quantization Robustness:** Circuit-targeted suppression demonstrating zero quantization resurrection under tested NF4/INT4 grids."
     )
     return res
 
 # Build Gradio UI
-with gr.Blocks(title="Polyglot-MANSU | Lexsi Alignment Hackathon", theme=gr.themes.Soft()) as demo:
+with gr.Blocks(title="Polyglot-MANSU | Lexsi Alignment Hackathon") as demo:
     gr.Markdown(
-        "# Polyglot-MANSU: Cross-Lingual & Quantization-Permanent Circuit Unlearning\n"
+        "# Polyglot-MANSU: Cross-Lingual & Quantization-Robust Circuit Unlearning\n"
         "**Lexsi AI Safety Hackathon 2026** | CohereLabs Tiny Aya 3.35B | Track 2b #7 Machine Unlearning"
     )
 
@@ -146,7 +146,10 @@ with gr.Blocks(title="Polyglot-MANSU | Lexsi Alignment Hackathon", theme=gr.them
 
         # Tab 3: Benchmarks & Quant Reversal
         with gr.TabItem("📊 6-Pillar AuditKIT Dashboard"):
-            gr.Markdown("### Verified Benchmark Matrix Across Precision & Languages")
+            gr.Markdown(
+                "### Comparative Literature Baseline vs. Quantization Reversal Matrix\n"
+                "*Benchmarked against published unlearning literature; dual-T4 empirical audit receipts on Cohere Tiny Aya are verified in repository receipts.*"
+            )
             gr.DataFrame(
                 headers=["Method", "Precision", "Forget Acc (WMDP-Cyber)", "PTQ Gap (Delta_PTQ)", "Hinglish/Telugu ASR", "Global-MMLU-Lite", "Hard-Boundary Twin Acc"],
                 value=[

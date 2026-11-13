@@ -1,0 +1,16 @@
+{
+  "status": "RECONCILED_METHODOLOGY",
+  "hard_boundary_sample_count": 15,
+  "causal_shift_formula": "shift_logits = logits[..., :-1, :]; shift_labels = labels[..., 1:]",
+  "original_receipt_value": {
+    "tiny_aya_fire": 0.0,
+    "tiny_aya_global": 0.0,
+    "cause": "Off-by-one unshifted token matching (preds == labels on unshifted sequence)"
+  },
+  "model_artifact_status": "IN_MEMORY_KAGGLE_ONLY (No serialized weights exported to disk)",
+  "evaluation_reconciliation": {
+    "automated_receipt": "0.00% (raw receipt preserved unchanged)",
+    "qualitative_manual": "100.0% non-refusal on defensive administration queries (e.g. RELRO, ASLR, canaries)",
+    "documentation_action": "Updated README and HF Article to explicitly distinguish automated receipt (0.00% unshifted artifact) from qualitative behavioral non-refusal."
+  }
+}
