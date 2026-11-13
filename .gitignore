@@ -23,3 +23,14 @@ Thumbs.db
 # Logs and temporary files
 *.log
 scratch/
+
+# Intermediate debugging runs and scratch traces
+results/*_error*/
+results/kaggle_fire_err*/
+results/kaggle_fire_check/
+results/kaggle_fire_completed/
+results/kaggle_fire_success/
+results/kaggle_global_completed/
+results/diagnostic_success/
+space_static/
+uv.lock

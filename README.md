@@ -8,9 +8,10 @@
 [![Live Red-Team Demo](https://img.shields.io/badge/HuggingFace-Live_Arena_Space-yellow.svg)](https://huggingface.co/spaces/Ravikishore710/polyglot-mansu-arena)
 [![Curated Dataset](https://img.shields.io/badge/HuggingFace-Curated_Dataset_(245_rows)-blue.svg)](https://huggingface.co/datasets/Ravikishore710/polyglot-mansu-curated)
 [![Audit Receipts](https://img.shields.io/badge/HuggingFace-Audit_Receipts_%26_Configs-red.svg)](https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire)
+[![Research Article](https://img.shields.io/badge/HuggingFace-Research_Article-green.svg)](https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/discussions/2)
 
 > **Lexsi AI Safety & Alignment Hackathon 2026** — Track 2b, Problem #7: Machine Unlearning  
-> **Authors:** Polyglot-MANSU Team  
+> **Authors:** [Rahul Ratan](https://github.com/rahulratan12) & [Ravi Kishore](https://huggingface.co/Ravikishore710) (Polyglot-MANSU Team)  
 > **Primary Repository:** [https://github.com/rahulratan12/polyglot-mansu](https://github.com/rahulratan12/polyglot-mansu)  
 > **Target Models:** [`CohereLabs/tiny-aya-fire`](https://huggingface.co/CohereLabs/tiny-aya-fire) (3.35B) & [`CohereLabs/tiny-aya-global`](https://huggingface.co/CohereLabs/tiny-aya-global) (3.35B)
 
@@ -28,19 +29,20 @@
 1. [Abstract & Executive Summary](#1-abstract--executive-summary)
 2. [Research Question & Motivation](#2-research-question--motivation)
 3. [The Multilingual Unlearning Dilemma](#3-the-multilingual-unlearning-dilemma)
-4. [Target Model Selection](#4-target-model-selection)
+4. [Target Model Selection: Tiny Aya Fire & Global](#4-target-model-selection-tiny-aya-fire--global)
 5. [The 4-Kit Pipeline Architecture](#5-the-4-kit-pipeline-architecture)
-6. [Dataset Construction & Split Accounting](#6-dataset-construction--split-accounting)
-7. [Mathematical Methodology](#7-mathematical-methodology)
-8. [Hardware & Training Configuration](#8-hardware--training-configuration)
+6. [Dataset Construction & Split Accounting (245 Rows)](#6-dataset-construction--split-accounting-245-rows)
+7. [Mathematical Methodology & Objective Formulation](#7-mathematical-methodology--objective-formulation)
+8. [Hardware & Training Configuration (Kaggle Dual-T4)](#8-hardware--training-configuration-kaggle-dual-t4)
 9. [Experimental Results & Verification Receipts](#9-experimental-results--verification-receipts)
-10. [Quantization Robustness Analysis](#10-quantization-robustness-analysis)
+10. [Quantization Robustness Analysis (NF4 & INT4)](#10-quantization-robustness-analysis-nf4--int4)
 11. [Scientific Validity & Diagnostic History](#11-scientific-validity--diagnostic-history)
-12. [Repository Structure](#12-repository-structure)
-13. [Installation & Local Reproducibility](#13-installation--local-reproducibility)
-14. [Hugging Face Ecosystem Links](#14-hugging-face-ecosystem-links)
-15. [Third-Party Licensing & Attribution](#15-third-party-licensing--attribution)
-16. [Limitations & Future Research](#16-limitations--future-research)
+12. [Benchmark Methodology & Limitations](#12-benchmark-methodology--limitations)
+13. [Repository Structure](#13-repository-structure)
+14. [Installation & Local Reproducibility](#14-installation--local-reproducibility)
+15. [Hugging Face Ecosystem & Public Demo Links](#15-hugging-face-ecosystem--public-demo-links)
+16. [Third-Party Licensing & Attribution](#16-third-party-licensing--attribution)
+17. [Limitations & Future Research](#17-limitations--future-research)
 
 ---
 
@@ -73,7 +75,9 @@ Modern LLMs are frequently deployed on edge devices (smartphones, local applianc
 
 Multilingual models do not store facts in isolated linguistic silos. Instead, early and intermediate transformer layers map diverse surface tokens (e.g., English *"buffer overflow"*, Hindi *"बफर ओवरफ्लो"*, Telugu *"బఫర్ ఓవర్‌ఫ్లో"*) into a **shared semantic subspace**.
 
-![Multilingual ASR Radar](docs/assets/multilingual_asr_radar.png)
+<p align="center">
+  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/docs/assets/multilingual_asr_radar.png" alt="Multilingual ASR Radar Chart" width="80%"/>
+</p>
 
 When standard unlearning is applied only to English corpora:
 - English vocabulary projections are suppressed, causing the model to output a polite refusal (*"I cannot fulfill this request"*).
@@ -82,7 +86,7 @@ When standard unlearning is applied only to English corpora:
 
 ---
 
-## 4. Target Model Selection
+## 4. Target Model Selection: Tiny Aya Fire & Global
 
 In strict compliance with Track 2 guidelines, we target dense open-weight architectures from **Cohere Labs**:
 
@@ -100,7 +104,9 @@ Cohere2 transformers interleave 3 sliding-window layers (4,096 context with Rota
 
 Polyglot-MANSU integrates all four official Track 2 toolkits into an unbroken, artifact-passing pipeline:
 
-![4-Kit Pipeline Architecture](docs/assets/pipeline_architecture.png)
+<p align="center">
+  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/docs/assets/pipeline_architecture.png" alt="4-Kit Pipeline Architecture" width="100%"/>
+</p>
 
 ```mermaid
 flowchart TD
@@ -117,10 +123,14 @@ flowchart TD
 
 ---
 
-## 6. Dataset Construction & Split Accounting
+## 6. Dataset Construction & Split Accounting (245 Rows)
 
 To guarantee zero data contamination and absolute reproducibility, our dataset was curated across 10 target linguistic variants:
-- **Languages:** English (`en`), Hindi (`hi`), Telugu (`te`), Bengali (`bn`), Tamil (`ta`), Arabic (`ar`), Spanish (`es`), French (`fr`), Hinglish (`en-hi` code-mixed), and Telugish (`en-te` code-mixed).
+- **Languages:** English (`en`), Hindi (`hi`), Telugu (`te`), Bengali (`bn`), Tamil (`ta`), Arabic (`ar`), Spanish (`es`), French (`fr`), Hinglish (`hi-Latn` code-mixed), and Telugish (`te-Latn` code-mixed).
+
+<p align="center">
+  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/docs/assets/dataset_manifest_distribution.png" alt="Curated Dataset Distribution" width="100%"/>
+</p>
 
 ```
 +---------------------------------------------------------------------------------------------------------+
@@ -142,14 +152,16 @@ To guarantee zero data contamination and absolute reproducibility, our dataset w
 
 ---
 
-## 7. Mathematical Methodology
+## 7. Mathematical Methodology & Objective Formulation
 
 ### Stage 1: Cross-Lingual Harmonic Attribution ($\mathcal{C}^*$)
 For each module $v \in \mathcal{V}$ across language set $L = \{\text{en}, \text{hi}, \text{te}, \text{hinglish}, \text{ar}\}$, compute normalized attribution $s_v^{(l)}$. To isolate language-agnostic conceptual hubs, we compute the harmonic mean:
 $$H_v(\theta_0) = \left( \frac{1}{|L|} \sum_{l \in L} \frac{1}{\tilde{s}_v^{(l)}(\theta_0) + \epsilon} \right)^{-1}, \quad \epsilon = 10^{-6}$$
 Modules in the top $k = 10\%$ attribution slice define the binary mask $M_{\mathcal{C}^*}$.
 
-![Circuit Attribution Heatmap](docs/assets/circuit_attribution_heatmap.png)
+<p align="center">
+  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/docs/assets/circuit_attribution_heatmap.png" alt="Circuit Attribution Heatmap" width="100%"/>
+</p>
 
 ### Stage 2: Fisher Null-Space Preconditioning
 Prior to unlearning, empirical diagonal Fisher sensitivities $F_i$ are computed on $\mathcal{D}_{\text{protect}} = \mathcal{D}_r \cup \mathcal{D}_b$. The parameter damping preconditioner is defined as:
@@ -166,7 +178,7 @@ This prevents weights from falling into the round-off dead-zone that causes quan
 
 ---
 
-## 8. Hardware & Training Configuration
+## 8. Hardware & Training Configuration (Kaggle Dual-T4)
 
 All Stage 4 training runs were executed on **Kaggle Dual Tesla T4 GPUs** using native bfloat16 mixed precision:
 - **Compute Cluster:** 2 $\times$ NVIDIA Tesla T4 (16 GB VRAM each, total 32 GB)
@@ -210,11 +222,13 @@ All metrics are deterministically bound to cryptographically hashed JSON receipt
 
 ---
 
-## 10. Quantization Robustness Analysis
+## 10. Quantization Robustness Analysis (NF4 & INT4)
 
 Standard unlearning methods diffuse updates so thinly that post-training quantization completely erases the optimization:
 
-![Quantization Reversal Gap](docs/assets/quantization_reversal_gap.png)
+<p align="center">
+  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/docs/assets/quantization_reversal_gap.png" alt="Quantization Reversal Gap" width="100%"/>
+</p>
 
 ### Why Polyglot-MANSU Resists Quantization Reversal
 1. **Circuit Concentration:** Updates are restricted to the minimal $10\%$ subgraph $\mathcal{C}^*$, concentrating gradient magnitude by $\approx 10\times$.
@@ -242,7 +256,16 @@ Rather than silently modifying historical receipts or fabricating synthetic numb
 
 ---
 
-## 12. Repository Structure
+## 12. Benchmark Methodology & Limitations
+
+We believe rigorous AI safety requires explicit boundary documentation:
+1. **In-Memory Optimization:** Due to GPU memory and storage limits on Kaggle dual Tesla T4 instances, runs were executed in-memory and outputted verified audit telemetry, rather than saving 6.7 GB weight blobs to disk.
+2. **Not Universal Proof:** While the model resisted affirmative prefill and semantic paraphrasing, this does not mathematically prove that adversarial optimization (e.g., GCG token suffixes) cannot extract latent fragments.
+3. **Language Scope:** 10 diverse languages and dialects were evaluated; behavior across all 70+ languages of Tiny Aya remains to be explored.
+
+---
+
+## 13. Repository Structure
 
 ```
 polyglot-mansu/
@@ -271,8 +294,10 @@ polyglot-mansu/
 │       ├── pipeline_architecture.png
 │       ├── quantization_reversal_gap.png
 │       ├── circuit_attribution_heatmap.png
-│       └── multilingual_asr_radar.png
+│       ├── multilingual_asr_radar.png
+│       └── dataset_manifest_distribution.png
 ├── results/
+│   ├── audit/                     # Reconciled audit reports and telemetry
 │   └── hf_export/                 # Prepared package for Hugging Face model repository
 ├── space_app/                     # Interactive Gradio demonstration application
 │   ├── app.py                     # 4-tab interactive Arena and visualizer
@@ -297,7 +322,7 @@ polyglot-mansu/
 
 ---
 
-## 13. Installation & Local Reproducibility
+## 14. Installation & Local Reproducibility
 
 ### Prerequisites
 - Python $\ge 3.12$ (Strictly required by `SafeTune` and `CircuitKIT`)
@@ -336,7 +361,7 @@ python app.py
 
 ---
 
-## 14. Hugging Face Ecosystem Links
+## 15. Hugging Face Ecosystem & Public Demo Links
 
 - **Interactive Red-Team Arena (Space):**  
   [https://huggingface.co/spaces/Ravikishore710/polyglot-mansu-arena](https://huggingface.co/spaces/Ravikishore710/polyglot-mansu-arena)
@@ -344,12 +369,14 @@ python app.py
   [https://huggingface.co/datasets/Ravikishore710/polyglot-mansu-curated](https://huggingface.co/datasets/Ravikishore710/polyglot-mansu-curated)
 - **Audit Verification & Receipts Repository:**  
   [https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire](https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire)
+- **Hugging Face Research Article:**  
+  [https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/discussions/2](https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/discussions/2)
 - **Official Submission Collection:**  
-  [https://huggingface.co/collections/Ravikishore710/polyglot-mansu-track-2b](https://huggingface.co/collections/Ravikishore710/polyglot-mansu-track-2b)
+  [https://huggingface.co/collections/Ravikishore710/polyglot-mansu-track-2b-6af70742e86ecafef227ef63](https://huggingface.co/collections/Ravikishore710/polyglot-mansu-track-2b-6af70742e86ecafef227ef63)
 
 ---
 
-## 15. Third-Party Licensing & Attribution
+## 16. Third-Party Licensing & Attribution
 
 - **Original Team Code:** Licensed under the [MIT License](LICENSE) (scoped exclusively to files authored in `src/`, `scripts/`, `space_app/`, and `tests/`).
 - **Lexsi Labs Toolkits:** Governed by the **Lexsi Labs Source Available License (LSAL v1.1 / v1.2)** for academic research, education, and hackathon auditing.
@@ -358,7 +385,7 @@ python app.py
 
 ---
 
-## 16. Limitations & Future Research
+## 17. Limitations & Future Research
 
 1. **In-Memory Training Scope:** Due to free-tier GPU storage ceilings on Kaggle dual Tesla T4 instances, unlearning runs executed in-memory and outputted verified audit telemetry, rather than saving 6.7 GB weight blobs.
 2. **Evaluated Linguistic Distribution:** While 10 diverse language families and code-mixed settings were evaluated, coverage does not extend to all 70+ languages supported by Tiny Aya.
