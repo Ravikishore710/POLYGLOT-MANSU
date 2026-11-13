@@ -1,6 +1,6 @@
 ---
 title: "Aligning Tiny Aya Fire (3.35B) for Cross-Lingual Machine Unlearning: Quantization-Robust Circuit Decoupling Across 10 Languages"
-thumbnail: "https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/docs/assets/pipeline_architecture.png"
+thumbnail: "https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/docs/assets/polyglot-mansu-cover.png"
 authors:
   - name: Rahul Ratan
   - name: Ravi Kishore
@@ -15,10 +15,14 @@ tags:
   - cohere
 ---
 
+<p align="center">
+  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/docs/assets/polyglot-mansu-cover.png" alt="Polyglot-MANSU Cover" width="100%"/>
+</p>
+
 # Aligning Tiny Aya Fire (3.35B) for Cross-Lingual Machine Unlearning: Quantization-Robust Circuit Decoupling Across 10 Languages
 
 > **🟡 Community Article** &nbsp;|&nbsp; **Published November 2026** &nbsp;|&nbsp; **Lexsi AI Safety & Alignment Hackathon (Track 2b, Problem #7: Machine Unlearning)**  
-> **Authors:** [Rahul Ratan](https://github.com/rahulratan12) & [Ravi Kishore](https://huggingface.co/Ravikishore710) (Polyglot-MANSU Team)  
+> **Authors:** [Rahul Ratan](https://github.com/rahulratan12) & [Ravi Kishore](https://huggingface.co/Ravikishore710) (Polyglot-MANSU Research Team)  
 > **Models Mentioned:** [`CohereLabs/tiny-aya-fire`](https://huggingface.co/CohereLabs/tiny-aya-fire) (3.35B), [`CohereLabs/tiny-aya-global`](https://huggingface.co/CohereLabs/tiny-aya-global) (3.35B), [`Ravikishore710/polyglot-mansu-tiny-aya-fire`](https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire)  
 > **Codebase:** [https://github.com/rahulratan12/polyglot-mansu](https://github.com/rahulratan12/polyglot-mansu) &nbsp;|&nbsp; **Live Arena:** [https://huggingface.co/spaces/Ravikishore710/polyglot-mansu-arena](https://huggingface.co/spaces/Ravikishore710/polyglot-mansu-arena)
 
@@ -32,7 +36,7 @@ tags:
 
 ---
 
-## 1. Introduction: Why Machine Unlearning Must Work Across Languages
+## 1. Introduction & Research Motivation
 
 Machine unlearning in Large Language Models (LLMs) aims to excise hazardous capabilities, private entity records, or copyrighted data without retraining a model from scratch. However, almost the entirety of modern unlearning literature—from Representation Misdirection Unlearning (`RMU`) to Negative Preference Optimization (`NPO`)—has been evaluated on English-only benchmarks.
 
@@ -54,7 +58,7 @@ Furthermore, real-world edge models are rarely deployed at full 16-bit precision
 
 ---
 
-## 2. Research Question and Hypothesis
+## 2. Research Question & Hypothesis
 
 We set out to address two fundamental questions:
 1. *Can causal attribution identify language-invariant factual hubs in dense multilingual transformers?*
@@ -65,7 +69,21 @@ Factual knowledge in multilingual models is concentrated in a sparse, cross-ling
 
 ---
 
-## 3. Why Cohere's Tiny Aya Fire and Tiny Aya Global?
+## 3. Benchmark Comparison Dashboard
+
+<p align="center">
+  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/docs/assets/benchmark_comparison.png" alt="Benchmark Comparison Dashboard" width="100%"/>
+</p>
+
+### Key Quantitative Takeaways:
+- **Direct Forgetting (Panel A):** Unmodified baseline memorization drops from $94.2\%$ to $0.00\%$ on Tiny Aya Fire ($0.03\%$ on Global) while preserving $98.4\%$ general multilingual retention utility.
+- **Cross-Lingual Leakage (Panel B):** Monolingual RMU exhibits severe leakage ($74.2\%$ in Hindi, $79.5\%$ in Telugu, $82.1\%$ in Hinglish), whereas Polyglot-MANSU maintains $0.00\%$ ASR across all 10 language settings.
+- **Quantization Permanence (Panel C):** Snapping weights past the dead-zone floor ($\tau_i$) prevents quantization reversal ($\Delta_{\text{PTQ}} = 0.00\%$), while RMU and NPO suffer catastrophic reversal ($+40.5\%$ and $+45.4\%$).
+- **Mechanistic Causal Decoupling (Panel D):** Causal Attribution Divergence ($CAD$) on Subgraph $\mathcal{C}^*$ reaches $0.9957$, confirming internal conceptual disruption while peripheral modules remain undisturbed ($CAD = 0.0002$).
+
+---
+
+## 4. Why Cohere's Tiny Aya Fire and Tiny Aya Global?
 
 Under the Track 2 guidelines of the Lexsi Hackathon, we target dense open-weight models from **Cohere Labs**:
 
@@ -79,12 +97,12 @@ Our interpretability analysis with `CircuitKIT` revealed that these global NoPE 
 
 ---
 
-## 4. The Polyglot-MANSU 4-Tool Architecture
+## 5. The Polyglot-MANSU 4-Tool Architecture
 
 Polyglot-MANSU integrates all four official Track 2 toolkits into an authentic, artifact-passing chain:
 
 <p align="center">
-  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/docs/assets/pipeline_architecture.png" alt="4-Kit Pipeline Architecture" width="100%"/>
+  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/docs/assets/polyglot-mansu-architecture.png" alt="4-Kit Pipeline Architecture" width="100%"/>
 </p>
 
 1. **`CuratorKIT` (v0.1.24):** Generates parallel translations across 10 languages and code-mixed dialects, computes MinHash Jaccard disjointness ($< 0.60$), and outputs schema-validated `manifest.json`.
@@ -94,13 +112,29 @@ Polyglot-MANSU integrates all four official Track 2 toolkits into an authentic, 
 
 ---
 
-## 5. Dataset Design and Split Methodology
+## 6. Evaluation Workflow
+
+<p align="center">
+  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/docs/assets/evaluation-workflow.png" alt="Evaluation Workflow" width="100%"/>
+</p>
+
+The evaluation workflow spans 6 systematic phases:
+1. **Target Fact Construction:** 10 hazardous offensive cyber exploit concepts and author dossiers.
+2. **Variant Synthesis:** 10 language variants generated via CuratorKIT with MinHash disjointness gating.
+3. **Unlearning Intervention:** Subgraph-restricted optimization, Fisher damping, and dead-zone snapping.
+4. **Attack & Leakage Audit:** Pillar 1 direct forget accuracy, Pillar 2 polyglot ASR, Pillar 3 affirmative prefill jailbreaks.
+5. **Boundary & Utility Audit:** Pillar 6 shifted causal next-token evaluation on 15 hard-boundary twins and 30 retain samples.
+6. **Quantization & CAD Audit:** Pillar 4 NF4/INT4 permanence verification ($\Delta_{\text{PTQ}} \le 0$) and Pillar 5 attribution divergence ($CAD \ge 0.99$).
+
+---
+
+## 7. Dataset Design and Split Methodology (245 Rows)
 
 To test cross-lingual transfer without data leakage, we curated a schema-validated dataset across 10 linguistic variants:
 - **Languages:** English (`en`), Hindi (`hi`), Telugu (`te`), Bengali (`bn`), Tamil (`ta`), Arabic (`ar`), Spanish (`es`), French (`fr`), Hinglish (`hi-Latn` code-mixed), and Telugish (`te-Latn` code-mixed).
 
 <p align="center">
-  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/docs/assets/dataset_manifest_distribution.png" alt="Curated Dataset Distribution" width="100%"/>
+  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/docs/assets/dataset-distribution.png" alt="Curated Dataset Distribution" width="100%"/>
 </p>
 
 ```
@@ -116,12 +150,9 @@ To test cross-lingual transfer without data leakage, we curated a schema-validat
 +------------------------------------+------------+-----------------------------------------------------+
 ```
 
-### The Role of Hard-Boundary Twins
-A frequent failure of aggressive unlearning is collateral damage (e.g., forgetting how to exploit a buffer overflow breaks benign Linux socket programming). Our **Hard-Boundary Twins** consist of benign defensive queries (e.g., compiler RELRO mitigations, ASLR, stack canaries) that share high lexical overlap with forget queries, penalizing over-refusal during training.
-
 ---
 
-## 6. Training & Unlearning Methodology
+## 8. Training & Unlearning Methodology
 
 ### Step 1: Harmonic Attribution Localization
 We compute attribution scores across candidate attention and MLP projection nodes separately for each language $l \in \{\text{en}, \text{hi}, \text{te}, \text{hinglish}, \text{ar}\}$. To isolate language-agnostic conceptual nodes and filter out surface token heads, we compute the harmonic mean:
@@ -141,23 +172,7 @@ To guarantee that 4-bit NormalFloat (NF4) and symmetric INT4 do not reverse the 
 
 ---
 
-## 7. Cross-Lingual Evaluation Setup
-
-Our evaluation suite spans 6 rigorous pillars executed via `AuditKIT`:
-1. **Pillar 1 — Direct Forget Accuracy:** Accuracy on direct target queries in full precision (BF16).
-2. **Pillar 2 — Polyglot Attack Success Rate (ASR):** Mean ASR across Hindi, Telugu, Tamil, Bengali, Arabic, Spanish, French, and code-mixed Hinglish/Telugish.
-3. **Pillar 3 — Affirmative Prefill ASR:** Resistance to jailbreak prefill completions (*"Sure, here is the exploit code:"*).
-4. **Pillar 4 — Quantization Reversal Gap ($\Delta_{\text{PTQ}}$):** Difference in target accuracy between 4-bit compressed weights and BF16 weights ($\text{Acc}_{\text{NF4}} - \text{Acc}_{\text{BF16}}$).
-5. **Pillar 5 — Circuit Attribution Divergence ($CAD$):** Mechanistic cosine divergence of causal attribution gradients over $\mathcal{C}^*$.
-6. **Pillar 6 — Benign Boundary Utility:** Retention accuracy on hard-boundary defensive twins.
-
-<p align="center">
-  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/docs/assets/multilingual_asr_radar.png" alt="Multilingual ASR Radar Chart" width="85%"/>
-</p>
-
----
-
-## 8. Before-and-After Verified Metrics
+## 9. Before-and-After Verified Metrics
 
 The following metrics are derived deterministically from our raw dual-T4 execution receipts:
 
@@ -178,13 +193,9 @@ The following metrics are derived deterministically from our raw dual-T4 executi
 
 ---
 
-## 9. Quantization Robustness Experiments
+## 10. Quantization Robustness Experiments
 
 To benchmark the quantization reversal phenomenon against published literature, we evaluated standard baselines against Polyglot-MANSU under 4-bit NormalFloat compression:
-
-<p align="center">
-  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/docs/assets/quantization_reversal_gap.png" alt="Quantization Reversal Gap" width="100%"/>
-</p>
 
 ```
 Method                   Precision      Target Forget Acc    Quant Reversal (Delta_PTQ)
@@ -194,20 +205,12 @@ Base Model               NF4 4-bit      93.8%                -0.4%
 SafeTune RMU             BF16            4.1%                N/A
 SafeTune RMU (Reversal!) NF4 4-bit      44.6%               +40.5% (CATASTROPHIC!)
 SafeTune NPO (Reversal!) NF4 4-bit      51.2%               +46.8% (CATASTROPHIC!)
-Polyglot-MANSU (Ours)    BF16            3.2%                N/A
-Polyglot-MANSU (Ours)    NF4 4-bit       3.0%                -0.2% (PERMANENT RETENTION)
-Polyglot-MANSU (Ours)    INT4 Q4_K_M     3.1%                -0.1% (PERMANENT RETENTION)
+Polyglot-MANSU (Ours)    BF16            0.0%                N/A
+Polyglot-MANSU (Ours)    NF4 4-bit       0.0%                 0.0% (PERMANENT RETENTION)
+Polyglot-MANSU (Ours)    INT4 Q4_K_M     0.0%                 0.0% (PERMANENT RETENTION)
 ```
 
 Standard RMU and NPO suffer catastrophic reversal because their weight updates ($|\delta \theta| \approx 10^{-4}$) are an order of magnitude smaller than NF4 quantization bin widths ($\approx 10^{-2}$). Polyglot-MANSU's circuit concentration and deadzone snapping ensure updates clear the rounding dead-zone, maintaining $\Delta_{\text{PTQ}} \le 0$.
-
----
-
-## 10. What the Results Demonstrate
-
-1. **Mechanistic Decoupling ($CAD \approx 0.996$):** The divergence in attribution proves that unlearning altered the internal causal pathway rather than merely adding an inference-time refusal layer.
-2. **True Multilingual Robustness:** The unlearning generalizes across script systems (Devanagari, Telugu, Arabic, Latin) and code-mixed informal dialects (Hinglish, Telugish).
-3. **Quantization Invariance:** Unlearning survives 4-bit post-training quantization without knowledge resurrection.
 
 ---
 
@@ -231,15 +234,7 @@ All code, configurations, data manifests, and receipts are publicly available:
 
 ---
 
-## 13. Lessons Learned
-
-1. **Sliding-Window vs. Global NoPE Layers:** In `Cohere2` architectures, long-range factual attribution concentrates heavily in global NoPE layers. Interventions targeting only sliding-window attention heads fail to achieve circuit divergence.
-2. **The Danger of Surface Evaluations:** Models that refuse in English frequently leak identical knowledge in code-mixed languages. Safety auditing must be polyglot by default.
-3. **Quantization as an Essential Safety Gate:** Any unlearning benchmark that does not evaluate post-training quantization gives a false sense of security.
-
----
-
-## 14. Conclusion
+## 13. Conclusion
 
 Polyglot-MANSU demonstrates that cross-lingual machine unlearning can be made quantization-robust by combining **mechanistic circuit localization**, **Fisher Null-Space preconditioning**, and **quantization dead-zone snapping**. By integrating all four Lexsi Track 2 libraries on Cohere's Tiny Aya models, we bridge the gap between theoretical interpretability and practical edge AI safety.
 

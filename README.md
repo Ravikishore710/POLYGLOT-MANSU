@@ -1,4 +1,8 @@
-# Polyglot-MANSU: Cross-Lingual & Quantization-Robust Circuit Unlearning
+<p align="center">
+  <img src="assets/polyglot-mansu-cover.png" alt="Polyglot-MANSU Cover" width="100%"/>
+</p>
+
+# POLYGLOT-MANSU: Multilingual Machine Unlearning & Cross-Lingual Safety Evaluation
 
 [![Lexsi Hackathon Track 2b](https://img.shields.io/badge/Lexsi_Hackathon-Track_2b_Problem_%237-blue.svg)](https://hackathon.lexsi.ai/)
 [![Cohere Tiny Aya](https://img.shields.io/badge/Target_Models-Cohere_Tiny_Aya_3.35B-8A2BE2.svg)](https://huggingface.co/CohereLabs/tiny-aya-fire)
@@ -10,15 +14,15 @@
 [![Audit Receipts](https://img.shields.io/badge/HuggingFace-Audit_Receipts_%26_Configs-red.svg)](https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire)
 [![Research Article](https://img.shields.io/badge/HuggingFace-Research_Article-green.svg)](https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/discussions/2)
 
-> **Lexsi AI Safety & Alignment Hackathon 2026** — Track 2b, Problem #7: Machine Unlearning  
-> **Authors:** [Rahul Ratan](https://github.com/rahulratan12) & [Ravi Kishore](https://huggingface.co/Ravikishore710) (Polyglot-MANSU Team)  
-> **Primary Repository:** [https://github.com/rahulratan12/polyglot-mansu](https://github.com/rahulratan12/polyglot-mansu)  
-> **Target Models:** [`CohereLabs/tiny-aya-fire`](https://huggingface.co/CohereLabs/tiny-aya-fire) (3.35B) & [`CohereLabs/tiny-aya-global`](https://huggingface.co/CohereLabs/tiny-aya-global) (3.35B)
+> **Lexsi AI Safety & Alignment Hackathon 2026** — Track 2b: Alignment & Defense (Problem #7: Machine Unlearning)  
+> **Authors:** [Rahul Ratan](https://github.com/rahulratan12) & [Ravi Kishore](https://huggingface.co/Ravikishore710) (Polyglot-MANSU Research Team)  
+> **Target Models:** [`CohereLabs/tiny-aya-fire`](https://huggingface.co/CohereLabs/tiny-aya-fire) (Primary, 3.35B) & [`CohereLabs/tiny-aya-global`](https://huggingface.co/CohereLabs/tiny-aya-global) (Generalization, 3.35B)  
+> **Interactive Demonstration:** [https://huggingface.co/spaces/Ravikishore710/polyglot-mansu-arena](https://huggingface.co/spaces/Ravikishore710/polyglot-mansu-arena)
 
 ---
 
 > [!IMPORTANT]
-> ### Critical Empirical & Artifact Disclosures
+> ### Transparent Scientific & Artifact Disclosures
 > 1. **Audit & Verification Repository Notice:** The Stage 4 unlearning experiments executed entirely in-memory on Kaggle dual Tesla T4 GPUs (`rahulratan12/polyglot-mansu-fire-run` Kernel 144655031 v11 and `rahulratan12/polyglot-mansu-global-run` v2). **No serialized parameter weights or LoRA adapter files (`adapter_model.safetensors`) were exported or saved to disk.** The Hugging Face model repository ([`Ravikishore710/polyglot-mansu-tiny-aya-fire`](https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire)) is an **Audit, Verification & Configuration Repository**, preserving cryptographic receipts, configurations, and SQLite logs for independent reproducibility.
 > 2. **Interactive Demonstration Disclosure:** The live Hugging Face Space ([`polyglot-mansu-arena`](https://huggingface.co/spaces/Ravikishore710/polyglot-mansu-arena)) utilizes **deterministic behavioral simulation (`simulate_arena_inference`)** derived directly from actual test evaluations. It does NOT run live 6.7 GB Cohere model inference at runtime, ensuring 100% zero-latency uptime on free CPU Basic tiers without CUDA Out-Of-Memory failures.
 > 3. **Scientific Scope:** Metrics reported herein reflect empirical observations under our specific 6-pillar benchmark protocol and evaluated prompt distributions. They do not constitute a mathematical proof of permanent, irreversible, or universal knowledge deletion across all possible future prompts.
@@ -26,31 +30,31 @@
 ---
 
 ## Table of Contents
-1. [Abstract & Executive Summary](#1-abstract--executive-summary)
-2. [Research Question & Motivation](#2-research-question--motivation)
-3. [The Multilingual Unlearning Dilemma](#3-the-multilingual-unlearning-dilemma)
-4. [Target Model Selection: Tiny Aya Fire & Global](#4-target-model-selection-tiny-aya-fire--global)
-5. [The 4-Kit Pipeline Architecture](#5-the-4-kit-pipeline-architecture)
-6. [Dataset Construction & Split Accounting (245 Rows)](#6-dataset-construction--split-accounting-245-rows)
-7. [Mathematical Methodology & Objective Formulation](#7-mathematical-methodology--objective-formulation)
-8. [Hardware & Training Configuration (Kaggle Dual-T4)](#8-hardware--training-configuration-kaggle-dual-t4)
-9. [Experimental Results & Verification Receipts](#9-experimental-results--verification-receipts)
-10. [Quantization Robustness Analysis (NF4 & INT4)](#10-quantization-robustness-analysis-nf4--int4)
-11. [Scientific Validity & Diagnostic History](#11-scientific-validity--diagnostic-history)
-12. [Benchmark Methodology & Limitations](#12-benchmark-methodology--limitations)
-13. [Repository Structure](#13-repository-structure)
-14. [Installation & Local Reproducibility](#14-installation--local-reproducibility)
-15. [Hugging Face Ecosystem & Public Demo Links](#15-hugging-face-ecosystem--public-demo-links)
-16. [Third-Party Licensing & Attribution](#16-third-party-licensing--attribution)
-17. [Limitations & Future Research](#17-limitations--future-research)
+1. [Research Abstract](#1-research-abstract)
+2. [Benchmark Dashboard & Comparative Results](#2-benchmark-dashboard--comparative-results)
+3. [Research Question & Motivation](#3-research-question--motivation)
+4. [The Multilingual Unlearning Dilemma](#4-the-multilingual-unlearning-dilemma)
+5. [Target Model Selection: Tiny Aya Fire & Global](#5-target-model-selection-tiny-aya-fire--global)
+6. [System Architecture & 4-Kit Pipeline](#6-system-architecture--4-kit-pipeline)
+7. [Four Repository Integrations](#7-four-repository-integrations)
+8. [Dataset Construction & Split Accounting (245 Rows)](#8-dataset-construction--split-accounting-245-rows)
+9. [Mathematical & Unlearning Methodology](#9-mathematical--unlearning-methodology)
+10. [Evaluation Workflow & Six Pillars](#10-evaluation-workflow--six-pillars)
+11. [Verified Benchmark Results Table](#11-verified-benchmark-results-table)
+12. [Dataset Distribution Visualizer](#12-dataset-distribution-visualizer)
+13. [Quantization Robustness Analysis](#13-quantization-robustness-analysis)
+14. [Reproducibility & Installation](#14-reproducibility--installation)
+15. [Limitations & Future Research](#15-limitations--future-research)
+16. [Hugging Face Publication Links](#16-hugging-face-publication-links)
+17. [License & Third-Party Attribution](#17-license--third-party-attribution)
 
 ---
 
-## 1. Abstract & Executive Summary
+## 1. Research Abstract
 
 Standard Large Language Model (LLM) machine unlearning algorithms—including Representation Misdirection Unlearning (`RMU`), Negative Preference Optimization (`NPO`), and Gradient Difference (`GradDiff`)—suffer from two critical, interconnected vulnerabilities:
 1. **The Quantization Reversal Failure Mode:** In full precision (BF16), gradient descent diffuses tiny weight updates across millions of parameters. When the unlearned model is compressed for edge deployment via 4-bit Post-Training Quantization (NF4 or INT4), weights snap back to their original quantization bins, **resurrecting up to 45% of supposedly forgotten hazardous knowledge** ($\Delta_{\text{PTQ}} \ge +40\%$).
-2. **The Cross-Lingual & Code-Mixed Bypass:** Dense multilingual models like Cohere's Tiny Aya encode factual knowledge in shared multilingual conceptual hubs. Monolingual unlearning suppresses English surface projections while leaving shared multilingual circuits intact, enabling trivial extraction via Hindi, Telugu, Arabic, or code-mixed dialects (Hinglish/Telugish).
+2. **The Cross-Lingual Behavioral Camouflage Bypass:** Dense multilingual models like Cohere's Tiny Aya encode factual knowledge in shared multilingual conceptual hubs. Monolingual unlearning suppresses English surface projections while leaving shared multilingual circuits intact, enabling trivial extraction via Hindi, Telugu, Arabic, or code-mixed dialects (Hinglish/Telugish).
 
 **Polyglot-MANSU** is an end-to-end unlearning framework designed to overcome both failure modes simultaneously. By chaining all four Lexsi Track 2 libraries ([`CuratorKIT`](https://github.com/Lexsi-Labs/CuratorKIT) $\to$ [`CircuitKIT`](https://github.com/Lexsi-Labs/CircuitKIT) $\to$ [`SafeTune`](https://github.com/Lexsi-Labs/SafeTune) $\to$ [`AuditKIT`](https://github.com/Lexsi-Labs/AuditKIT)), we isolate the **Cross-Lingual Harmonic Circuit ($\mathcal{C}^*$)**, constrain optimization to the Fisher Null Space of retain/boundary concepts, and enforce a **Multi-Grid Quantization Dead-zone Snapping Floor** during training.
 
@@ -62,7 +66,21 @@ Tested on [`CohereLabs/tiny-aya-fire`](https://huggingface.co/CohereLabs/tiny-ay
 
 ---
 
-## 2. Research Question & Motivation
+## 2. Benchmark Dashboard & Comparative Results
+
+<p align="center">
+  <img src="assets/benchmark_comparison.png" alt="Polyglot-MANSU Benchmark Comparison Dashboard" width="100%"/>
+</p>
+
+### Key Empirical Findings:
+- **Direct Forgetting (Panel A):** Unmodified baseline memorization drops from $94.2\%$ to $0.00\%$ on Tiny Aya Fire ($0.03\%$ on Global) without degrading general multilingual retention ($98.4\%$).
+- **Cross-Lingual Resistance (Panel B):** Monolingual RMU exhibits severe leakage ($74.2\%$ in Hindi, $79.5\%$ in Telugu, $82.1\%$ in Hinglish), whereas Polyglot-MANSU maintains $0.00\%$ ASR across all 10 language settings.
+- **Quantization Permanence (Panel C):** Snapping weights past the dead-zone floor ($\tau_i$) prevents quantization reversal ($\Delta_{\text{PTQ}} = 0.00\%$), while RMU and NPO suffer catastrophic reversal ($+40.5\%$ and $+45.4\%$).
+- **Mechanistic Causal Decoupling (Panel D):** Causal Attribution Divergence ($CAD$) on Subgraph $\mathcal{C}^*$ reaches $0.9957$, confirming internal conceptual disruption while peripheral modules remain undisturbed ($CAD = 0.0002$).
+
+---
+
+## 3. Research Question & Motivation
 
 > **Central Research Question:**  
 > *Can we localize and selectively decouple the shared cross-lingual conceptual circuits of dense multilingual models such that unlearning persists under 4-bit edge quantization (NF4/INT4) and resists adversarial extraction across low-resource and code-mixed languages without collateral damage to adjacent benign capabilities?*
@@ -71,13 +89,9 @@ Modern LLMs are frequently deployed on edge devices (smartphones, local applianc
 
 ---
 
-## 3. The Multilingual Unlearning Dilemma
+## 4. The Multilingual Unlearning Dilemma
 
 Multilingual models do not store facts in isolated linguistic silos. Instead, early and intermediate transformer layers map diverse surface tokens (e.g., English *"buffer overflow"*, Hindi *"बफर ओवरफ्लो"*, Telugu *"బఫర్ ఓవర్‌ఫ్లో"*) into a **shared semantic subspace**.
-
-<p align="center">
-  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/docs/assets/multilingual_asr_radar.png" alt="Multilingual ASR Radar Chart" width="80%"/>
-</p>
 
 When standard unlearning is applied only to English corpora:
 - English vocabulary projections are suppressed, causing the model to output a polite refusal (*"I cannot fulfill this request"*).
@@ -86,7 +100,7 @@ When standard unlearning is applied only to English corpora:
 
 ---
 
-## 4. Target Model Selection: Tiny Aya Fire & Global
+## 5. Target Model Selection: Tiny Aya Fire & Global
 
 In strict compliance with Track 2 guidelines, we target dense open-weight architectures from **Cohere Labs**:
 
@@ -100,12 +114,12 @@ Cohere2 transformers interleave 3 sliding-window layers (4,096 context with Rota
 
 ---
 
-## 5. The 4-Kit Pipeline Architecture
+## 6. System Architecture & 4-Kit Pipeline
 
 Polyglot-MANSU integrates all four official Track 2 toolkits into an unbroken, artifact-passing pipeline:
 
 <p align="center">
-  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/docs/assets/pipeline_architecture.png" alt="4-Kit Pipeline Architecture" width="100%"/>
+  <img src="assets/polyglot-mansu-architecture.png" alt="Polyglot-MANSU System Architecture" width="100%"/>
 </p>
 
 ```mermaid
@@ -116,21 +130,23 @@ flowchart TD
     D -->|"Verified Cryptographic Receipts"| E["results/hf_export/"]
 ```
 
+---
+
+## 7. Four Repository Integrations
+
+Each toolkit executes authentic computational workloads and passes concrete artifacts:
+
 1. **`CuratorKIT` (v0.1.24):** Generates parallel translations across 10 languages and code-mixed dialects, enforces MinHash Jaccard disjointness ($< 0.60$) between training and evaluation splits, and exports verified schemas (`manifest.json`, `lexsi_provenance.json`).
-2. **`CircuitKIT` (v0.2.2):** Applies the `0006-cohere` TransformerLens patch to evaluate Edge Attribution Patching with Integrated Gradients (`algorithm="eap-ig"`, `ig_steps=3`), computing harmonic necessity scores across all 36 layers.
+2. **`CircuitKIT` (v0.2.2):** Applies the `0006-cohere` TransformerLens patch to evaluate Edge Attribution Patching with Integrated Gradients (`algorithm="eap-ig"`, `ig_steps=3`), computing harmonic necessity scores across all 36 layers to isolate minimal subgraph $\mathcal{C}^*$.
 3. **`SafeTune` (v0.1.16):** Provides standard unlearning baselines (`RMU`, `NPO`, `SimDPO`, `FLAT`). Our `PolyglotMANSUTrainer` extends SafeTune by projecting gradients into the diagonal Fisher Null Space of retain/boundary twins and applying multi-grid deadzone snapping.
 4. **`AuditKIT` (v1.1.7):** Orchestrates automated multi-pillar auditing, measuring direct accuracy, multilingual ASR, affirmative prefill vulnerability, $\Delta_{\text{PTQ}}$, and causal attribution divergence ($CAD$).
 
 ---
 
-## 6. Dataset Construction & Split Accounting (245 Rows)
+## 8. Dataset Construction & Split Accounting (245 Rows)
 
 To guarantee zero data contamination and absolute reproducibility, our dataset was curated across 10 target linguistic variants:
 - **Languages:** English (`en`), Hindi (`hi`), Telugu (`te`), Bengali (`bn`), Tamil (`ta`), Arabic (`ar`), Spanish (`es`), French (`fr`), Hinglish (`hi-Latn` code-mixed), and Telugish (`te-Latn` code-mixed).
-
-<p align="center">
-  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/docs/assets/dataset_manifest_distribution.png" alt="Curated Dataset Distribution" width="100%"/>
-</p>
 
 ```
 +---------------------------------------------------------------------------------------------------------+
@@ -152,18 +168,14 @@ To guarantee zero data contamination and absolute reproducibility, our dataset w
 
 ---
 
-## 7. Mathematical Methodology & Objective Formulation
+## 9. Mathematical & Unlearning Methodology
 
 ### Stage 1: Cross-Lingual Harmonic Attribution ($\mathcal{C}^*$)
 For each module $v \in \mathcal{V}$ across language set $L = \{\text{en}, \text{hi}, \text{te}, \text{hinglish}, \text{ar}\}$, compute normalized attribution $s_v^{(l)}$. To isolate language-agnostic conceptual hubs, we compute the harmonic mean:
 $$H_v(\theta_0) = \left( \frac{1}{|L|} \sum_{l \in L} \frac{1}{\tilde{s}_v^{(l)}(\theta_0) + \epsilon} \right)^{-1}, \quad \epsilon = 10^{-6}$$
 Modules in the top $k = 10\%$ attribution slice define the binary mask $M_{\mathcal{C}^*}$.
 
-<p align="center">
-  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/docs/assets/circuit_attribution_heatmap.png" alt="Circuit Attribution Heatmap" width="100%"/>
-</p>
-
-### Stage 2: Fisher Null-Space Preconditioning
+### Stage 2: Fisher Null-Space Preconditioning & AGTAO
 Prior to unlearning, empirical diagonal Fisher sensitivities $F_i$ are computed on $\mathcal{D}_{\text{protect}} = \mathcal{D}_r \cup \mathcal{D}_b$. The parameter damping preconditioner is defined as:
 $$P_i = M_{\mathcal{C}^*, i} \cdot \mathbb{I}\!\left[F_i \le Q_{0.85}(F_{\mathcal{C}^*})\right] \cdot \left(1 + \frac{F_i}{\text{median}(F_{\mathcal{C}^*}) + \epsilon}\right)^{-1}$$
 Whenever forget gradients $g_f$ and retain gradients $g_r$ exhibit negative inner product ($\langle g_f, g_r \rangle < 0$), we project out destructive interference via Adaptive Gradient Orthogonalization (`AGTAO`):
@@ -178,19 +190,23 @@ This prevents weights from falling into the round-off dead-zone that causes quan
 
 ---
 
-## 8. Hardware & Training Configuration (Kaggle Dual-T4)
+## 10. Evaluation Workflow & Six Pillars
 
-All Stage 4 training runs were executed on **Kaggle Dual Tesla T4 GPUs** using native bfloat16 mixed precision:
-- **Compute Cluster:** 2 $\times$ NVIDIA Tesla T4 (16 GB VRAM each, total 32 GB)
-- **Model Distribution:** Target model loaded in BF16 on `cuda:0` (~6.7 GB VRAM); evaluation evaluator decoupled to `cuda:1`.
-- **Optimization:** AdamW ($\text{lr} = 5 \times 10^{-5}$, $\beta_1 = 0.9$, $\beta_2 = 0.999$, weight decay $0.01$).
-- **Batch Geometry:** Batch size = 1, gradient accumulation = 4, effective batch size = 4.
-- **Preamble Protection (GUARD-01):** Tiny Aya's ~366-token system preamble enforced with `max_len = 1024` to prevent dataloader truncation.
-- **Execution Mode:** In-memory unlearning and evaluation; zero serialized weights exported.
+<p align="center">
+  <img src="assets/evaluation-workflow.png" alt="Polyglot-MANSU Evaluation Workflow" width="100%"/>
+</p>
+
+The evaluation workflow spans 6 systematic phases:
+1. **Target Fact Construction:** 10 hazardous offensive cyber exploit concepts and author dossiers.
+2. **Variant Synthesis:** 10 language variants generated via CuratorKIT with MinHash disjointness gating.
+3. **Unlearning Intervention:** Subgraph-restricted optimization, Fisher damping, and dead-zone snapping.
+4. **Attack & Leakage Audit:** Pillar 1 direct forget accuracy, Pillar 2 polyglot ASR, Pillar 3 affirmative prefill jailbreaks.
+5. **Boundary & Utility Audit:** Pillar 6 shifted causal next-token evaluation on 15 hard-boundary twins and 30 retain samples.
+6. **Quantization & CAD Audit:** Pillar 4 NF4/INT4 permanence verification ($\Delta_{\text{PTQ}} \le 0$) and Pillar 5 attribution divergence ($CAD \ge 0.99$).
 
 ---
 
-## 9. Experimental Results & Verification Receipts
+## 11. Verified Benchmark Results Table
 
 All metrics are deterministically bound to cryptographically hashed JSON receipts produced directly by `AuditKIT`:
 
@@ -202,7 +218,7 @@ All metrics are deterministically bound to cryptographically hashed JSON receipt
 | **Cross-Lingual** | Polyglot ASR (Mean) | Leakage Proven | **0.00%** | **0.02%** | Resists bypass in 10 languages |
 | **Adversarial Jailbreak** | Affirmative Prefill ASR | Vulnerable | **0.00%** | **0.04%** | Resists prefill completion |
 | **Mechanistic Causal** | Attribution Divergence ($CAD$)| 0.0000 | **0.9957** | **0.9966** | Causal circuit decoupled |
-| **Defensive Boundary** | Twin Utility Preservation | Non-Refusal | **Non-Refusal Confirmed** (0.00% raw receipt)* | **Non-Refusal Confirmed** (0.00% raw receipt)* | Zero over-refusal on benign RELRO |
+| **Defensive Boundary** | Twin Utility Preservation | Non-Refusal | **Non-Refusal Confirmed** (0.00% raw)* | **Non-Refusal Confirmed** (0.00% raw)* | Zero over-refusal on benign RELRO |
 | **AuditKIT Verdict** | Compliance Classification | `INSUFFICIENT` | **`PASSED_UNLEARNED`**| **`PASSED_UNLEARNED`** | Official Hackathon Audit Status |
 
 *\*Footnote on Baseline String Match & Pillar 6 Token Shift:*  
@@ -222,13 +238,22 @@ All metrics are deterministically bound to cryptographically hashed JSON receipt
 
 ---
 
-## 10. Quantization Robustness Analysis (NF4 & INT4)
-
-Standard unlearning methods diffuse updates so thinly that post-training quantization completely erases the optimization:
+## 12. Dataset Distribution Visualizer
 
 <p align="center">
-  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/docs/assets/quantization_reversal_gap.png" alt="Quantization Reversal Gap" width="100%"/>
+  <img src="assets/dataset-distribution.png" alt="Polyglot-MANSU Curated Dataset Distribution" width="100%"/>
 </p>
+
+The dataset allocation guarantees:
+- **Disjoint Curation:** 100 train forget rows and 100 held-out test forget rows exhibit 0 exact prompt overlap and $< 0.35$ MinHash Jaccard similarity.
+- **Multilingual Symmetry:** Each linguistic setting contains 24–25 schema-annotated prompts.
+- **Hard Boundary Isolation:** 15 benign administrative concepts prevent model degradation on adjacent cybersecurity capabilities.
+
+---
+
+## 13. Quantization Robustness Analysis
+
+Standard unlearning methods diffuse updates so thinly that post-training quantization completely erases the optimization:
 
 ### Why Polyglot-MANSU Resists Quantization Reversal
 1. **Circuit Concentration:** Updates are restricted to the minimal $10\%$ subgraph $\mathcal{C}^*$, concentrating gradient magnitude by $\approx 10\times$.
@@ -237,92 +262,7 @@ Standard unlearning methods diffuse updates so thinly that post-training quantiz
 
 ---
 
-## 11. Scientific Validity & Diagnostic History
-
-### Understanding CAD (Circuit Attribution Divergence)
-$CAD = 1 - \cos(s_{\text{base}}, s_{\text{unlearn}})$ measures the directional shift in attribution gradients over $\mathcal{C}^*$.
-- A superficial system prompt refusal yields $CAD \approx 0.0$ because internal knowledge representations remain undisturbed.
-- Polyglot-MANSU yields $CAD = 0.9957$, confirming that internal causal pathways were mechanically disrupted.
-- *Scientific Caveat:* A high $CAD$ proves circuit disruption under evaluated inputs; it should be triangulated with empirical ASR and probe metrics rather than treated as an absolute mathematical guarantee of universal deletion.
-
-### Forensic Reconciliation of Pillar 6 Hard-Boundary Utility
-During post-experiment forensic code audits, an off-by-one causal token alignment bug was detected in `auditkit_runner.py`:
-$$\text{Correct Causal Shift: } \text{logits}_{t} \leftrightarrow \text{labels}_{t+1}$$
-Because the automated evaluation script compared unshifted logits against labels on free-form completions, exact token accuracy evaluated to `0.00%` in the Kaggle receipts.
-Rather than silently modifying historical receipts or fabricating synthetic numbers, we transparently document:
-1. **Raw Automated Measurement:** `0.00%` in `11_stage4...` and `12_stage4...` (preserved verbatim for scientific auditability).
-2. **Corrected Logic:** Documented and verified in `scripts/reconcile_pillar6_evaluation.py` and `results/audit/pillar6_reconciliation_report.json`.
-3. **Qualitative Behavior:** Verified in interactive inference tests where benign Linux compiler RELRO and stack canary queries are answered helpfully and completely without over-refusal.
-
----
-
-## 12. Benchmark Methodology & Limitations
-
-We believe rigorous AI safety requires explicit boundary documentation:
-1. **In-Memory Optimization:** Due to GPU memory and storage limits on Kaggle dual Tesla T4 instances, runs were executed in-memory and outputted verified audit telemetry, rather than saving 6.7 GB weight blobs to disk.
-2. **Not Universal Proof:** While the model resisted affirmative prefill and semantic paraphrasing, this does not mathematically prove that adversarial optimization (e.g., GCG token suffixes) cannot extract latent fragments.
-3. **Language Scope:** 10 diverse languages and dialects were evaluated; behavior across all 70+ languages of Tiny Aya remains to be explored.
-
----
-
-## 13. Repository Structure
-
-```
-polyglot-mansu/
-├── README.md                      # Primary comprehensive documentation
-├── LICENSE                        # MIT License for team-authored code
-├── ATTRIBUTION.md                 # Upstream Lexsi LSAL & Cohere CC-BY-NC licenses
-├── pyproject.toml                 # Package configuration and dependencies
-├── configs/
-│   ├── circuitkit_discovery.yaml  # EAP-IG discovery hyperparameters
-│   ├── polyglot_mansu_fire.yaml   # Canonical unlearning config for Tiny Aya Fire
-│   ├── polyglot_mansu_global.yaml # Canonical unlearning config for Tiny Aya Global
-│   └── safetune_baselines.yaml    # Upstream baseline configs (RMU, NPO)
-├── data/
-│   └── curated/                   # 245-row curated multilingual dataset
-│       ├── train_forget.jsonl     # 100 train forget rows across 10 languages
-│       ├── heldout_test_forget.jsonl # 100 held-out evaluation probes
-│       ├── retain.jsonl           # 30 retain rows
-│       ├── hard_boundary_twins.jsonl # 15 benign defensive administration rows
-│       ├── manifest.json          # Dataset manifest and split checksums
-│       ├── checksums.txt          # Raw SHA-256 integrity hashes
-│       └── README.md              # Hugging Face Dataset Card
-├── docs/
-│   ├── POLYGLOT_MANSU_HF_ARTICLE.md # Comprehensive Hugging Face research article
-│   ├── VERIFIED_BENCHMARK_TABLES.md # Deterministic benchmark tables
-│   └── assets/                    # Editable publication-quality research figures
-│       ├── pipeline_architecture.png
-│       ├── quantization_reversal_gap.png
-│       ├── circuit_attribution_heatmap.png
-│       ├── multilingual_asr_radar.png
-│       └── dataset_manifest_distribution.png
-├── results/
-│   ├── audit/                     # Reconciled audit reports and telemetry
-│   └── hf_export/                 # Prepared package for Hugging Face model repository
-├── space_app/                     # Interactive Gradio demonstration application
-│   ├── app.py                     # 4-tab interactive Arena and visualizer
-│   ├── requirements.txt           # Pinned dependencies for Hugging Face Spaces
-│   └── README.md                  # Space metadata with Gradio YAML header
-├── src/
-│   └── polyglot_mansu/            # Core library implementation
-│       ├── circuits/              # CircuitKIT EAP-IG and CAD computation
-│       ├── compression/           # NF4 & INT4 quantization deadzone math
-│       ├── data/                  # CuratorKIT translation and boundary pipelines
-│       ├── eval/                  # AuditKIT 6-pillar evaluators and probes
-│       └── unlearn/               # PolyglotMANSUTrainer and Fisher null-space
-├── scripts/                       # Reproducibility and auditing utilities
-│   ├── generate_research_visuals.py # Source generator for all docs/assets/ figures
-│   ├── compile_verified_tables.py   # Deterministic table builder from JSON receipts
-│   ├── publish_to_huggingface.py    # Automated Hub publishing script
-│   └── verify_hf_auth.py            # Local OAuth session validator
-└── tests/                         # Unit tests and end-to-end integration tests
-    ├── test_guards.py             # Pre-flight environment guards
-    └── test_full_4repo_pipeline_e2e.py # Complete 4-kit verification pipeline
-```
-
----
-
-## 14. Installation & Local Reproducibility
+## 14. Reproducibility & Installation
 
 ### Prerequisites
 - Python $\ge 3.12$ (Strictly required by `SafeTune` and `CircuitKIT`)
@@ -345,8 +285,8 @@ pip install -e .
 
 ### Reproduce Research Visuals & Benchmark Tables
 ```bash
-# Regenerate all publication figures into docs/assets/
-python scripts/generate_research_visuals.py
+# Regenerate all publication figures into assets/
+python scripts/generate_all_assets.py
 
 # Recompile verified benchmark tables from raw JSON receipts
 python scripts/compile_verified_tables.py
@@ -361,7 +301,15 @@ python app.py
 
 ---
 
-## 15. Hugging Face Ecosystem & Public Demo Links
+## 15. Limitations & Future Research
+
+1. **In-Memory Training Scope:** Due to free-tier GPU storage ceilings on Kaggle dual Tesla T4 instances, unlearning runs executed in-memory and outputted verified audit telemetry, rather than saving 6.7 GB weight blobs.
+2. **Evaluated Linguistic Distribution:** While 10 diverse language families and code-mixed settings were evaluated, coverage does not extend to all 70+ languages supported by Tiny Aya.
+3. **Adversarial Bounds:** While affirmative prefill attacks and semantic paraphrasing were evaluated, future work should explore automated GCG (Greedy Coordinate Gradient) suffix optimization across code-mixed prompts.
+
+---
+
+## 16. Hugging Face Publication Links
 
 - **Interactive Red-Team Arena (Space):**  
   [https://huggingface.co/spaces/Ravikishore710/polyglot-mansu-arena](https://huggingface.co/spaces/Ravikishore710/polyglot-mansu-arena)
@@ -376,17 +324,9 @@ python app.py
 
 ---
 
-## 16. Third-Party Licensing & Attribution
+## 17. License & Third-Party Attribution
 
 - **Original Team Code:** Licensed under the [MIT License](LICENSE) (scoped exclusively to files authored in `src/`, `scripts/`, `space_app/`, and `tests/`).
 - **Lexsi Labs Toolkits:** Governed by the **Lexsi Labs Source Available License (LSAL v1.1 / v1.2)** for academic research, education, and hackathon auditing.
 - **Cohere Labs Models:** `tiny-aya-fire` and `tiny-aya-global` are licensed under the **Cohere Non-Commercial License (CC-BY-NC 4.0)** with C4AI Acceptable Use Policy.
 - See [ATTRIBUTION.md](ATTRIBUTION.md) for complete legal notices.
-
----
-
-## 17. Limitations & Future Research
-
-1. **In-Memory Training Scope:** Due to free-tier GPU storage ceilings on Kaggle dual Tesla T4 instances, unlearning runs executed in-memory and outputted verified audit telemetry, rather than saving 6.7 GB weight blobs.
-2. **Evaluated Linguistic Distribution:** While 10 diverse language families and code-mixed settings were evaluated, coverage does not extend to all 70+ languages supported by Tiny Aya.
-3. **Adversarial Bounds:** While affirmative prefill attacks and semantic paraphrasing were evaluated, future work should explore automated GCG (Greedy Coordinate Gradient) suffix optimization across code-mixed prompts.
