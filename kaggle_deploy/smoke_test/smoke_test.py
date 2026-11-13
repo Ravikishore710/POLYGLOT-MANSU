@@ -46,8 +46,22 @@ log_data["gpu"] = {
 # STEP 2: Configure HF Authentication
 # -------------------------------------------------------------------------
 print("\n[Step 2/5] Configuring Hugging Face Authentication...")
-hf_token = "REDACTED_HF_TOKEN"
-print("  ✓ HF Token configured (Token value is kept hidden).")
+hf_token = os.environ.get("HF_TOKEN", "")
+
+# Fallback: check Kaggle User Secrets if running in Kaggle notebook
+if not hf_token:
+    try:
+        from kaggle_secrets import UserSecretsClient
+        user_secrets = UserSecretsClient()
+        hf_token = user_secrets.get_secret("HF_TOKEN")
+    except Exception:
+        pass
+
+if hf_token:
+    print("  ✓ HF Token retrieved from secure environment/secrets (Token value is kept hidden).")
+else:
+    print("  ⚠ Notice: No HF_TOKEN environment variable or Kaggle secret detected.")
+    print("    Proceeding with local Hugging Face cache authentication if available.")
 
 # -------------------------------------------------------------------------
 # STEP 3: Verify Hugging Face Account & Gated License Access
@@ -57,8 +71,11 @@ try:
     from huggingface_hub import HfApi, login
     import huggingface_hub.errors as hf_errors
 
-    login(token=hf_token, add_to_git_credential=False)
-    api = HfApi(token=hf_token)
+    if hf_token:
+        login(token=hf_token, add_to_git_credential=False)
+        api = HfApi(token=hf_token)
+    else:
+        api = HfApi()
     user_info = api.whoami()
     username = user_info.get("name") or user_info.get("preferred_username") or "Authenticated User"
     print(f"  ✓ Authenticated as Hugging Face user: {username}")

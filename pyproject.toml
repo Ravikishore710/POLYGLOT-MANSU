@@ -9,7 +9,7 @@ description = "Cross-Lingual, Quantization-Permanent Circuit Unlearning for Mult
 authors = [
     { name = "Polyglot-MANSU Team" }
 ]
-readme = "AGENTS.md"
+readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "torch>=2.4.0",

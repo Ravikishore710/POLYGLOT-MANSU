@@ -1,0 +1,33 @@
+# Polyglot-MANSU: Root Requirements
+# Requires Python >= 3.12 (Strictly enforced by SafeTune and CircuitKIT)
+
+# --- Core Deep Learning & Interpretability Stack ---
+torch>=2.4.0
+transformer-lens==3.8.0
+transformers>=4.44.0
+accelerate>=0.33.0
+datasets>=2.20.0
+huggingface-hub>=0.25.0
+
+# --- Official Lexsi Labs Toolkits (Track 2 Stack) ---
+curatorkit>=0.1.20
+circuitkit>=0.2.0
+safetune>=0.1.10
+auditkit>=1.1.0
+
+# --- Scientific Computing & Utilities ---
+numpy>=1.26.0
+scipy>=1.13.0
+pandas>=2.2.0
+pydantic>=2.8.0
+pyyaml>=6.0.1
+tqdm>=4.66.0
+litellm>=1.40.0
+matplotlib>=3.8.0
+pillow>=10.0.0
+
+# --- Optional Development & Verification Tools ---
+# Install via: pip install -r requirements-dev.txt (or pip install -e .[dev])
+# pytest>=8.0.0
+# pytest-cov>=5.0.0
+# ruff>=0.6.0

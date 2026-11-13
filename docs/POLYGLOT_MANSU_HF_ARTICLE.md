@@ -1,9 +1,14 @@
 ---
 title: "Aligning Tiny Aya Fire (3.35B) for Cross-Lingual Machine Unlearning: Quantization-Robust Circuit Decoupling Across 10 Languages"
-thumbnail: "https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/docs/assets/polyglot-mansu-cover.png"
+thumbnail: "https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/polyglot-mansu-cover.png"
 authors:
-  - name: Rahul Ratan
-  - name: Ravi Kishore
+  - user: Ravikishore710
+models:
+  - CohereLabs/tiny-aya-fire
+  - CohereLabs/tiny-aya-global
+  - Ravikishore710/polyglot-mansu-tiny-aya-fire
+datasets:
+  - Ravikishore710/polyglot-mansu-curated
 tags:
   - safety
   - alignment
@@ -16,15 +21,12 @@ tags:
 ---
 
 <p align="center">
-  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/docs/assets/polyglot-mansu-cover.png" alt="Polyglot-MANSU Cover" width="100%"/>
+  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/polyglot-mansu-cover.png" alt="Polyglot-MANSU Cover" width="100%"/>
 </p>
 
-# Aligning Tiny Aya Fire (3.35B) for Cross-Lingual Machine Unlearning: Quantization-Robust Circuit Decoupling Across 10 Languages
-
-> **🟡 Community Article** &nbsp;|&nbsp; **Published November 2026** &nbsp;|&nbsp; **Lexsi AI Safety & Alignment Hackathon (Track 2b, Problem #7: Machine Unlearning)**  
+> **Lexsi AI Safety & Alignment Hackathon (Track 2b, Problem #7: Machine Unlearning)**  
 > **Authors:** [Rahul Ratan](https://github.com/rahulratan12) & [Ravi Kishore](https://huggingface.co/Ravikishore710) (Polyglot-MANSU Research Team)  
-> **Models Mentioned:** [`CohereLabs/tiny-aya-fire`](https://huggingface.co/CohereLabs/tiny-aya-fire) (3.35B), [`CohereLabs/tiny-aya-global`](https://huggingface.co/CohereLabs/tiny-aya-global) (3.35B), [`Ravikishore710/polyglot-mansu-tiny-aya-fire`](https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire)  
-> **Codebase:** [https://github.com/rahulratan12/polyglot-mansu](https://github.com/rahulratan12/polyglot-mansu) &nbsp;|&nbsp; **Live Arena:** [https://huggingface.co/spaces/Ravikishore710/polyglot-mansu-arena](https://huggingface.co/spaces/Ravikishore710/polyglot-mansu-arena)
+> **Codebase:** [github.com/rahulratan12/polyglot-mansu](https://github.com/rahulratan12/polyglot-mansu) &nbsp;|&nbsp; **Live Arena:** [huggingface.co/spaces/Ravikishore710/polyglot-mansu-arena](https://huggingface.co/spaces/Ravikishore710/polyglot-mansu-arena)
 
 ---
 
@@ -72,7 +74,7 @@ Factual knowledge in multilingual models is concentrated in a sparse, cross-ling
 ## 3. Benchmark Comparison Dashboard
 
 <p align="center">
-  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/docs/assets/benchmark_comparison.png" alt="Benchmark Comparison Dashboard" width="100%"/>
+  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/benchmark_comparison.png" alt="Benchmark Comparison Dashboard" width="100%"/>
 </p>
 
 ### Key Quantitative Takeaways:
@@ -102,7 +104,7 @@ Our interpretability analysis with `CircuitKIT` revealed that these global NoPE 
 Polyglot-MANSU integrates all four official Track 2 toolkits into an authentic, artifact-passing chain:
 
 <p align="center">
-  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/docs/assets/polyglot-mansu-architecture.png" alt="4-Kit Pipeline Architecture" width="100%"/>
+  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/polyglot-mansu-architecture.png" alt="4-Kit Pipeline Architecture" width="100%"/>
 </p>
 
 1. **`CuratorKIT` (v0.1.24):** Generates parallel translations across 10 languages and code-mixed dialects, computes MinHash Jaccard disjointness ($< 0.60$), and outputs schema-validated `manifest.json`.
@@ -115,7 +117,7 @@ Polyglot-MANSU integrates all four official Track 2 toolkits into an authentic, 
 ## 6. Evaluation Workflow
 
 <p align="center">
-  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/docs/assets/evaluation-workflow.png" alt="Evaluation Workflow" width="100%"/>
+  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/evaluation-workflow.png" alt="Evaluation Workflow" width="100%"/>
 </p>
 
 The evaluation workflow spans 6 systematic phases:
@@ -134,7 +136,7 @@ To test cross-lingual transfer without data leakage, we curated a schema-validat
 - **Languages:** English (`en`), Hindi (`hi`), Telugu (`te`), Bengali (`bn`), Tamil (`ta`), Arabic (`ar`), Spanish (`es`), French (`fr`), Hinglish (`hi-Latn` code-mixed), and Telugish (`te-Latn` code-mixed).
 
 <p align="center">
-  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/docs/assets/dataset-distribution.png" alt="Curated Dataset Distribution" width="100%"/>
+  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/dataset-distribution.png" alt="Curated Dataset Distribution" width="100%"/>
 </p>
 
 ```
@@ -160,7 +162,7 @@ $$H_v(\theta_0) = \left( \frac{1}{|L|} \sum_{l \in L} \frac{1}{\tilde{s}_v^{(l)}
 The top $10\%$ highest-attribution parameters define the unlearning mask $M_{\mathcal{C}^*}$.
 
 <p align="center">
-  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/docs/assets/circuit_attribution_heatmap.png" alt="Circuit Attribution Heatmap" width="100%"/>
+  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/circuit_attribution_heatmap.png" alt="Circuit Attribution Heatmap" width="100%"/>
 </p>
 
 ### Step 2: Fisher Null-Space Damping & Conflict Orthogonalization
@@ -237,6 +239,13 @@ All code, configurations, data manifests, and receipts are publicly available:
 ## 13. Conclusion
 
 Polyglot-MANSU demonstrates that cross-lingual machine unlearning can be made quantization-robust by combining **mechanistic circuit localization**, **Fisher Null-Space preconditioning**, and **quantization dead-zone snapping**. By integrating all four Lexsi Track 2 libraries on Cohere's Tiny Aya models, we bridge the gap between theoretical interpretability and practical edge AI safety.
+
+---
+
+## 9. Teammates
+
+- **Ravi Kishore — Research Lead & AI Safety Integration** ([@Ravikishore710](https://huggingface.co/Ravikishore710))
+- **Rahul Ratan — Technical Lead & Engineering** ([@rahulratan](https://huggingface.co/rahulratan))
 
 ---
 *Published as part of the Lexsi AI Safety & Alignment Hackathon (Track 2b, Problem #7: Machine Unlearning).*
