@@ -60,12 +60,13 @@ class PolyglotMANSUTrainer:
         model: nn.Module,
         circuit_mask: Dict[str, torch.Tensor],
         config: Optional[PolyglotMANSUConfig] = None,
-        device: Optional[torch.device] = None
+        device: Optional[torch.device] = None,
+        reference_model: Optional[nn.Module] = None
     ):
         self.model = model
-        self.circuit_mask = circuit_mask
-        self.config = config or PolyglotMANSUConfig()
         self.device = device or torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        self.circuit_mask = {k: v.to(self.device) for k, v in circuit_mask.items()}
+        self.config = config or PolyglotMANSUConfig()
 
         # Freeze non-circuit parameters so AdamW optimizer only tracks circuit weights (VRAM guard)
         self.trainable_params_count = 0
@@ -89,18 +90,26 @@ class PolyglotMANSUTrainer:
         else:
             self.ref_device = self.device
 
-        self.reference_model = copy.deepcopy(model).to(self.ref_device)
+        # Safely setup reference model without duplicating GPU 0 VRAM
+        if reference_model is not None:
+            self.reference_model = reference_model.to(self.ref_device)
+        else:
+            model_cpu = copy.deepcopy(model).to("cpu")
+            self.reference_model = model_cpu.to(self.ref_device)
         self.reference_model.eval()
         for p in self.reference_model.parameters():
             p.requires_grad = False
 
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+
         # Store initial reference weights theta_0 for deadzone calculation
         self.theta_0 = {name: p.clone().detach().cpu() for name, p in model.named_parameters()}
         
-        # Quantization deadzone thresholds
+        # Quantization deadzone thresholds stored on CPU to preserve GPU VRAM during training
         if self.config.use_quant_floor:
             self.tau = {
-                name: compute_quant_deadzones(p, gamma=self.config.gamma_quant).to(self.device)
+                name: compute_quant_deadzones(p, gamma=self.config.gamma_quant).cpu()
                 for name, p in model.named_parameters() if name in circuit_mask
             }
         else:
@@ -126,6 +135,15 @@ class PolyglotMANSUTrainer:
             q=self.config.q_fisher,
             alpha_F=self.config.alpha_F
         )
+        # Cast preconditioner to model dtype (bf16) to halve memory
+        dtype = next(self.model.parameters()).dtype
+        for name in self.preconditioner:
+            self.preconditioner[name] = self.preconditioner[name].to(dtype=dtype, device=self.device)
+        
+        # Free raw fisher sensitivities and empty cache
+        del fisher
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
 
     def train_step(
         self,
@@ -145,27 +163,35 @@ class PolyglotMANSUTrainer:
         r_labels = retain_batch.get("labels", r_ids).to(self.device)
         out_r = self.model(input_ids=r_ids, labels=r_labels)
         loss_retain = out_r.loss
-        loss_retain.backward(retain_graph=True)
+        loss_retain_val = loss_retain.item()
+        loss_retain.backward()
 
         g_r = {name: p.grad.clone() for name, p in self.model.named_parameters() if p.grad is not None}
         optimizer.zero_grad()
+        del out_r, loss_retain, r_ids, r_labels
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
 
         # 2. Forget loss (SimNPO / GA on forget batch)
         f_ids = forget_batch["input_ids"].to(self.device)
         f_labels = forget_batch.get("labels", f_ids).to(self.device)
-        out_f = self.model(input_ids=f_ids, labels=f_labels)
         
-        # Reference pass on ref_device
+        # Reference pass on ref_device first (no grads, isolated)
         f_ids_ref = f_ids.to(self.ref_device)
         f_labels_ref = f_labels.to(self.ref_device)
         with torch.no_grad():
             out_f_ref = self.reference_model(input_ids=f_ids_ref, labels=f_labels_ref)
+            logp_ref = -out_f_ref.loss.to(self.device)
+        del out_f_ref, f_ids_ref, f_labels_ref
 
+        # Target forget forward pass on self.device
+        out_f = self.model(input_ids=f_ids, labels=f_labels)
         logp_curr = -out_f.loss
-        logp_ref = -out_f_ref.loss.to(self.device)
         diff = logp_curr - logp_ref
         loss_forget = -torch.log(torch.sigmoid(-self.config.beta * diff) + 1e-8)
+        loss_forget_val = loss_forget.item()
         loss_forget.backward()
+        del out_f, loss_forget, f_ids, f_labels
 
         # 3. Apply Fisher Preconditioning & Orthogonalization
         with torch.no_grad():
@@ -185,8 +211,8 @@ class PolyglotMANSUTrainer:
         optimizer.step()
 
         return {
-            "loss_forget": loss_forget.item(),
-            "loss_retain": loss_retain.item()
+            "loss_forget": loss_forget_val,
+            "loss_retain": loss_retain_val
         }
 
     def post_train_quant_snapping(self) -> Dict[str, Any]:

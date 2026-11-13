@@ -49,10 +49,11 @@ from polyglot_mansu.compression.ptq_nf4 import quantize_model_nf4
 from polyglot_mansu.compression.ptq_int4_gguf import quantize_model_int4
 
 MODEL_ID = "CohereLabs/tiny-aya-global"
-MAX_LEN = 1024
+# GUARD-01: Use max_len=512 for training/unlearning batches to prevent OOM while respecting the system preamble
+MAX_LEN = 512
 
 class TextDataset(Dataset):
-    def __init__(self, jsonl_path: Path, tokenizer, max_len: int = 1024):
+    def __init__(self, jsonl_path: Path, tokenizer, max_len: int = 512):
         self.samples = []
         if jsonl_path.exists():
             with open(jsonl_path, "r", encoding="utf-8") as f:
@@ -64,22 +65,25 @@ class TextDataset(Dataset):
         if not self.samples:
             self.samples = ["Confidential entity information and private dossier records." * 5]
         
-        self.encodings = tokenizer(
-            self.samples,
-            truncation=True,
-            max_length=max_len,
-            padding="max_length",
-            return_tensors="pt"
-        )
+        self.tokenizer = tokenizer
+        self.max_len = max_len
 
     def __len__(self):
         return len(self.samples)
 
     def __getitem__(self, idx):
+        item = self.tokenizer(
+            self.samples[idx],
+            truncation=True,
+            max_length=self.max_len,
+            padding=False,
+            return_tensors="pt"
+        )
+        input_ids = item["input_ids"].squeeze(0)
         return {
-            "input_ids": self.encodings["input_ids"][idx],
-            "attention_mask": self.encodings["attention_mask"][idx],
-            "labels": self.encodings["input_ids"][idx]
+            "input_ids": input_ids,
+            "attention_mask": item["attention_mask"].squeeze(0),
+            "labels": input_ids.clone()
         }
 
 def compute_sha256(path: Path) -> str:
@@ -101,14 +105,15 @@ def main():
         tokenizer.pad_token = tokenizer.eos_token
 
     dtype = torch.bfloat16 if torch.cuda.is_available() else torch.float32
-    print(f"[Account 2] Loading {MODEL_ID} weights in {dtype}...")
+    print(f"[Account 2] Loading {MODEL_ID} weights in {dtype} on {device}...")
     model = AutoModelForCausalLM.from_pretrained(
         MODEL_ID,
         token=hf_token,
-        torch_dtype=dtype,
-        device_map="auto" if torch.cuda.is_available() else None,
+        dtype=dtype,
+        device_map={"": device} if torch.cuda.is_available() else None,
         trust_remote_code=True
     )
+    model.config.use_cache = False
 
     print("[Account 2] Preparing Datasets from data/curated...")
     data_dir = Path("data/curated")
@@ -121,8 +126,8 @@ def main():
     boundary_ds = TextDataset(data_dir / "hard_boundary_twins.jsonl", tokenizer, MAX_LEN)
     heldout_ds = TextDataset(data_dir / "heldout_test_forget.jsonl", tokenizer, MAX_LEN)
 
-    forget_loader = DataLoader(forget_ds, batch_size=2, shuffle=True)
-    retain_loader = DataLoader(retain_ds, batch_size=2, shuffle=True)
+    forget_loader = DataLoader(forget_ds, batch_size=1, shuffle=True)
+    retain_loader = DataLoader(retain_ds, batch_size=1, shuffle=True)
 
     print("[Account 2] Cross-Model CircuitKIT Generalization Discovery...")
     discovery_data = {
@@ -135,14 +140,44 @@ def main():
     circuit_mask, sparsity = extract_circuit_mask(harmonic_scores, sparsity_ratio=0.10)
     print(f"[Account 2] Isolated Harmonic Circuit C*: {len(circuit_mask)} tensors, Sparsity: {sparsity:.4f}")
 
+    ref_device = torch.device("cuda:1" if torch.cuda.is_available() and torch.cuda.device_count() > 1 else "cpu")
+    print(f"[Account 2] Loading dedicated reference model in {dtype} on {ref_device}...")
+    reference_model = AutoModelForCausalLM.from_pretrained(
+        MODEL_ID,
+        token=hf_token,
+        dtype=dtype,
+        device_map={"": ref_device} if str(ref_device).startswith("cuda") else None,
+        trust_remote_code=True
+    )
+    reference_model.config.use_cache = False
+    reference_model.eval()
+    for p in reference_model.parameters():
+        p.requires_grad = False
+
+    if hasattr(model, "gradient_checkpointing_enable"):
+        model.gradient_checkpointing_enable()
+        print("[Account 2] Activation gradient checkpointing enabled on target model.")
+
     print("[Account 2] Initializing PolyglotMANSUTrainer on tiny-aya-global...")
     cfg = PolyglotMANSUConfig(lr=2e-5, epochs=3, max_len=MAX_LEN, use_circuit_mask=True, use_quant_floor=True)
-    trainer = PolyglotMANSUTrainer(model=model, circuit_mask=circuit_mask, config=cfg, device=device)
+    trainer = PolyglotMANSUTrainer(
+        model=model,
+        circuit_mask=circuit_mask,
+        config=cfg,
+        device=device,
+        reference_model=reference_model
+    )
     trainer.initialize_fisher(retain_loader)
 
     trainable_params = trainer.get_trainable_parameters()
     print(f"[Account 2] Circuit-active trainable parameters: {len(trainable_params)} modules ({trainer.trainable_params_count:,} weights, {trainer.trainable_params_count/trainer.total_params_count*100:.2f}% of model)")
-    optimizer = torch.optim.AdamW(trainable_params, lr=cfg.lr)
+    try:
+        import bitsandbytes as bnb
+        print("[Account 2] Using 8-bit AdamW optimizer (bnb.optim.AdamW8bit) for 75% optimizer memory reduction.")
+        optimizer = bnb.optim.AdamW8bit(trainable_params, lr=cfg.lr)
+    except Exception:
+        print("[Account 2] bitsandbytes not available, falling back to torch.optim.AdamW.")
+        optimizer = torch.optim.AdamW(trainable_params, lr=cfg.lr)
 
     print(f"[Account 2] Training across {cfg.epochs} epochs...")
     step = 0
@@ -157,14 +192,16 @@ def main():
     snap_stats = trainer.post_train_quant_snapping()
     print(f"[Account 2] Snapping Result: {snap_stats}")
 
+    # Free reference model to liberate GPU 1 for evaluation judges
+    del reference_model
+    del trainer.reference_model
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+
     results_dir = Path("results/audit")
     results_dir.mkdir(parents=True, exist_ok=True)
 
-    print("[Account 2] Running PTQ Quantization Verification...")
-    nf4_res = quantize_model_nf4(model)
-    int4_res = quantize_model_int4(model)
-
-    print("[Account 2] Running Cross-Model Validation Audit...")
+    print("[Account 2] Running Cross-Model Validation Audit on Unlearned Model...")
     audit_summary = run_6pillar_audit(
         model=model,
         model_name="tiny_aya_global_mansu",
@@ -175,6 +212,10 @@ def main():
         is_decoupled=True
     )
     print(f"[Account 2] Global Audit Summary: {audit_summary}")
+
+    print("[Account 2] Running PTQ Quantization Verification...")
+    nf4_res = quantize_model_nf4(model)
+    int4_res = quantize_model_int4(model)
 
     receipt = {
         "model_id": MODEL_ID,

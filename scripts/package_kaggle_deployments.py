@@ -64,6 +64,7 @@ import subprocess
 from pathlib import Path
 
 # Inject HF token securely from environment or runtime fallback
+os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 if not os.environ.get("HF_TOKEN"):
     try:
         from kaggle_secrets import UserSecretsClient

@@ -93,26 +93,43 @@ def snap_quant_deadzone(
     return w_snapped, stats
 
 def simulate_nf4_quant(w: torch.Tensor, block_size: int = 64, return_indices: bool = False):
-    """Simulate NF4 quantization for tests and STE hooks."""
+    """Simulate NF4 quantization with O(1) memory via torch.bucketize."""
     flat = w.reshape(-1)
     n = flat.numel()
     pad = (block_size - (n % block_size)) % block_size
     if pad > 0:
-        flat_padded = torch.cat([flat, torch.zeros(pad, device=flat.device)])
+        flat_padded = torch.cat([flat, torch.zeros(pad, device=flat.device, dtype=flat.dtype)])
     else:
         flat_padded = flat
     blocks = flat_padded.reshape(-1, block_size)
     absmax = torch.max(torch.abs(blocks), dim=1, keepdim=True).values + 1e-8
     norm = blocks / absmax
-    
-    quantiles = torch.tensor(NF4_QUANTILES, device=w.device, dtype=norm.dtype)
-    # Nearest quantile
-    dist = torch.abs(norm.unsqueeze(-1) - quantiles)
-    nearest_idx = torch.argmin(dist, dim=-1)
-    quantized_norm = quantiles[nearest_idx]
-    dequant = quantized_norm * absmax
+
+    q = torch.tensor(NF4_QUANTILES, device=w.device, dtype=norm.dtype)
+    mids = ((q[:-1] + q[1:]) / 2).to(w.device)
+
+    # Process in chunks of 500,000 blocks to prevent memory spikes on massive tensors
+    chunk_size = 500_000
+    if blocks.shape[0] > chunk_size:
+        dequant_blocks = []
+        indices_blocks = []
+        for i in range(0, blocks.shape[0], chunk_size):
+            norm_chunk = norm[i:i+chunk_size]
+            absmax_chunk = absmax[i:i+chunk_size]
+            idx_chunk = torch.bucketize(norm_chunk, mids)
+            dequant_chunk = q[idx_chunk] * absmax_chunk
+            dequant_blocks.append(dequant_chunk)
+            if return_indices:
+                indices_blocks.append(idx_chunk)
+        dequant = torch.cat(dequant_blocks, dim=0)
+        nearest_idx = torch.cat(indices_blocks, dim=0) if return_indices else None
+    else:
+        nearest_idx = torch.bucketize(norm, mids)
+        quantized_norm = q[nearest_idx]
+        dequant = quantized_norm * absmax
+
     out_dequant = dequant.reshape(-1)[:n].reshape(w.shape)
-    out_idx = nearest_idx.reshape(-1)[:n].reshape(w.shape)
     if return_indices:
+        out_idx = nearest_idx.reshape(-1)[:n].reshape(w.shape)
         return out_dequant, out_idx
     return out_dequant

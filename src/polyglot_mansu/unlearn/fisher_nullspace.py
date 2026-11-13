@@ -13,22 +13,31 @@ def compute_diagonal_fisher(
     dataloader: torch.utils.data.DataLoader,
     circuit_mask: Dict[str, torch.Tensor],
     device: torch.device,
-    max_batches: int = 10
+    max_batches: int = 10,
+    max_seq_len: int = 256
 ) -> Dict[str, torch.Tensor]:
     """
     Computes empirical diagonal Fisher sensitivities F_i on retain/boundary data
     restricted to the circuit mask M_C*.
+    Truncates sequence length to max_seq_len to prevent activation VRAM OOM.
     """
     model.eval()
     fisher = {name: torch.zeros_like(p, device=device) for name, p in model.named_parameters() if name in circuit_mask}
     total_samples = 0
+
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
 
     for batch_idx, batch in enumerate(dataloader):
         if batch_idx >= max_batches:
             break
         model.zero_grad()
         input_ids = batch["input_ids"].to(device)
+        if input_ids.shape[1] > max_seq_len:
+            input_ids = input_ids[:, :max_seq_len]
         labels = batch.get("labels", input_ids).to(device)
+        if labels.shape[1] > max_seq_len:
+            labels = labels[:, :max_seq_len]
         
         outputs = model(input_ids=input_ids, labels=labels)
         loss = outputs.loss
@@ -42,10 +51,16 @@ def compute_diagonal_fisher(
                 if name in circuit_mask and p.grad is not None:
                     fisher[name] += (p.grad ** 2) * batch_size
 
+        model.zero_grad()
+        del outputs, loss, input_ids, labels
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+
     with torch.no_grad():
         for name in fisher:
             if total_samples > 0:
-                fisher[name] = (fisher[name] / total_samples) * circuit_mask[name]
+                mask = circuit_mask[name].to(device)
+                fisher[name] = (fisher[name] / total_samples) * mask
 
     return fisher
 
@@ -67,20 +82,25 @@ def compute_fisher_preconditioner(
     for name, f in fisher.items():
         m = circuit_mask.get(name)
         if m is not None:
-            active_f = f[m > 0]
+            active_f = f[m.to(f.device) > 0]
             if active_f.numel() > 0:
                 all_vals.append(active_f.detach().cpu())
 
     if all_vals:
         concat_f = torch.cat(all_vals)
-        cutoff_val = torch.quantile(concat_f, q).item()
-        med_val = torch.median(concat_f).item()
+        if concat_f.numel() > 1_000_000:
+            step = concat_f.numel() // 1_000_000
+            sample_f = concat_f[::step][:1_000_000]
+        else:
+            sample_f = concat_f
+        cutoff_val = torch.quantile(sample_f, q).item()
+        med_val = torch.median(sample_f).item()
     else:
         cutoff_val = float("inf")
         med_val = 1.0
 
     for name, f in fisher.items():
-        m = circuit_mask[name]
+        m = circuit_mask[name].to(f.device)
         mask_condition = (f <= cutoff_val).float() * m
         damping = torch.pow(1.0 + f / (med_val + eps), -alpha_F)
         preconditioner[name] = mask_condition * damping

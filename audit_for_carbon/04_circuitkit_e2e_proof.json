@@ -4,6 +4,6 @@
   "hidden_size": 128,
   "cad_metric": 0.0,
   "circuit_sparsity": 0.1,
-  "mask_file_saved": "C:\\Users\\RahulNew\\AppData\\Local\\Temp\\pytest-of-RahulNew\\pytest-8\\test_cohere2_circuit_discovery0\\M_C_star.pt",
+  "mask_file_saved": "C:\\Users\\RahulNew\\AppData\\Local\\Temp\\pytest-of-RahulNew\\pytest-21\\test_cohere2_circuit_discovery0\\M_C_star.pt",
   "status": "VERIFIED_MINI_COHERE2_E2E"
 }

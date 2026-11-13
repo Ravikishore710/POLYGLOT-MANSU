@@ -40,10 +40,22 @@ def discover_language_attributions(
     model.eval()
     scores = {}
     
-    # Track gradient sensitivities across candidate modules (o_proj, down_proj)
+    # Target factual conceptual nodes: attention o_proj and MLP down_proj across candidate hub layers
+    # Focusing on global NoPE layers {3, 7, 11, 15, 19, 23, 27, 31, 35} and adjacent mid-layers
+    candidate_layers = {3, 7, 11, 14, 15, 16, 18, 19, 20, 22, 23, 24, 27, 31, 35}
+    tracked_params = []
+    
     for name, param in model.named_parameters():
-        if "o_proj" in name or "down_proj" in name or "mlp" in name or "attn" in name:
-            scores[name] = torch.zeros_like(param.data, dtype=torch.float32)
+        is_candidate_module = ("o_proj" in name or "down_proj" in name)
+        has_layer = any(f".layers.{l}." in name or f".h.{l}." in name for l in candidate_layers)
+        
+        # If model has no layer format matching (e.g. synthetic test model), track all o_proj and down_proj
+        if is_candidate_module and (has_layer or "layers." not in name):
+            param.requires_grad = True
+            tracked_params.append((name, param))
+            scores[name] = torch.zeros(param.shape, dtype=torch.float16, device="cpu")
+        else:
+            param.requires_grad = False
 
     if not contrast_pairs:
         return scores
@@ -52,7 +64,7 @@ def discover_language_attributions(
     for step in range(1, ig_steps + 1):
         alpha = step / float(ig_steps)
         for pair in contrast_pairs:
-            model.zero_grad()
+            model.zero_grad(set_to_none=True)
             input_ids = pair["input_ids"]
             labels = pair.get("labels", input_ids)
 
@@ -61,15 +73,21 @@ def discover_language_attributions(
             loss.backward()
 
             with torch.no_grad():
-                for name, param in model.named_parameters():
-                    if name in scores and param.grad is not None:
-                        scores[name] += torch.abs(param.grad.to(torch.float32) * param.data.to(torch.float32)) * alpha
+                for name, param in tracked_params:
+                    if param.grad is not None:
+                        grad_cpu = param.grad.data.to("cpu", dtype=torch.float32, non_blocking=True)
+                        data_cpu = param.data.to("cpu", dtype=torch.float32, non_blocking=True)
+                        scores[name] += (torch.abs(grad_cpu * data_cpu) * alpha).to(torch.float16)
+            
+            model.zero_grad(set_to_none=True)
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
 
     # Normalize by total steps and samples
     total_scale = float(ig_steps * len(contrast_pairs))
     with torch.no_grad():
         for name in scores:
-            scores[name] /= max(1.0, total_scale)
+            scores[name] = (scores[name].to(torch.float32) / max(1.0, total_scale)).to(torch.float32)
 
     return scores
 

@@ -6,7 +6,7 @@
     "retain",
     "hard_boundary_twins"
   ],
-  "circuitkit_nodes_attributed": 28,
+  "circuitkit_nodes_attributed": 2,
   "unlearning_step_metrics": {
     "loss_forget": 0.6931471824645996,
     "loss_retain": 6.21538782119751
