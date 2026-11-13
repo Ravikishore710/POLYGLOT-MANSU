@@ -102,7 +102,7 @@ def main():
     print("\n[4/4] Creating Public Hugging Face Collection ...")
     try:
         collection = api.create_collection(
-            title="Polyglot-MANSU: Multilingual Permanent Unlearning",
+            title="Polyglot-MANSU: Multilingual Machine Unlearning (Track 2b)",
             description="Official Lexsi AI Safety & Alignment Hackathon (Track 2b #7) project assets by Polyglot-MANSU team.",
             private=False
         )

@@ -1,8 +1,9 @@
 ---
-title: "Polyglot-MANSU: Evaluating Cross-Lingual Machine Unlearning in Tiny Aya"
-thumbnail: "https://raw.githubusercontent.com/rahulratan12/polyglot-mansu/main/docs/assets/pipeline_architecture.png"
+title: "Aligning Tiny Aya Fire (3.35B) for Cross-Lingual Machine Unlearning: Quantization-Robust Circuit Decoupling Across 10 Languages"
+thumbnail: "https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/docs/assets/pipeline_architecture.png"
 authors:
-  - name: Polyglot-MANSU Team
+  - name: Rahul Ratan
+  - name: Ravi Kishore
 tags:
   - safety
   - alignment
@@ -14,14 +15,12 @@ tags:
   - cohere
 ---
 
-# Polyglot-MANSU: Evaluating Cross-Lingual Machine Unlearning in Tiny Aya
+# Aligning Tiny Aya Fire (3.35B) for Cross-Lingual Machine Unlearning: Quantization-Robust Circuit Decoupling Across 10 Languages
 
-### Combining multilingual data curation, mechanistic circuit discovery, unlearning, and six-pillar auditing across ten language and code-mixing settings
-
-**Target Event:** [Lexsi AI Safety & Alignment Hackathon 2026](https://hackathon.lexsi.ai/) (Track 2b, Problem #7: Machine Unlearning)  
-**Authors:** Polyglot-MANSU Research Team  
-**Primary Codebase:** [https://github.com/rahulratan12/polyglot-mansu](https://github.com/rahulratan12/polyglot-mansu)  
-**Target Models:** [`CohereLabs/tiny-aya-fire`](https://huggingface.co/CohereLabs/tiny-aya-fire) (3.35B) & [`CohereLabs/tiny-aya-global`](https://huggingface.co/CohereLabs/tiny-aya-global) (3.35B)
+> **🟡 Community Article** &nbsp;|&nbsp; **Published November 2026** &nbsp;|&nbsp; **Lexsi AI Safety & Alignment Hackathon (Track 2b, Problem #7: Machine Unlearning)**  
+> **Authors:** [Rahul Ratan](https://github.com/rahulratan12) & [Ravi Kishore](https://huggingface.co/Ravikishore710) (Polyglot-MANSU Team)  
+> **Models Mentioned:** [`CohereLabs/tiny-aya-fire`](https://huggingface.co/CohereLabs/tiny-aya-fire) (3.35B), [`CohereLabs/tiny-aya-global`](https://huggingface.co/CohereLabs/tiny-aya-global) (3.35B), [`Ravikishore710/polyglot-mansu-tiny-aya-fire`](https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire)  
+> **Codebase:** [https://github.com/rahulratan12/polyglot-mansu](https://github.com/rahulratan12/polyglot-mansu) &nbsp;|&nbsp; **Live Arena:** [https://huggingface.co/spaces/Ravikishore710/polyglot-mansu-arena](https://huggingface.co/spaces/Ravikishore710/polyglot-mansu-arena)
 
 ---
 
@@ -71,7 +70,7 @@ Factual knowledge in multilingual models is concentrated in a sparse, cross-ling
 Under the Track 2 guidelines of the Lexsi Hackathon, we target dense open-weight models from **Cohere Labs**:
 
 - **[`CohereLabs/tiny-aya-fire`](https://huggingface.co/CohereLabs/tiny-aya-fire) (3.35B):** Optimized for South Asian languages (Hindi, Telugu, Tamil, Bengali, Urdu) alongside 70+ global languages.
-- **[`CohereLabs/tiny-aya-global`](https://huggingface.co/CohereLabs/tiny-aya-global) (3.35B):** Serves as our out-of-distribution model validation target.
+- **[`CohereLabs/tiny-aya-global`](https://huggingface.co/CohereLabs/tiny-aya-global) (3.35B):** Serves as our out-of-distribution cross-model validation target.
 
 ### Architectural Insight: The Role of NoPE Layers
 Tiny Aya uses the `Cohere2ForCausalLM` architecture (36 layers, 2048 hidden size, 16 query heads, 4 KV heads). It interleaves 3 sliding-window layers (4,096 context with Rotary Position Embeddings) with every 4th layer configured as a **global NoPE (No Position Embeddings)** layer (specifically layers $\{3, 7, 11, 15, 19, 23, 27, 31, 35\}$).
@@ -84,7 +83,9 @@ Our interpretability analysis with `CircuitKIT` revealed that these global NoPE 
 
 Polyglot-MANSU integrates all four official Track 2 toolkits into an authentic, artifact-passing chain:
 
-![4-Kit Pipeline Architecture](https://raw.githubusercontent.com/rahulratan12/polyglot-mansu/main/docs/assets/pipeline_architecture.png)
+<p align="center">
+  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/docs/assets/pipeline_architecture.png" alt="4-Kit Pipeline Architecture" width="100%"/>
+</p>
 
 1. **`CuratorKIT` (v0.1.24):** Generates parallel translations across 10 languages and code-mixed dialects, computes MinHash Jaccard disjointness ($< 0.60$), and outputs schema-validated `manifest.json`.
 2. **`CircuitKIT` (v0.2.2):** Applies the `0006-cohere` TransformerLens patch to execute Edge Attribution Patching with Integrated Gradients (`algorithm="eap-ig"`, `ig_steps=3`), localizing the minimal $10\%$ conceptual subgraph $\mathcal{C}^*$.
@@ -96,7 +97,11 @@ Polyglot-MANSU integrates all four official Track 2 toolkits into an authentic, 
 ## 5. Dataset Design and Split Methodology
 
 To test cross-lingual transfer without data leakage, we curated a schema-validated dataset across 10 linguistic variants:
-- **Languages:** English (`en`), Hindi (`hi`), Telugu (`te`), Bengali (`bn`), Tamil (`ta`), Arabic (`ar`), Spanish (`es`), French (`fr`), Hinglish (`en-hi` code-mixed), and Telugish (`en-te` code-mixed).
+- **Languages:** English (`en`), Hindi (`hi`), Telugu (`te`), Bengali (`bn`), Tamil (`ta`), Arabic (`ar`), Spanish (`es`), French (`fr`), Hinglish (`hi-Latn` code-mixed), and Telugish (`te-Latn` code-mixed).
+
+<p align="center">
+  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/docs/assets/dataset_manifest_distribution.png" alt="Curated Dataset Distribution" width="100%"/>
+</p>
 
 ```
 +------------------------------------+------------+-----------------------------------------------------+
@@ -123,7 +128,9 @@ We compute attribution scores across candidate attention and MLP projection node
 $$H_v(\theta_0) = \left( \frac{1}{|L|} \sum_{l \in L} \frac{1}{\tilde{s}_v^{(l)}(\theta_0) + \epsilon} \right)^{-1}$$
 The top $10\%$ highest-attribution parameters define the unlearning mask $M_{\mathcal{C}^*}$.
 
-![Circuit Attribution Heatmap](https://raw.githubusercontent.com/rahulratan12/polyglot-mansu/main/docs/assets/circuit_attribution_heatmap.png)
+<p align="center">
+  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/docs/assets/circuit_attribution_heatmap.png" alt="Circuit Attribution Heatmap" width="100%"/>
+</p>
 
 ### Step 2: Fisher Null-Space Damping & Conflict Orthogonalization
 Before updating weights, we compute diagonal Fisher information $F_i$ on retain and boundary samples. Active parameters with high Fisher sensitivity are damped ($P_i \to 0$). Furthermore, whenever forget gradients $g_f$ and retain gradients $g_r$ conflict ($\langle g_f, g_r \rangle < 0$), we project out destructive interference:
@@ -143,6 +150,10 @@ Our evaluation suite spans 6 rigorous pillars executed via `AuditKIT`:
 4. **Pillar 4 — Quantization Reversal Gap ($\Delta_{\text{PTQ}}$):** Difference in target accuracy between 4-bit compressed weights and BF16 weights ($\text{Acc}_{\text{NF4}} - \text{Acc}_{\text{BF16}}$).
 5. **Pillar 5 — Circuit Attribution Divergence ($CAD$):** Mechanistic cosine divergence of causal attribution gradients over $\mathcal{C}^*$.
 6. **Pillar 6 — Benign Boundary Utility:** Retention accuracy on hard-boundary defensive twins.
+
+<p align="center">
+  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/docs/assets/multilingual_asr_radar.png" alt="Multilingual ASR Radar Chart" width="85%"/>
+</p>
 
 ---
 
@@ -171,7 +182,9 @@ The following metrics are derived deterministically from our raw dual-T4 executi
 
 To benchmark the quantization reversal phenomenon against published literature, we evaluated standard baselines against Polyglot-MANSU under 4-bit NormalFloat compression:
 
-![Quantization Reversal Gap](https://raw.githubusercontent.com/rahulratan12/polyglot-mansu/main/docs/assets/quantization_reversal_gap.png)
+<p align="center">
+  <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/docs/assets/quantization_reversal_gap.png" alt="Quantization Reversal Gap" width="100%"/>
+</p>
 
 ```
 Method                   Precision      Target Forget Acc    Quant Reversal (Delta_PTQ)
