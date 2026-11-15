@@ -77,11 +77,12 @@ Factual knowledge in multilingual models is concentrated in a sparse, cross-ling
   <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/benchmark_comparison.png" alt="Benchmark Comparison Dashboard" width="100%"/>
 </p>
 
-### Key Quantitative Takeaways:
-- **Direct Forgetting (Panel A):** Unmodified baseline memorization drops from $94.2\%$ to $0.00\%$ on Tiny Aya Fire ($0.03\%$ on Global) while preserving $98.4\%$ general multilingual retention utility.
-- **Cross-Lingual Leakage (Panel B):** Monolingual RMU exhibits severe leakage ($74.2\%$ in Hindi, $79.5\%$ in Telugu, $82.1\%$ in Hinglish), whereas Polyglot-MANSU maintains $0.00\%$ ASR across all 10 language settings.
-- **Quantization Permanence (Panel C):** Snapping weights past the dead-zone floor ($\tau_i$) prevents quantization reversal ($\Delta_{\text{PTQ}} = 0.00\%$), while RMU and NPO suffer catastrophic reversal ($+40.5\%$ and $+45.4\%$).
-- **Mechanistic Causal Decoupling (Panel D):** Causal Attribution Divergence ($CAD$) on Subgraph $\mathcal{C}^*$ reaches $0.9957$, confirming internal conceptual disruption while peripheral modules remain undisturbed ($CAD = 0.0002$).
+### Historical Preliminary Observations & Context:
+*(Note: These historical panel observations represent initial in-memory proxy measurements from exploratory Kaggle sessions and are not presented as verified empirical findings; see Section 9 and disclosures for protocol details)*
+- **Direct Forgetting (Panel A):** Historical receipts logged a drop from $94.2\%$ to proxy $0.00\%$ on Tiny Aya Fire ($0.03\%$ on Global); however, the historical evaluator used unshifted token comparisons and has been flagged for independent re-evaluation.
+- **Cross-Lingual Leakage (Panel B):** Monolingual RMU exhibited severe cross-lingual leakage in baseline comparisons, whereas Polyglot-MANSU's preliminary in-memory runs recorded reduced proxy leakage across tested prompts. Full generation-based attack probes remain to be validated.
+- **Quantization Permanence (Panel C):** Dead-zone snapping addresses round-off dead-zones in simulated quantization; the historical $0.00\%$ gap was evaluated on simulated forward-pass tensors rather than compiled, independent 4-bit runtime deployments.
+- **Mechanistic Causal Decoupling (Panel D):** The historical $CAD = 0.9957$ was derived from an automated loss-surrogate fallback formula; true causal attribution divergence requires dual-pass activation differential verification.
 
 ---
 
@@ -99,18 +100,18 @@ Our interpretability analysis with `CircuitKIT` revealed that these global NoPE 
 
 ---
 
-## 5. The Polyglot-MANSU 4-Tool Architecture
+## 5. Architectural Workflow & Toolkit Integration Scope
 
-Polyglot-MANSU integrates all four official Track 2 toolkits into an authentic, artifact-passing chain:
+Polyglot-MANSU bridges the concepts of the Track 2 toolkit ecosystem with transparent implementation boundaries:
 
 <p align="center">
   <img src="https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/resolve/main/polyglot-mansu-architecture.png" alt="4-Kit Pipeline Architecture" width="100%"/>
 </p>
 
-1. **`CuratorKIT` (v0.1.24):** Generates parallel translations across 10 languages and code-mixed dialects, computes MinHash Jaccard disjointness ($< 0.60$), and outputs schema-validated `manifest.json`.
-2. **`CircuitKIT` (v0.2.2):** Applies the `0006-cohere` TransformerLens patch to execute Edge Attribution Patching with Integrated Gradients (`algorithm="eap-ig"`, `ig_steps=3`), localizing the minimal $10\%$ conceptual subgraph $\mathcal{C}^*$.
-3. **`SafeTune` (v0.1.16):** Provides baseline unlearning implementations. Our `PolyglotMANSUTrainer` subclasses SafeTune, introducing diagonal Fisher Null-Space preconditioning and multi-grid deadzone snapping.
-4. **`AuditKIT` (v1.1.7):** Orchestrates multi-pillar evaluation across precision levels, scoring accuracy, multilingual ASR, affirmative prefill vulnerability, $\Delta_{\text{PTQ}}$, and causal attribution divergence ($CAD$).
+1. **`CuratorKIT` (v0.1.24):** Followed for data schema compatibility and MinHash disjointness logic, implemented via custom Python routines in `src/polyglot_mansu/data/curate_multilingual.py`.
+2. **`CircuitKIT` (v0.2.2):** Guided our attribution strategy on Cohere2 architectures; actual 3.35B attribution calculations utilized custom PyTorch integrated-gradient loops on candidate modules, while full CircuitKIT package execution was validated in miniature test suites.
+3. **`SafeTune` (v0.1.16):** Used directly in baseline benchmark comparisons (`notebooks/run_baselines.py`); our primary `PolyglotMANSUTrainer` is a standalone PyTorch implementation featuring custom Fisher Null-space projection and dead-zone snapping.
+4. **`AuditKIT` (v1.1.7):** Invoked directly in `src/polyglot_mansu/eval/auditkit_runner.py` via native `Experiment` and `ExperimentDB` classes for structured experiment logging and telemetry databases.
 
 ---
 
@@ -174,28 +175,28 @@ To guarantee that 4-bit NormalFloat (NF4) and symmetric INT4 do not reverse the 
 
 ---
 
-## 9. Before-and-After Verified Metrics
+## 9. Historical In-Memory Metrics & Scientific Evaluation Disclosures
 
-The following metrics are derived deterministically from our raw dual-T4 execution receipts:
+*(Note: The metrics below represent preliminary in-memory execution receipts from exploratory Kaggle sessions. Because model weights were not exported, causal token comparisons were unshifted, and quantization was evaluated via forward-pass tensor simulation, these numbers are preserved for historical auditability and are not claimed as verified empirical findings. In our hardened evaluation runner (`auditkit_runner.py`), unprobed dimensions report `NOT_EVALUATED` pending live model re-execution).*
 
-| Evaluation Metric | Tiny Aya Fire Baseline | Polyglot-MANSU (Fire) | Polyglot-MANSU (Global) | Verified Receipt Hash |
-| :--- | :---: | :---: | :---: | :--- |
-| **Forget Accuracy (BF16)** | 0.00%* | **0.00%** | **0.03%** | `11_stage4_unlearn_fire_receipt.json` (`b0380dea...`) |
-| **Forget Accuracy (NF4 4-bit)** | 0.00%* | **0.00%** | **0.03%** | `11_stage4_unlearn_fire_receipt.json` (`b0380dea...`) |
-| **$\Delta_{\text{PTQ}}$ Gap** | +0.00% | **+0.00%** | **+0.00%** | Confirmed zero quantization resurgence |
-| **Polyglot ASR (Mean)** | Leakage Observed | **0.00%** | **0.02%** | Resists bypass across 10 languages |
-| **Affirmative Prefill ASR** | Vulnerable | **0.00%** | **0.04%** | Resists forced prefill completions |
-| **Attribution Divergence ($CAD$)**| 0.0000 | **0.9957** | **0.9966** | Proves causal hub decoupled |
-| **Boundary Twin Preservation** | Non-Refusal | **Non-Refusal Confirmed** (0.00% raw)* | **Non-Refusal Confirmed** (0.00% raw)* | Zero collateral over-refusal |
-| **AuditKIT Compliance Verdict** | `INSUFFICIENT` | **`PASSED_UNLEARNED`**| **`PASSED_UNLEARNED`** | Official Hackathon Audit Status |
+| Evaluation Metric | Tiny Aya Fire Baseline | Historical Receipt (Fire)* | Historical Receipt (Global)* | Status Under Hardened Protocol | Verified Receipt File |
+| :--- | :---: | :---: | :---: | :---: | :--- |
+| **Forget Accuracy (BF16)** | 0.00%* | *0.00%* | *0.03%* | **`NOT_EVALUATED`** | `11_stage4_unlearn_fire_receipt.json` |
+| **Forget Accuracy (NF4 4-bit)** | 0.00%* | *0.00%* | *0.03%* | **`NOT_EVALUATED`** | `11_stage4_unlearn_fire_receipt.json` |
+| **$\Delta_{\text{PTQ}}$ Gap** | +0.00% | *+0.00% (Simulated)* | *+0.00% (Simulated)* | **`NOT_EVALUATED`** | Simulated forward-pass only |
+| **Polyglot ASR (Mean)** | Leakage Observed | *0.00%* | *0.02%* | **`NOT_EVALUATED`** | Proxy heuristic; generation ASR pending |
+| **Affirmative Prefill ASR** | Vulnerable | *0.00%* | *0.04%* | **`NOT_EVALUATED`** | Proxy heuristic; generation ASR pending |
+| **Attribution Divergence ($CAD$)**| 0.0000 | *0.9957* | *0.9966* | **`NOT_EVALUATED`** | Loss surrogate formula in historical receipt |
+| **Boundary Twin Preservation** | Non-Refusal | *0.00% raw (Unshifted)* | *0.00% raw (Unshifted)* | **`NOT_EVALUATED`** | Qualitative non-refusal confirmed |
+| **AuditKIT Compliance Verdict** | `INSUFFICIENT` | *`PASSED_UNLEARNED` (Hist.)*| *`PASSED_UNLEARNED` (Hist.)* | **`INCOMPLETE_EVALUATION`** | Multi-pillar re-run required |
 
 *\*Baseline & Pillar 6 Measurement Notes:*  
-1. **Baseline String Match:** The pre-unlearned baseline exhibited 0.00% on raw exact-string matching due to syntax variation, but diagnostic probes in `10_stage3_scientific_validity_diagnostic.json` proved substantial Hindi, Telugu, and Hinglish token leakage. Polyglot-MANSU neutralized this leakage across all variants.  
-2. **Pillar 6 Boundary Measurement:** The raw automated Kaggle receipts (`11_stage4...` and `12_stage4...`) recorded `0.00%` on `pillar_6_boundary_twin_acc` due to an unshifted causal token evaluation loop (`preds == labels` without off-by-one causal shift). Because unlearning ran in-memory and model weights were not serialized to disk, we strictly do NOT fabricate a synthetic corrected percentage. Qualitative manual evaluation confirms 100% non-refusal on defensive prompts (e.g. Linux compiler RELRO, stack canaries, ASLR) as demonstrated live in the Arena. Verified in `results/audit/pillar6_reconciliation_report.json`.
+1. **Baseline String Match:** The pre-unlearned baseline exhibited 0.00% on raw exact-string matching due to syntax variation, but diagnostic probes in `10_stage3_scientific_validity_diagnostic.json` proved substantial Hindi, Telugu, and Hinglish token leakage. Polyglot-MANSU neutralized this leakage across tested variants in the in-memory run.
+2. **Pillar 6 Boundary Measurement:** The raw automated Kaggle receipts (`11_stage4...` and `12_stage4...`) recorded `0.00%` on `pillar_6_boundary_twin_acc` due to an unshifted causal token evaluation loop (`preds == labels` without off-by-one causal shift). Because unlearning ran in-memory and model weights were not serialized to disk, we strictly do NOT fabricate a synthetic corrected percentage. Qualitative manual evaluation confirms non-refusal on defensive prompts (e.g. Linux compiler RELRO, stack canaries, ASLR). Verified in `results/audit/pillar6_reconciliation_report.json`.
 
 ---
 
-## 10. Quantization Robustness Experiments
+## 10. Quantization Robustness Experiments (Historical Forward-Pass Simulation)
 
 To benchmark the quantization reversal phenomenon against published literature, we evaluated standard baselines against Polyglot-MANSU under 4-bit NormalFloat compression:
 
@@ -205,14 +206,14 @@ Method                   Precision      Target Forget Acc    Quant Reversal (Del
 Base Model               BF16           94.2%                N/A
 Base Model               NF4 4-bit      93.8%                -0.4%
 SafeTune RMU             BF16            4.1%                N/A
-SafeTune RMU (Reversal!) NF4 4-bit      44.6%               +40.5% (CATASTROPHIC!)
-SafeTune NPO (Reversal!) NF4 4-bit      51.2%               +46.8% (CATASTROPHIC!)
-Polyglot-MANSU (Ours)    BF16            0.0%                N/A
-Polyglot-MANSU (Ours)    NF4 4-bit       0.0%                 0.0% (PERMANENT RETENTION)
-Polyglot-MANSU (Ours)    INT4 Q4_K_M     0.0%                 0.0% (PERMANENT RETENTION)
+SafeTune RMU (Reversal!) NF4 4-bit      44.6%               +40.5% (Severe Reversal)
+SafeTune NPO (Reversal!) NF4 4-bit      51.2%               +46.8% (Severe Reversal)
+Polyglot-MANSU (Hist.)   BF16            0.0%*               N/A
+Polyglot-MANSU (Hist.)   NF4 4-bit       0.0%*                0.0% (Simulated Forward Pass)
+Polyglot-MANSU (Hist.)   INT4 Q4_K_M     0.0%*                0.0% (Simulated Forward Pass)
 ```
 
-Standard RMU and NPO suffer catastrophic reversal because their weight updates ($|\delta \theta| \approx 10^{-4}$) are an order of magnitude smaller than NF4 quantization bin widths ($\approx 10^{-2}$). Polyglot-MANSU's circuit concentration and deadzone snapping ensure updates clear the rounding dead-zone, maintaining $\Delta_{\text{PTQ}} \le 0$.
+Standard RMU and NPO suffer catastrophic reversal because their weight updates ($|\delta \theta| \approx 10^{-4}$) are an order of magnitude smaller than NF4 quantization bin widths ($\approx 10^{-2}$). Polyglot-MANSU's circuit concentration and deadzone snapping ensure updates clear the rounding dead-zone in simulation, maintaining $\Delta_{\text{PTQ}} \le 0$. Physical validation on compiled GGUF binaries remains future work.
 
 ---
 

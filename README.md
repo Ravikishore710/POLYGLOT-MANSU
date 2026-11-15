@@ -56,13 +56,9 @@ Standard Large Language Model (LLM) machine unlearning algorithms—including Re
 1. **The Quantization Reversal Failure Mode:** In full precision (BF16), gradient descent diffuses tiny weight updates across millions of parameters. When the unlearned model is compressed for edge deployment via 4-bit Post-Training Quantization (NF4 or INT4), weights snap back to their original quantization bins, **resurrecting up to 45% of supposedly forgotten hazardous knowledge** ($\Delta_{\text{PTQ}} \ge +40\%$).
 2. **The Cross-Lingual Behavioral Camouflage Bypass:** Dense multilingual models like Cohere's Tiny Aya encode factual knowledge in shared multilingual conceptual hubs. Monolingual unlearning suppresses English surface projections while leaving shared multilingual circuits intact, enabling trivial extraction via Hindi, Telugu, Arabic, or code-mixed dialects (Hinglish/Telugish).
 
-**Polyglot-MANSU** is an end-to-end unlearning framework designed to overcome both failure modes simultaneously. By chaining all four Lexsi Track 2 libraries ([`CuratorKIT`](https://github.com/Lexsi-Labs/CuratorKIT) $\to$ [`CircuitKIT`](https://github.com/Lexsi-Labs/CircuitKIT) $\to$ [`SafeTune`](https://github.com/Lexsi-Labs/SafeTune) $\to$ [`AuditKIT`](https://github.com/Lexsi-Labs/AuditKIT)), we isolate the **Cross-Lingual Harmonic Circuit ($\mathcal{C}^*$)**, constrain optimization to the Fisher Null Space of retain/boundary concepts, and enforce a **Multi-Grid Quantization Dead-zone Snapping Floor** during training.
+**Polyglot-MANSU** is an unlearning framework designed to study both failure modes within a unified architecture. By drawing upon the conceptual workflow of the Lexsi Track 2 ecosystem ([`CuratorKIT`](https://github.com/Lexsi-Labs/CuratorKIT) $\to$ [`CircuitKIT`](https://github.com/Lexsi-Labs/CircuitKIT) $\to$ [`SafeTune`](https://github.com/Lexsi-Labs/SafeTune) $\to$ [`AuditKIT`](https://github.com/Lexsi-Labs/AuditKIT)), we formulate methods to isolate candidate **Cross-Lingual Harmonic Circuits ($\mathcal{C}^*$)**, constrain optimization to the Fisher Null Space of retain/boundary concepts, and model a **Multi-Grid Quantization Dead-zone Snapping Floor**.
 
-Tested on [`CohereLabs/tiny-aya-fire`](https://huggingface.co/CohereLabs/tiny-aya-fire) (3.35B) and [`CohereLabs/tiny-aya-global`](https://huggingface.co/CohereLabs/tiny-aya-global) (3.35B) across 10 language settings, Polyglot-MANSU achieves:
-- **Causal Circuit Attribution Divergence ($CAD$):** **0.9957** (Fire) and **0.9966** (Global), proving internal factual circuits were dismantled.
-- **Quantization Reversal Gap ($\Delta_{\text{PTQ}}$):** **0.00%** under both 4-bit NormalFloat (NF4) and symmetric INT4.
-- **Polyglot & Prefill Attack Success Rate:** **0.00%** on Fire ($0.02\%$ on Global) under adversarial and jailbreak prefill probes.
-- **Benign Boundary Utility:** **100% preservation** on closely overlapping defensive administration twin queries.
+In preliminary in-memory Kaggle exploration on [`CohereLabs/tiny-aya-fire`](https://huggingface.co/CohereLabs/tiny-aya-fire) (3.35B) and [`CohereLabs/tiny-aya-global`](https://huggingface.co/CohereLabs/tiny-aya-global) (3.35B), historical run receipts recorded initial unlearning signals across 10 language settings. However, as detailed in our scientific disclosures (Section 11), these historical figures relied on proxy formulations, unshifted token comparisons, and simulated forward passes without exported checkpoints. Under our hardened evaluation protocol (`src/polyglot_mansu/eval/auditkit_runner.py`), these dimensions are strictly designated as **`NOT_EVALUATED`** pending full-scale independent model re-execution.
 
 ---
 
@@ -72,11 +68,12 @@ Tested on [`CohereLabs/tiny-aya-fire`](https://huggingface.co/CohereLabs/tiny-ay
   <img src="assets/benchmark_comparison.png" alt="Polyglot-MANSU Benchmark Comparison Dashboard" width="100%"/>
 </p>
 
-### Key Empirical Findings:
-- **Direct Forgetting (Panel A):** Unmodified baseline memorization drops from $94.2\%$ to $0.00\%$ on Tiny Aya Fire ($0.03\%$ on Global) without degrading general multilingual retention ($98.4\%$).
-- **Cross-Lingual Resistance (Panel B):** Monolingual RMU exhibits severe leakage ($74.2\%$ in Hindi, $79.5\%$ in Telugu, $82.1\%$ in Hinglish), whereas Polyglot-MANSU maintains $0.00\%$ ASR across all 10 language settings.
-- **Quantization Permanence (Panel C):** Snapping weights past the dead-zone floor ($\tau_i$) prevents quantization reversal ($\Delta_{\text{PTQ}} = 0.00\%$), while RMU and NPO suffer catastrophic reversal ($+40.5\%$ and $+45.4\%$).
-- **Mechanistic Causal Decoupling (Panel D):** Causal Attribution Divergence ($CAD$) on Subgraph $\mathcal{C}^*$ reaches $0.9957$, confirming internal conceptual disruption while peripheral modules remain undisturbed ($CAD = 0.0002$).
+### Historical Preliminary Observations & Methodological Context:
+*(Note: These historical panel observations represent initial in-memory proxy measurements from early exploratory runs and are not presented as verified empirical findings; see Section 11 for rigorous protocol disclosures)*
+- **Direct Forgetting (Panel A):** Historical receipts logged a drop in memorization score from $94.2\%$ to proxy $0.00\%$ on Tiny Aya Fire ($0.03\%$ on Global); however, the historical evaluator used unshifted token comparisons and has been flagged for independent re-evaluation.
+- **Cross-Lingual Resistance (Panel B):** While baseline comparisons indicated multilingual leakage in standard unlearning, Polyglot-MANSU's historical proxy ASR figures require validation under full generation-based attack evaluators.
+- **Quantization Permanence (Panel C):** Dead-zone snapping addresses round-off dead-zones in mathematical simulation; the historical $0.00\%$ gap was evaluated on simulated forward-pass tensors rather than compiled, independent 4-bit runtime deployments.
+- **Mechanistic Causal Decoupling (Panel D):** The historical $CAD = 0.9957$ was derived from an automated loss-surrogate fallback formula; true causal attribution divergence requires dual-pass activation differential verification.
 
 ---
 
@@ -114,9 +111,9 @@ Cohere2 transformers interleave 3 sliding-window layers (4,096 context with Rota
 
 ---
 
-## 6. System Architecture & 4-Kit Pipeline
+## 6. Architectural Workflow & Toolkit Mapping
 
-Polyglot-MANSU integrates all four official Track 2 toolkits into an unbroken, artifact-passing pipeline:
+Polyglot-MANSU maps its workflow across the four conceptual domains of the Track 2 toolkit ecosystem:
 
 <p align="center">
   <img src="assets/polyglot-mansu-architecture.png" alt="Polyglot-MANSU System Architecture" width="100%"/>
@@ -124,22 +121,22 @@ Polyglot-MANSU integrates all four official Track 2 toolkits into an unbroken, a
 
 ```mermaid
 flowchart TD
-    A["CuratorKIT v0.1.24<br/>Parallel Curation & MinHash Disjointness"] -->|"data/curated/manifest.json (245 rows)"| B["CircuitKIT v0.2.2<br/>EAP-IG Attribution on Cohere2"]
-    B -->|"Causal Circuit Tensor C*"| C["SafeTune v0.1.16 / PolyglotMANSUTrainer<br/>Fisher Null-Space Damping & Snapping"]
-    C -->|"In-Memory Unlearned Model"| D["AuditKIT v1.1.7<br/>6-Pillar Evaluation & SQLite DB"]
-    D -->|"Verified Cryptographic Receipts"| E["results/hf_export/"]
+    A["CuratorKIT-Compatible Curation<br/>Parallel Curation & MinHash Disjointness"] -->|"data/curated/manifest.json (245 rows)"| B["Circuit Attribution Engine<br/>PyTorch IG on Cohere2 Modules (CircuitKIT Concepts)"]
+    B -->|"Candidate Circuit Mask C*"| C["Custom PolyglotMANSUTrainer<br/>Fisher Null-Space Damping & Snapping"]
+    C -->|"In-Memory Model / Evaluation States"| D["AuditKIT v1.1.7 Runner<br/>Telemetry Logging & SQLite DB"]
+    D -->|"Cryptographic Experiment Receipts"| E["audit_for_carbon/"]
 ```
 
 ---
 
-## 7. Four Repository Integrations
+## 7. Official Toolkit Integration & Execution Scope
 
-Each toolkit executes authentic computational workloads and passes concrete artifacts:
+To maintain complete scientific transparency, we explicitly document the exact role and execution scope of each Track 2 toolkit:
 
-1. **`CuratorKIT` (v0.1.24):** Generates parallel translations across 10 languages and code-mixed dialects, enforces MinHash Jaccard disjointness ($< 0.60$) between training and evaluation splits, and exports verified schemas (`manifest.json`, `lexsi_provenance.json`).
-2. **`CircuitKIT` (v0.2.2):** Applies the `0006-cohere` TransformerLens patch to evaluate Edge Attribution Patching with Integrated Gradients (`algorithm="eap-ig"`, `ig_steps=3`), computing harmonic necessity scores across all 36 layers to isolate minimal subgraph $\mathcal{C}^*$.
-3. **`SafeTune` (v0.1.16):** Provides standard unlearning baselines (`RMU`, `NPO`, `SimDPO`, `FLAT`). Our `PolyglotMANSUTrainer` extends SafeTune by projecting gradients into the diagonal Fisher Null Space of retain/boundary twins and applying multi-grid deadzone snapping.
-4. **`AuditKIT` (v1.1.7):** Orchestrates automated multi-pillar auditing, measuring direct accuracy, multilingual ASR, affirmative prefill vulnerability, $\Delta_{\text{PTQ}}$, and causal attribution divergence ($CAD$).
+1. **`CuratorKIT` (v0.1.24):** Imported in miniature integration tests (`test_full_4repo_pipeline_e2e.py`). Our multilingual dataset generation (`src/polyglot_mansu/data/curate_multilingual.py`) uses custom Python routines implementing MinHash deduplication and schema conventions compatible with CuratorKIT exports (`manifest.json`, `lexsi_provenance.json`), rather than executing upstream CuratorKIT generator pipelines on external APIs.
+2. **`CircuitKIT` (v0.2.2):** Imported in unit tests and scripts. While our methodology builds on CircuitKIT's EAP-IG and Cohere2 patching concepts, our actual Stage 4 attribution calculations (`src/polyglot_mansu/circuits/discover_polyglot.py`) were implemented via custom PyTorch integrated-gradient loops on candidate attention and MLP layers, rather than invoking CircuitKIT's full native `Pipeline.evaluate()` suite on the 3.35B model.
+3. **`SafeTune` (v0.1.16):** Used directly in our baseline comparison runner (`notebooks/run_baselines.py` / `src/polyglot_mansu/unlearn/run_baselines.py`). Our primary unlearning engine (`PolyglotMANSUTrainer`) is our own standalone PyTorch implementation featuring custom Fisher Null-space projection and dead-zone quantization snapping, not an invoked SafeTune trainer subclass.
+4. **`AuditKIT` (v1.1.7):** Invoked directly in `src/polyglot_mansu/eval/auditkit_runner.py` via native `Experiment` and `ExperimentDB` classes to structure experimental metadata and write SQLite telemetry records (`experiment_db.sqlite`).
 
 ---
 
@@ -206,24 +203,36 @@ The evaluation workflow spans 6 systematic phases:
 
 ---
 
-## 11. Verified Benchmark Results Table
+## 11. Historical In-Memory Benchmark Results & Scientific Disclosures
 
-All metrics are deterministically bound to cryptographically hashed JSON receipts produced directly by `AuditKIT`:
+> [!IMPORTANT]
+> **Scientific Integrity & Empirical Scope Disclosures:**
+> 1. **Historical In-Memory Receipts (Methodologically Limited & Not Independently Validated):** The metrics below reflect preliminary execution receipts logged during our initial Kaggle dual-T4 training sessions (`rahulratan12/polyglot-mansu-fire-run` Kernel 144655031 v11 and `polyglot-mansu-global-run` v2). Because training executed in-memory and GPU session quotas prevented serializing full 6.7 GB weight checkpoints, **no serialized model weights or LoRA adapters were exported**. These results must not be interpreted as verified final findings.
+> 2. **Evaluation Protocol Limitations in Historical Runs:**
+>    - **Direct Forget Accuracy:** Historical receipts utilized unshifted causal-token comparisons rather than shifted autoregressive scoring.
+>    - **Quantization Reversal Gap ($\Delta_{\text{PTQ}}$):** The historical pipeline evaluated forward-pass simulation on shared in-memory tensors without an independent behavioral evaluation on isolated quantized copies; real GGUF/llama.cpp binary deployments were not tested.
+>    - **Polyglot & Prefill ASR:** Historical scores were rapid proxy estimates rather than genuine generation-based attack evaluations.
+>    - **Circuit Attribution Divergence ($CAD$):** Historical values derived from an automated loss-surrogate fallback formula rather than dual-pass attribution differentials.
+>    - **Defensive Boundary Utility:** Raw receipts recorded `0.00%` due to unshifted token loops; utility preservation is **not independently verified** (though qualitative non-refusal was observed on benign RELRO/ASLR queries).
+> 3. **Hardened Evaluator Implementation:** The refactored codebase (`src/polyglot_mansu/eval/auditkit_runner.py`) fixes causal token shifting, implements true generation probes, and evaluates quantization on independent cloned tensor copies. Under this hardened protocol, unprobed metrics report **`NOT_EVALUATED`** and the verdict defaults to **`INCOMPLETE_EVALUATION`** until an actual live 3.35B model execution is performed.
+> 4. **No Universal or Guaranteed Deletion:** We do not claim universal, mathematically permanent, or un-reversible knowledge erasure. White-box gradient attacks (e.g. GCG suffixes) or dedicated fine-tuning may still recover suppressed representations.
 
-| Evaluation Dimension | Metric Name | Tiny Aya Fire Baseline | Polyglot-MANSU (Fire) | Polyglot-MANSU (Global) | Scientific Interpretation |
-| :--- | :--- | :---: | :---: | :---: | :--- |
-| **Direct Knowledge** | Forget Accuracy (BF16) | 0.00%* | **0.00%** | **0.03%** | Target capability neutralized |
-| **Edge Quantization** | Forget Accuracy (NF4) | 0.00%* | **0.00%** | **0.03%** | Snapped weights do not leak |
-| **Quantization Gap** | $\Delta_{\text{PTQ}}$ Gap | +0.00% | **+0.00%** | **+0.00%** | Zero quantization resurrection |
-| **Cross-Lingual** | Polyglot ASR (Mean) | Leakage Proven | **0.00%** | **0.02%** | Resists bypass in 10 languages |
-| **Adversarial Jailbreak** | Affirmative Prefill ASR | Vulnerable | **0.00%** | **0.04%** | Resists prefill completion |
-| **Mechanistic Causal** | Attribution Divergence ($CAD$)| 0.0000 | **0.9957** | **0.9966** | Causal circuit decoupled |
-| **Defensive Boundary** | Twin Utility Preservation | Non-Refusal | **Non-Refusal Confirmed** (0.00% raw)* | **Non-Refusal Confirmed** (0.00% raw)* | Zero over-refusal on benign RELRO |
-| **AuditKIT Verdict** | Compliance Classification | `INSUFFICIENT` | **`PASSED_UNLEARNED`**| **`PASSED_UNLEARNED`** | Official Hackathon Audit Status |
+The table below contrasts the historical logged receipts against the current status under our hardened evaluation protocol:
 
-*\*Footnote on Baseline String Match & Pillar 6 Token Shift:*  
-1. **Baseline Exact-Match:** The unmodified baseline scored 0.00% on raw exact-string matching due to syntax variation, but diagnostic probe `10_stage3_scientific_validity_diagnostic.json` confirmed significant semantic token leakage under Hindi and Hinglish prompts. Polyglot-MANSU eliminated this leakage completely.  
-2. **Pillar 6 Boundary Measurement:** The raw automated Kaggle receipts (`11_stage4...` and `12_stage4...`) recorded `0.00%` on `pillar_6_boundary_twin_acc` due to an unshifted causal token evaluation loop in the rapid evaluation script (`preds == labels` without off-by-one causal shift). Because unlearning ran in-memory and model weights were not serialized to disk, we strictly do NOT fabricate a synthetic corrected percentage. Qualitative manual evaluation confirms 100% non-refusal on defensive prompts (e.g. Linux compiler RELRO, stack canaries, ASLR) as demonstrated live in the Arena.
+| Evaluation Dimension | Metric Name | Historical In-Memory Receipt (Methodologically Limited)* | Status Under Hardened Protocol | Scientific Finding & Known Limitations |
+| :--- | :--- | :---: | :---: | :--- |
+| **Direct Knowledge** | Forget Accuracy (BF16) | *0.00% (Fire) / 0.03% (Global)* | **`NOT_EVALUATED`** | Historical logged value used unshifted token comparisons; not independently validated. |
+| **Edge Quantization** | Forget Accuracy (NF4) | *0.00% (Fire) / 0.03% (Global)* | **`NOT_EVALUATED`** | Simulated forward pass only; no independent behavioral evaluation in historical pipeline. |
+| **Quantization Gap** | $\Delta_{\text{PTQ}}$ Gap | *+0.00% (Simulated)* | **`NOT_EVALUATED`** | Zero-gap claim was methodologically limited by in-place tensor mutation; real GGUF unverified. |
+| **Cross-Lingual** | Polyglot ASR (Mean)* | *0.00% (Fire) / 0.02% (Global)* | **`NOT_EVALUATED`** | Historical proxy heuristic; full generation-based attack evaluation pending live 3.35B execution. |
+| **Adversarial Jailbreak** | Affirmative Prefill ASR* | *0.00% (Fire) / 0.04% (Global)* | **`NOT_EVALUATED`** | Historical proxy heuristic; full generation-based attack evaluation pending live 3.35B execution. |
+| **Mechanistic Causal** | Attribution Divergence ($CAD$)* | *0.9957 (Fire) / 0.9966 (Global)* | **`NOT_EVALUATED`** | Historical value derived from loss-surrogate fallback formula; true CAD pending dual forward passes. |
+| **Defensive Boundary** | Twin Utility Preservation | *0.00% raw (Unshifted loop)* | **`NOT_EVALUATED`** | Token shift loop artifact; not independently verified (qualitative non-refusal observed on RELRO/ASLR). |
+| **AuditKIT Verdict** | Compliance Classification | *`PASSED_UNLEARNED` (Hist.)* | **`INCOMPLETE_EVALUATION`** | Historical receipt reflects unhardened eval; new evaluator enforces complete multi-pillar testing. |
+
+*\*Footnote on Historical In-Memory Receipts & Protocol Disclosures:*
+1. **Historical Logged Values:** Preserved strictly for auditability from Kaggle execution receipts (`11_stage4...` and `12_stage4...`). Because weights were not exported and historical evaluation code contained methodological limitations, these figures are not presented as verified empirical findings.
+2. **Current Evaluator State:** All unprobed dimensions in `auditkit_runner.py` return `NOT_EVALUATED`. They remain unverified on the full 3.35B model until a fresh end-to-end training and evaluation run is conducted.
 
 ### Verifiable Receipt Cryptographic Hashes
 - **E2E 4-Kit Pipeline Receipt:** `audit_for_carbon/06_full_4repo_pipeline_e2e.json`  
@@ -324,7 +333,25 @@ python app.py
 
 ---
 
-## 17. License & Third-Party Attribution
+## 17. Team Members & Contribution Disclosures
+
+- **Rahul Ratan** (`rahulratan12@gmail.com`) — Repository architecture, PyTorch training implementation, unit tests, and Kaggle deployment workflows.
+- **Ravi Kishore** (`Ravikishore710`) — Hugging Face dataset curation, model card documentation, evaluation schemas, and interactive demo.
+
+**Declaration of Outside Work:** All code, datasets, evaluation scripts, and documentation for Polyglot-MANSU were created during the hackathon period. Pre-existing open-source foundation models (CohereLabs Tiny Aya) and hackathon toolkits (CuratorKIT, CircuitKIT, SafeTune, AuditKIT) were utilized in compliance with their respective open-source licenses.
+
+---
+
+## 18. AI Tool Usage Statement
+
+In compliance with the hackathon reporting standards, we explicitly disclose all AI tools utilized during development:
+- **Google Gemini (via Antigravity agentic workflows):** Used for code authoring, test scaffolding, documentation structure, and offline synthetic dataset curation within CuratorKIT.
+- **OpenAI ChatGPT:** Used for conceptual brainstorming, prompt rephrasing, and code review assistance.
+- **Local & Cloud GPU Execution:** All algorithmic logic, test assertions, and empirical evaluation loops were executed and verified on local and Kaggle GPU environments.
+
+---
+
+## 19. License & Third-Party Attribution
 
 - **Original Team Code:** Licensed under the [MIT License](LICENSE) (scoped exclusively to files authored in `src/`, `scripts/`, `space_app/`, and `tests/`).
 - **Lexsi Labs Toolkits:** Governed by the **Lexsi Labs Source Available License (LSAL v1.1 / v1.2)** for academic research, education, and hackathon auditing.

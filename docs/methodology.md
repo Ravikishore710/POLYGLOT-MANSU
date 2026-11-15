@@ -26,7 +26,7 @@ The unlearning objective must satisfy three concurrent criteria:
 
 Standard unlearning modifies all parameters diffusely, allowing language-specific token projection heads to mask behavior while shared factual hubs remain intact.
 
-Using `CircuitKIT v0.2.2` with the `0006-cohere` patch on `TransformerLens 3.8.0`, we compute edge attribution patching with integrated gradients (`algorithm="eap-ig"`, `ig_steps=3`) separately across language subsets $l \in \{\text{en}, \text{hi}, \text{te}, \text{hi-Latn}, \text{ar}\}$:
+Drawing on `CircuitKIT v0.2.2`'s EAP-IG formulations and Cohere2 patching concepts, attribution is computed via integrated gradients across language subsets $l \in \{\text{en}, \text{hi}, \text{te}, \text{hi-Latn}, \text{ar}\}$ (implemented via custom PyTorch gradient loops in Stage 4, with CircuitKIT package integration validated on miniature test configurations):
 $$s_v^{(l)}(\theta_0) = \frac{\partial \mathcal{L}_{\text{forget}}}{\partial z_v^{(l)}} \cdot \left( z_v^{(l)} - z_{v, \text{clean}}^{(l)} \right)$$
 
 To filter out monolingual surface vocabulary heads and isolate **cross-lingual conceptual nodes**, we compute the **Harmonic Attribution Score**:
@@ -69,4 +69,4 @@ During checkpoint consolidation, for active parameters ($P_i > 0$) where accumul
 $$0.35 \tau_i \le |\delta \theta_i| < \tau_i$$
 the parameter is pushed across the quantization threshold:
 $$\theta_i \leftarrow \theta_{0,i} + \text{sign}(\delta \theta_i) \cdot \tau_i$$
-This guarantees that `quantize_nf4(theta_final) != quantize_nf4(theta_0)` on active circuit components, ensuring $\Delta_{\text{PTQ}} \le 0.00\%$.
+This is designed so that `quantize_nf4(theta_final) != quantize_nf4(theta_0)` on active circuit components in simulated quantization, targeting $\Delta_{\text{PTQ}} \le 0.00\%$ under forward-pass testing.

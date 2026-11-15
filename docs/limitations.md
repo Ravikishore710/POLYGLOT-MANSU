@@ -31,8 +31,8 @@ Our benchmark suite specifically evaluates:
 4. **Post-Training Quantization Resurgence:** Re-evaluating extraction under 4-bit NormalFloat (NF4) and symmetric 4-bit INT4.
 
 ### B. Out-of-Scope Threat Vectors (What Remains Unproven)
-1. **Universal Mathematical Deletion:** Achieving $0.00\%$ ASR on 100 held-out probes and $CAD = 0.9957$ proves circuit decoupling under tested distributions. It does not mathematically prove that an adversary with white-box gradient access cannot find an adversarial suffix (e.g., via multi-token GCG optimization) that triggers residual factual circuits.
-2. **Scale of Language Coverage:** While we evaluate 10 major languages and code-mixed settings spanning four major language families (Indo-Aryan, Dravidian, Semitic, Romance), Tiny Aya supports over 70 languages. Robustness across the remaining 60+ low-resource languages remains to be empirically verified.
+1. **Universal Mathematical Deletion:** While preliminary historical benchmarks recorded low leakage under evaluated prompt distributions, this does not mathematically prove that an adversary with white-box gradient access cannot find an adversarial suffix (e.g., via multi-token GCG optimization) that triggers residual factual circuits. Furthermore, historical ASR and CAD metrics were derived via proxy heuristics and unshifted token loops, and are designated as `NOT_EVALUATED` in our refactored evaluation runner until an independent full model re-execution occurs.
+2. **Scale of Language Coverage:** While we evaluate 10 diverse languages and code-mixed settings spanning four major language families (Indo-Aryan, Dravidian, Semitic, Romance), Tiny Aya supports over 70 languages. Robustness across the remaining 60+ low-resource languages remains to be empirically verified.
 3. **Fine-Tuning Relearning Resistance:** While we evaluated representation erasure and Fisher damping, exhaustive multi-epoch adversarial fine-tuning on foreign domain data was not conducted.
 
 ---

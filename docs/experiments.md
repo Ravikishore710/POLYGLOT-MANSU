@@ -38,24 +38,34 @@ Curated across 10 linguistic variants via `CuratorKIT v0.1.24`:
 
 ---
 
-## 3. Verified Benchmark Results
+## 3. Historical In-Memory Benchmark Results & Scientific Disclosures
 
-The following numbers represent deterministic empirical measurements derived directly from our raw execution receipts:
+> [!NOTE]
+> **Measurement Disclosures & Known Methodological Limitations:**
+> - **Historical Receipts (Not Independently Validated):** These metrics reflect preliminary execution receipts from the in-memory Kaggle sessions (`11_stage4...` and `12_stage4...`). Because model weights were not exported, they are preserved as historical execution receipts rather than independently verified findings.
+> - **Direct Forget Accuracy:** Historical receipts utilized unshifted causal-token comparisons rather than shifted autoregressive scoring.
+> - **Simulated Quantization Only:** Quantization was evaluated via forward-pass weight simulation (NF4 blocksize 64 and symmetric INT4 group 32) without independent behavioral evaluations on isolated clones; compiled GGUF/llama.cpp binaries were not tested.
+> - **Proxy ASR & CAD:** Historical ASR and CAD metrics were evaluated via proxy heuristics; true generation-based attack probes and dual-pass CAD in `auditkit_runner.py` report `NOT_EVALUATED` until an actual full model execution occurs.
+> - **Defensive Utility:** Preservation is **not independently verified**; qualitative non-refusal was observed on benign defensive queries (RELRO/ASLR).
+> - **No Universal Guarantees:** No universal, permanent, or un-reversible deletion guarantees are claimed.
 
-| Evaluation Dimension | Metric Name | Tiny Aya Fire Baseline | Polyglot-MANSU (Fire) | Polyglot-MANSU (Global) | Scientific Interpretation |
-| :--- | :--- | :---: | :---: | :---: | :--- |
-| **Direct Knowledge** | Forget Accuracy (BF16) | 0.00%* | **0.00%** | **0.03%** | Target capability neutralized |
-| **Edge Quantization** | Forget Accuracy (NF4) | 0.00%* | **0.00%** | **0.03%** | Snapped weights do not leak |
-| **Quantization Gap** | $\Delta_{\text{PTQ}}$ Gap | +0.00% | **+0.00%** | **+0.00%** | Confirmed zero quantization resurgence |
-| **Cross-Lingual** | Polyglot ASR (Mean) | Leakage Proven | **0.00%** | **0.02%** | Resists bypass in 10 languages |
-| **Adversarial Jailbreak** | Affirmative Prefill ASR | Vulnerable | **0.00%** | **0.04%** | Resists forced prefill completions |
-| **Mechanistic Causal** | Attribution Divergence ($CAD$)| 0.0000 | **0.9957** | **0.9966** | Causal circuit decoupled |
-| **Defensive Boundary** | Twin Utility Preservation | Non-Refusal | **Non-Refusal Confirmed** (0.00% raw)* | **Non-Refusal Confirmed** (0.00% raw)* | Zero over-refusal on benign RELRO |
-| **AuditKIT Verdict** | Compliance Classification | `INSUFFICIENT` | **`PASSED_UNLEARNED`**| **`PASSED_UNLEARNED`** | Official Hackathon Audit Status |
+The table below contrasts the historical logged receipts against the current status under our hardened evaluation protocol:
 
-*\*Baseline & Pillar 6 Measurement Notes:*  
-1. **Baseline Exact-Match:** The unmodified baseline scored 0.00% on raw exact-string matching due to syntax variation, but diagnostic probe `10_stage3_scientific_validity_diagnostic.json` confirmed significant semantic token leakage under Hindi and Hinglish prompts. Polyglot-MANSU eliminated this leakage completely.  
-2. **Pillar 6 Boundary Measurement:** The raw automated Kaggle receipts (`11_stage4...` and `12_stage4...`) recorded `0.00%` on `pillar_6_boundary_twin_acc` due to an unshifted causal token evaluation loop in the rapid evaluation script (`preds == labels` without off-by-one causal shift). Because unlearning ran in-memory and model weights were not serialized to disk, we strictly do NOT fabricate a synthetic corrected percentage. Qualitative manual evaluation confirms 100% non-refusal on defensive prompts (e.g. Linux compiler RELRO, stack canaries, ASLR) as demonstrated live in the Arena.
+| Evaluation Dimension | Metric Name | Historical In-Memory Receipt (Methodologically Limited)* | Status Under Hardened Protocol | Scientific Finding & Known Limitations |
+| :--- | :--- | :---: | :---: | :--- |
+| **Direct Knowledge** | Forget Accuracy (BF16) | *0.00% (Fire) / 0.03% (Global)* | **`NOT_EVALUATED`** | Historical logged value used unshifted token comparisons; not independently validated. |
+| **Edge Quantization** | Forget Accuracy (NF4) | *0.00% (Fire) / 0.03% (Global)* | **`NOT_EVALUATED`** | Simulated forward pass only; no independent behavioral evaluation in historical pipeline. |
+| **Quantization Gap** | $\Delta_{\text{PTQ}}$ Gap | *+0.00% (Simulated)* | **`NOT_EVALUATED`** | Zero-gap claim was methodologically limited by in-place tensor mutation; real GGUF unverified. |
+| **Cross-Lingual** | Polyglot ASR (Mean)* | *0.00% (Fire) / 0.02% (Global)* | **`NOT_EVALUATED`** | Historical proxy heuristic; full generation-based attack evaluation pending live 3.35B execution. |
+| **Adversarial Jailbreak** | Affirmative Prefill ASR* | *0.00% (Fire) / 0.04% (Global)* | **`NOT_EVALUATED`** | Historical proxy heuristic; full generation-based attack evaluation pending live 3.35B execution. |
+| **Mechanistic Causal** | Attribution Divergence ($CAD$)* | *0.9957 (Fire) / 0.9966 (Global)* | **`NOT_EVALUATED`** | Historical value derived from loss-surrogate fallback formula; true CAD pending dual forward passes. |
+| **Defensive Boundary** | Twin Utility Preservation | *0.00% raw (Unshifted loop)* | **`NOT_EVALUATED`** | Token shift loop artifact; not independently verified (qualitative non-refusal observed on RELRO/ASLR). |
+| **AuditKIT Verdict** | Compliance Classification | *`PASSED_UNLEARNED` (Hist.)* | **`INCOMPLETE_EVALUATION`** | Historical receipt reflects unhardened eval; new evaluator enforces complete multi-pillar testing. |
+
+*\*Baseline & Pillar 6 Measurement Notes:*
+1. **Baseline Exact-Match:** The unmodified baseline scored 0.00% on raw exact-string matching due to syntax variation, but diagnostic probe `10_stage3_scientific_validity_diagnostic.json` confirmed significant semantic token leakage under Hindi and Hinglish prompts. Polyglot-MANSU eliminated this leakage in the in-memory run.
+2. **Pillar 6 Boundary Measurement:** The raw automated Kaggle receipts (`11_stage4...` and `12_stage4...`) recorded `0.00%` on `pillar_6_boundary_twin_acc` due to an unshifted causal token evaluation loop in the rapid evaluation script (`preds == labels` without off-by-one causal shift). We strictly do NOT fabricate a synthetic corrected percentage. Qualitative manual evaluation confirms non-refusal on defensive prompts (e.g. Linux compiler RELRO, stack canaries, ASLR) as demonstrated live in the Arena.
+3. **Proxy vs. Generation Probes:** Historical ASR and CAD metrics were derived from rapid proxy formulations; full generation-based attack evaluations and dual-pass CAD are implemented in `auditkit_runner.py` and report `NOT_EVALUATED` until an actual live 3.35B model execution is performed.
 
 ---
 
