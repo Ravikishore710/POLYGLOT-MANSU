@@ -19,7 +19,7 @@
 | **SafeTune Integration** | Guard enforcement, trainer wrapper, loss functions | `src/polyglot_mansu/unlearn/polyglot_mansu_trainer.py`, `src/polyglot_mansu/guards.py`. Guard 01-08 enforced. | **PASS** |
 | **AuditKIT Integration** | 7-pillar evaluation suite, autoregressive alignment | `src/polyglot_mansu/eval/auditkit_runner.py`. Generation ASR probes, Wilson CIs, PTQ reversal clone. | **PASS** |
 | **Hardware Certification** | Native BF16 execution on Ampere sm_80+ | Tested on NVIDIA A100-SXM4-80GB. 252.25 TFLOPS BF16 GEMM throughput verified. Receipt: [`results/smoke_test_a100_receipt.json`](file:///c:/Users/RahulNew/Downloads/AI%20Red%20Teaming/results/smoke_test_a100_receipt.json). | **PASS** |
-| **Model Checkpoint Export** | Full 3.35B unlearned SafeTensors checkpoint | Exported and verified on local disk: [`models/tiny_aya_fire_mansu_weights/model.safetensors`](file:///c:/Users/RahulNew/Downloads/AI%20Red%20Teaming/models/tiny_aya_fire_mansu_weights/model.safetensors) (6.70 GB). | **PASS** |
+| **Model Checkpoint Export** | Full 3.35B SafeTensors checkpoint produced by unlearning optimization | Exported and verified on local disk: [`models/tiny_aya_fire_mansu_weights/model.safetensors`](file:///c:/Users/RahulNew/Downloads/AI%20Red%20Teaming/models/tiny_aya_fire_mansu_weights/model.safetensors) (6.70 GB). | **PASS** |
 | **Reload Bit-Exactness** | $\max |\theta_{\text{disk}} - \theta_{\text{memory}}| = 0.0$ | Verified bit-exact match against in-memory unlearned state. Recorded in execution receipt. | **PASS** |
 | **Option B Sampling** | 300 steps, exhaustive forget coverage, cycled retain | All 100 forget samples seen every epoch (0 dropped). Logged in [`results/audit/hardened_fire/training_sample_log_tiny_aya_fire_mansu.json`](file:///c:/Users/RahulNew/Downloads/AI%20Red%20Teaming/results/audit/hardened_fire/training_sample_log_tiny_aya_fire_mansu.json). | **PASS** |
 
@@ -31,8 +31,8 @@ All artifacts are present, verified, and anchored by deterministic SHA-256 hashe
 
 | Item | Local File Path | Size (Bytes) | SHA-256 Hash |
 | :--- | :--- | :--- | :--- |
-| **Unlearned Model Weights** | `models/tiny_aya_fire_mansu_weights/model.safetensors` | 6,698,488,600 | `ee461df48eee3a31c35e62cb957cc4c2fe83d8812d424d152df75374bdd2f5ec` |
-| **Unlearned Tokenizer** | `models/tiny_aya_fire_mansu_weights/tokenizer.json` | 21,376,625 | `d80fa65cdce1ebb9e13b3de476d58ef60fde9533f0cacec1d758c59bba0447a2` |
+| **Model Weights (Post-Optimization Checkpoint)** | `models/tiny_aya_fire_mansu_weights/model.safetensors` | 6,698,488,600 | `ee461df48eee3a31c35e62cb957cc4c2fe83d8812d424d152df75374bdd2f5ec` |
+| **Model Tokenizer (Post-Optimization Checkpoint)** | `models/tiny_aya_fire_mansu_weights/tokenizer.json` | 21,376,625 | `d80fa65cdce1ebb9e13b3de476d58ef60fde9533f0cacec1d758c59bba0447a2` |
 | **Model Config** | `models/tiny_aya_fire_mansu_weights/config.json` | 2,020 | `f1eba457bf81b133aa4816eb906daa5797f491656a018db17bfb3b0d0bb84cc2` |
 | **Generation Config** | `models/tiny_aya_fire_mansu_weights/generation_config.json` | 132 | `b5424ac1545b2d6f76602862e0f316273d0e012c9594f8ce39830bb9d1371fac` |
 | **Chat Template** | `models/tiny_aya_fire_mansu_weights/chat_template.jinja` | 3,239 | `2147c474f41b522b7296f74692b9f31e45f49a31465960576a9d321339c5915a` |

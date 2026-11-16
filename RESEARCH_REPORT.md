@@ -22,7 +22,7 @@ We present **Polyglot-MANSU**, an unlearning framework designed for dense multil
 3. **Mid-Layer Latent Adversarial Perturbation & Gradient Conflict Orthogonalization:** Scrubs internal residual representations under worst-case activation shifts.
 4. **Multi-Grid Quantization Dead-Zone Snapping:** Mitigates quantization rounding dead-zones by displacing active weights beyond NF4 and symmetric INT4 bin thresholds during consolidation.
 
-In this work, we report the complete engineering implementation, hardware certification on an NVIDIA A100-SXM4-80GB GPU in native BF16, and exhaustive 300-step unlearning optimization under Option B sampling. We provide the full 6.70 GB unlearned SafeTensors model checkpoint, verified bit-exact against the post-unlearning in-memory model ($\max |\theta_{\text{disk}} - \theta_{\text{memory}}| = 0.0$), alongside complete step-by-step sample ID logs, cryptographic SHA-256 manifests, and a hardened 7-pillar evaluation architecture. In training execution, multi-grid dead-zone snapping detected and snapped 2,034 active parameters. However, we do not claim quantization permanence or behavioral forgetting as experimentally proven: full quantization permanence under compiled edge runtimes (e.g., GGUF in llama.cpp) and post-export behavioral generation attack resistance remain strictly designated as un-evaluated hypotheses (`NOT_EVALUATED`) pending end-to-end evaluation sweeps.
+In this work, we report the complete engineering implementation, hardware certification on an NVIDIA A100-SXM4-80GB GPU in native BF16, and exhaustive 300-step unlearning optimization under Option B sampling. We provide the full 6.70 GB SafeTensors model checkpoint produced by the unlearning optimization run, verified bit-exact against the post-unlearning in-memory model ($\max |\theta_{\text{disk}} - \theta_{\text{memory}}| = 0.0$), alongside complete step-by-step sample ID logs, cryptographic SHA-256 manifests, and a hardened 7-pillar evaluation architecture. In training execution, multi-grid dead-zone snapping detected and snapped 2,034 active parameters. However, we do not claim quantization permanence or behavioral forgetting as experimentally proven: full quantization permanence under compiled edge runtimes (e.g., GGUF in llama.cpp) and post-export behavioral generation attack resistance remain strictly designated as un-evaluated hypotheses (`NOT_EVALUATED`) pending end-to-end evaluation sweeps.
 
 ---
 
@@ -276,7 +276,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 chk_path = 'models/tiny_aya_fire_mansu_weights'
 tokenizer = AutoTokenizer.from_pretrained(chk_path)
 model = AutoModelForCausalLM.from_pretrained(chk_path, torch_dtype=torch.bfloat16, device_map='cpu')
-print('Successfully reloaded 3.35B unlearned model. Parameter count:', sum(p.numel() for p in model.parameters()))
+print('Successfully reloaded 3.35B model checkpoint. Parameter count:', sum(p.numel() for p in model.parameters()))
 "
 ```
 

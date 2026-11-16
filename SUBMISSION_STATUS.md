@@ -14,7 +14,7 @@
 1. **Target Models & Track Alignment:**
    - Evaluated strictly on dense open-weight models from Cohere Labs: [`CohereLabs/tiny-aya-fire`](https://huggingface.co/CohereLabs/tiny-aya-fire) (3.35B) and [`CohereLabs/tiny-aya-global`](https://huggingface.co/CohereLabs/tiny-aya-global) (3.35B).
 2. **Authentic 3.35B Model Checkpoint Exported:**
-   - Full 6.70 GB unlearned SafeTensors checkpoint (`models/tiny_aya_fire_mansu_weights/model.safetensors`) produced on an NVIDIA A100-SXM4-80GB GPU in native BF16.
+   - Full 6.70 GB SafeTensors checkpoint produced by the unlearning optimization run (`models/tiny_aya_fire_mansu_weights/model.safetensors`) on an NVIDIA A100-SXM4-80GB GPU in native BF16.
    - Post-export in-memory reload verification confirmed: $\max |\theta_{\text{disk}} - \theta_{\text{memory}}| = 0.000000$.
    - All 6 model and tokenizer files verified against deterministic SHA-256 hashes in `checksums.json`.
 3. **Option B Sampling Execution (300 Optimization Steps):**
@@ -69,8 +69,8 @@ To prevent conflation of reporting metrics, we explicitly delineate the 4 levels
 
 | Artifact Name | Path | Size (Bytes) | SHA-256 Hash |
 | :--- | :--- | :--- | :--- |
-| **Unlearned Model Weights** | [`models/tiny_aya_fire_mansu_weights/model.safetensors`](file:///c:/Users/RahulNew/Downloads/AI%20Red%20Teaming/models/tiny_aya_fire_mansu_weights/model.safetensors) | 6,698,488,600 | `ee461df48eee3a31c35e62cb957cc4c2fe83d8812d424d152df75374bdd2f5ec` |
-| **Unlearned Model Tokenizer** | [`models/tiny_aya_fire_mansu_weights/tokenizer.json`](file:///c:/Users/RahulNew/Downloads/AI%20Red%20Teaming/models/tiny_aya_fire_mansu_weights/tokenizer.json) | 21,376,625 | `d80fa65cdce1ebb9e13b3de476d58ef60fde9533f0cacec1d758c59bba0447a2` |
+| **Model Weights (Post-Optimization Checkpoint)** | [`models/tiny_aya_fire_mansu_weights/model.safetensors`](file:///c:/Users/RahulNew/Downloads/AI%20Red%20Teaming/models/tiny_aya_fire_mansu_weights/model.safetensors) | 6,698,488,600 | `ee461df48eee3a31c35e62cb957cc4c2fe83d8812d424d152df75374bdd2f5ec` |
+| **Model Tokenizer (Post-Optimization Checkpoint)** | [`models/tiny_aya_fire_mansu_weights/tokenizer.json`](file:///c:/Users/RahulNew/Downloads/AI%20Red%20Teaming/models/tiny_aya_fire_mansu_weights/tokenizer.json) | 21,376,625 | `d80fa65cdce1ebb9e13b3de476d58ef60fde9533f0cacec1d758c59bba0447a2` |
 | **Checksum Manifest** | [`models/tiny_aya_fire_mansu_weights/checksums.json`](file:///c:/Users/RahulNew/Downloads/AI%20Red%20Teaming/models/tiny_aya_fire_mansu_weights/checksums.json) | 550 | `7cabe565e81e9733e0b06b0e2ff85fd92d589d1b3ede5119ccabbcec09038532` |
 | **Training Execution Receipt** | [`results/audit/hardened_fire/execution_receipt_tiny_aya_fire_mansu_export.json`](file:///c:/Users/RahulNew/Downloads/AI%20Red%20Teaming/results/audit/hardened_fire/execution_receipt_tiny_aya_fire_mansu_export.json) | 1,593 | `3245d32edab97afd0c88029c3226a0ad89eaea8b5e344061b879f8fc749be83f` |
 | **Training Sample Log** | [`results/audit/hardened_fire/training_sample_log_tiny_aya_fire_mansu.json`](file:///c:/Users/RahulNew/Downloads/AI%20Red%20Teaming/results/audit/hardened_fire/training_sample_log_tiny_aya_fire_mansu.json) | 52,087 | `74b8bb914b30948532a7eed1ca726728893e72bc075227b2f2509c5a41a27ecc` |
