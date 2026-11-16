@@ -328,6 +328,8 @@ python app.py
   [https://huggingface.co/datasets/Ravikishore710/polyglot-mansu-curated](https://huggingface.co/datasets/Ravikishore710/polyglot-mansu-curated)
 - **Audit Verification & Receipts Repository:**  
   [https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire](https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire)
+- **Direct 3.35B Checkpoint Weights Repository:**  
+  [https://huggingface.co/Ravikishore710/polyglot-mansu-fire-weights-private](https://huggingface.co/Ravikishore710/polyglot-mansu-fire-weights-private) *(Contains `model.safetensors` [6.70 GB]; toggle to Public upon user approval)*
 - **Hugging Face Research Article:**  
   [https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/discussions/2](https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/discussions/2)
 - **Official Submission Collection:**  
