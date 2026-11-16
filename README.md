@@ -12,11 +12,13 @@
 [![Live Red-Team Demo](https://img.shields.io/badge/HuggingFace-Live_Arena_Space-yellow.svg)](https://huggingface.co/spaces/Ravikishore710/polyglot-mansu-arena)
 [![Curated Dataset](https://img.shields.io/badge/HuggingFace-Curated_Dataset_(245_rows)-blue.svg)](https://huggingface.co/datasets/Ravikishore710/polyglot-mansu-curated)
 [![Audit Receipts](https://img.shields.io/badge/HuggingFace-Audit_Receipts_%26_Configs-red.svg)](https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire)
+[![3.35B Checkpoint](https://img.shields.io/badge/HuggingFace-3.35B_SafeTensors_Checkpoint-purple.svg)](https://huggingface.co/Ravikishore710/polyglot-mansu-fire-weights-private)
 [![Research Article](https://img.shields.io/badge/HuggingFace-Research_Article-green.svg)](https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire/discussions/2)
 
 > **Lexsi AI Safety & Alignment Hackathon 2026** — Track 2b: Alignment & Defense (Problem #7: Machine Unlearning)  
 > **Authors:** [Rahul Ratan](https://github.com/rahulratan12) & [Ravi Kishore](https://huggingface.co/Ravikishore710) (Polyglot-MANSU Research Team)  
 > **Target Models:** [`CohereLabs/tiny-aya-fire`](https://huggingface.co/CohereLabs/tiny-aya-fire) (Primary, 3.35B) & [`CohereLabs/tiny-aya-global`](https://huggingface.co/CohereLabs/tiny-aya-global) (Generalization, 3.35B)  
+> **Public Model Checkpoint (6.70 GB):** [https://huggingface.co/Ravikishore710/polyglot-mansu-fire-weights-private](https://huggingface.co/Ravikishore710/polyglot-mansu-fire-weights-private)  
 > **Interactive Demonstration:** [https://huggingface.co/spaces/Ravikishore710/polyglot-mansu-arena](https://huggingface.co/spaces/Ravikishore710/polyglot-mansu-arena)
 
 ---

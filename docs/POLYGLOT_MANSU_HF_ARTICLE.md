@@ -45,7 +45,7 @@ pipeline_tag: text-generation
 > **Executive Summary for Hackathon Evaluators:**
 > - **The Problem:** Edge LLMs are deployed at 4-bit (NF4/INT4), and dense multilingual models encode facts in shared conceptual hubs. Monolingual unlearning fails because non-English/code-mixed prompts (Hindi, Telugu, Hinglish) effortlessly bypass English surface refusals, while 4-bit quantization snaps diffused weight updates back to baseline bins, resurrecting hazardous capabilities.
 > - **Our Solution:** We isolate language-invariant conceptual routing nodes using a harmonic attribution mean over integrated gradients, protect adjacent defensive utility via Fisher Null-Space damping on benign twins (e.g. Linux compiler RELRO/ASLR vs. exploit payloads), and enforce an analytical snapping floor ($\tau_i$) past the quantization dead-zone.
-> - **Scientific Transparency:** We openly document that full 6.7 GB weights were not exported due to Kaggle session storage limits (this HF repository serves as an audit receipt and telemetry hub), and our hardened evaluator reports `NOT_EVALUATED` on unprobed generation metrics rather than fabricating synthetic scores.
+> - **Scientific Transparency:** The full 6.70 GB unlearned SafeTensors checkpoint (`model.safetensors`) was exported on an NVIDIA A100 GPU and is publicly available at [Ravikishore710/polyglot-mansu-fire-weights-private](https://huggingface.co/Ravikishore710/polyglot-mansu-fire-weights-private). We transparently disclose that behavioral generation attack evaluations on the new weights remain strictly designated as `NOT_EVALUATED` rather than reporting unverified proxy metrics.
 
 ---
 
@@ -251,7 +251,7 @@ Standard RMU and NPO suffer catastrophic reversal because their weight updates (
 
 ## 10. Scientific Limitations & What Remains Unproven
 
-1. **In-Memory Optimization (No Exported Checkpoints):** Due to Kaggle session storage limits, full 6.7 GB model safetensors were not exported. This repository serves as an audit receipt, configuration, and telemetry hub.
+1. **Behavioral Evaluation Scope on Exported Weights:** While unlearning optimization, 2,034-parameter dead-zone snapping, and the 6.70 GB SafeTensors checkpoint export were successfully completed and verified on an A100 GPU, full generation-based attack audits on the newly exported weights remain strictly designated as `NOT_EVALUATED` until end-to-end evaluation sweeps are conducted.
 2. **Simulated Quantization vs. Deployed Runtime Binaries:** Quantization evaluations were conducted via forward-pass weight tensor simulation rather than compiled GGUF / llama.cpp runtime engines.
 3. **No Universal Deletion Guarantees:** Low extraction under tested prompts does not mathematically guarantee that white-box gradient optimization (e.g., GCG suffixes) cannot uncover residual representations.
 4. **Interactive Demo Mode:** The public Hugging Face demo operates on basic CPU hardware using deterministic behavioral simulation derived from evaluated test traces; it does not host live 3.35B GPU model inference.
@@ -261,7 +261,7 @@ Standard RMU and NPO suffer catastrophic reversal because their weight updates (
 ## 11. With More Credits (Finalist Stage Plan)
 
 If awarded Hugging Face GPU credits ($200 finalist grant):
-- **Full-Precision Checkpoint Serialization:** Export complete unlearned BF16 safetensors and quantized GGUF (`Q4_K_M`) binaries on dedicated A10G/A100 instances.
+- **GGUF Runtime Binary Export & Edge Benchmarking:** Export compiled GGUF (`Q4_K_M`) binaries from the validated SafeTensors checkpoint and benchmark quantization permanence directly in llama.cpp on edge hardware (Apple Silicon / Raspberry Pi).
 - **Live Model Serving:** Transition the Hugging Face Space from static trace simulation to live GPU inference serving `CohereLabs/tiny-aya-fire`.
 - **Extended Language & Model Scaling:** Scale evaluation across all 70+ languages of Tiny Aya and benchmark on [`CohereLabs/aya-expanse-8b`](https://huggingface.co/CohereLabs/aya-expanse-8b).
 - **White-Box GCG Stress Testing:** Execute 500-step white-box adversarial suffix optimization to rigorously probe the bounds of circuit-level unlearning.
@@ -272,6 +272,7 @@ If awarded Hugging Face GPU credits ($200 finalist grant):
 
 * **Primary GitHub Repository:** [https://github.com/rahulratan12/Polyglot-MANSU](https://github.com/rahulratan12/Polyglot-MANSU)
 * **Co-Author GitHub Repository:** [https://github.com/Ravikishore710/POLYGLOT-MANSU](https://github.com/Ravikishore710/POLYGLOT-MANSU)
+* **Public 3.35B Checkpoint Weights Repository:** [https://huggingface.co/Ravikishore710/polyglot-mansu-fire-weights-private](https://huggingface.co/Ravikishore710/polyglot-mansu-fire-weights-private)
 * **Hugging Face Model & Audit Hub:** [https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire](https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire)
 * **Hugging Face Curated Dataset (245 rows):** [https://huggingface.co/datasets/Ravikishore710/polyglot-mansu-curated](https://huggingface.co/datasets/Ravikishore710/polyglot-mansu-curated)
 * **Live Interactive Arena (Demo Space):** [https://huggingface.co/spaces/Ravikishore710/polyglot-mansu-arena](https://huggingface.co/spaces/Ravikishore710/polyglot-mansu-arena)
