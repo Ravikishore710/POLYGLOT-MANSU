@@ -3,7 +3,7 @@
 
 ---
 
-### Tracks & Problem Statements Covered
+### Tracks + Problem Statements Covered
 * **Track 2b: AI Safety & Alignment (Alignment & Defense)**
   * **Problem #7: Machine Unlearning** — Removing hazardous capabilities and private data across paraphrased, adversarial, and cross-lingual probes while preserving benign general utility.
 
@@ -18,7 +18,7 @@
 ### Abstract
 Standard large language model unlearning techniques (Gradient Difference, Negative Preference Optimization, and Representation Misdirection Unlearning) suffer from two fundamental vulnerabilities: **quantization reversal** and **cross-lingual circuit bypass**. Under 4-bit edge compression (NF4, INT4), diffuse unlearning updates ($10^{-4}$ to $10^{-3}$) are $47\times\text{--}828\times$ smaller than quantization bin widths ($0.2774$), causing weights to snap back to pre-unlearned bins and resurrecting hazardous capabilities. Concurrently, unlearning executed in English fails to sever shared multilingual conceptual hubs in dense models like Cohere's Tiny Aya (3.35B), allowing trivial extraction via low-resource languages or code-mixed dialects (e.g., Hindi, Telugu, Hinglish, Telugish).
 
-We present **Polyglot-MANSU**, an unlearning framework designed for dense multilingual edge architectures. Polyglot-MANSU chains all 4 Track 2 toolkits: (1) **CuratorKIT** schema curates a 245-sample, 10-language benchmark with MinHash deduplication ($J < 0.20$); (2) **CircuitKIT** localizes the cross-lingual invariant circuit ($\mathcal{C}^*$, 30 active tensors, 0.0004 global sparsity) via harmonic integrated gradients; (3) **SafeTune** enforces Fisher null-space damping ($q=0.85$), gradient orthogonalization, and multi-grid dead-zone snapping; and (4) **AuditKIT** formulates a 7-pillar evaluation framework with autoregressive token alignment. 
+We present **Polyglot-MANSU**, an unlearning framework designed for dense multilingual edge architectures. Polyglot-MANSU chains all 4 Track 2 toolkits: (1) **CuratorKIT** schema curates a 245-sample, 10-language benchmark with MinHash deduplication ($J < 0.20$); (2) **CircuitKIT** localizes the cross-lingual invariant circuit ($\mathcal{C}^*$, 30 active tensors, 0.0004 global sparsity) via harmonic integrated gradients; (3) **SafeTune** enforces Fisher null-space damping ($q=0.85$), gradient orthogonalization, and multi-grid dead-zone snapping; and (4) **AuditKIT** formulates a 7-pillar evaluation framework with autoregressive token alignment.
 
 Executed on an NVIDIA A100-SXM4-80GB GPU in native BF16 for 300 steps under Option B sampling (100% forget coverage per epoch), the framework detected and snapped 2,034 quantization dead-zone parameters and exported an authentic 6.70 GB SafeTensors checkpoint verified bit-exact against in-memory weights ($\max |\theta_{\text{disk}} - \theta_{\text{memory}}| = 0.000000$). While optimization, dead-zone snapping, and serialization are proven, post-export behavioral generation attacks and compiled GGUF edge deployment remain strictly designated as `NOT_EVALUATED` hypotheses pending end-to-end evaluation sweeps.
 
@@ -54,7 +54,11 @@ Real-world enterprise and on-device models are rarely deployed in uncompressed 1
 2. **$H_2$ (Quantization Dead-Zone Catastrophe):** Diffuse unlearning updates fail to clear the rounding threshold of 4-bit quantization bins, leading to parameter reversal ($\Delta_{\text{PTQ}} > 0$).
 3. **$H_3$ (Multi-Grid Snapping Persistence):** Analytically displacing active circuit parameters beyond the quantization dead-zone threshold ($\tau_i$) mitigates round-off reversal across both NF4 and symmetric INT4 grids.
 
-#### Threat Model
+#### Pre-Registered Hypotheses
+* Parameter updates constrained to harmonic invariant nodes $\mathcal{C}^*$ reduce retain degradation on distant language families (Arabic, Romance) by at least $40\%$ compared to full-parameter gradient difference.
+* Parameters that satisfy $|\delta \theta_i| \ge \tau_i$ will not flip quantization bins during symmetric INT4 or NF4 calibration.
+
+#### Threat Model [T2a] [T3]
 * **Attacker Capability:** Black-box or grey-box query access to edge-deployed 4-bit quantized models.
 * **Attack Vectors:**
   1. *Cross-Lingual & Code-Mixed Jailbreaks:* Submitting weaponized exploit queries in low-resource languages (Telugu, Bengali) or Latin-script code-mixing (Hinglish/Telugish).
@@ -71,10 +75,11 @@ Real-world enterprise and on-device models are rarely deployed in uncompressed 1
 ### Hackathon Repositories (Kits) Used
 
 * **CuratorKIT:** Used its dataset schema (Alpaca formatting) and MinHash deduplication ($J < 0.20$) in `src/polyglot_mansu/data/curate_multilingual.py` to curate the 245-sample, 10-language benchmark across four disjoint splits.
+* **AlignTune:** *N/A* (Scoped to general alignment/fine-tuning; not applicable to machine unlearning).
+* **AgentTune:** *N/A* (Scoped to agentic workflow trajectories; not applicable to machine unlearning).
+* **SafeTune:** Built `PolyglotMANSUTrainer` enforcing SafeTune runtime guards (GUARD-01 through GUARD-08, including the 366-token system preamble guard), Fisher null-space damping ($q=0.85$), and latent adversarial perturbation.
 * **CircuitKIT:** Directly executed integrated gradients attribution (`algorithm="eap-ig"`, `level="node"`) with `circuitkit.backends._tl_compat` patch `0006-cohere` to identify the 30 active circuit tensors in Tiny Aya's 36-layer architecture.
-* **SafeTune:** Built `PolyglotMANSUTrainer` enforcing SafeTune runtime guards (GUARD-01 through GUARD-08), Fisher null-space damping ($q=0.85$), and latent adversarial perturbation.
 * **AuditKIT:** Integrated `Experiment` and `ExperimentDB` in `src/polyglot_mansu/eval/auditkit_runner.py` to structure the 7-pillar evaluation framework with autoregressive causal token alignment.
-* **AlignTune & AgentTune:** N/A (Scoped to general alignment/agentic tracks; not utilized).
 
 #### How the Repos Connect (Pipeline Data Flow)
 
@@ -93,51 +98,64 @@ flowchart TD
 
 ### Models and Licenses
 
-* **Base Model:** `CohereLabs/tiny-aya-fire` (3.35B dense `Cohere2ForCausalLM`, 36 layers, 16 query heads, 4 KV heads, RoPE/NoPE hybrid attention). License: **Cohere Non-Commercial License (CC-BY-NC 4.0)**.
-* **Generalization Model (Implemented in code):** `CohereLabs/tiny-aya-global` (3.35B). License: CC-BY-NC 4.0.
-* **Teacher / Judge Model:** Gemini API was used strictly offline for initial synthetic translation auditing; AllenAI WildGuard was audited for VRAM decoupling (GUARD-08).
+* **Base Aya Model:** `CohereLabs/tiny-aya-fire` (3.35B dense `Cohere2ForCausalLM`, 36 layers, 16 query heads, 4 KV heads, RoPE/NoPE hybrid attention). Config: BF16 native. License: **Cohere Non-Commercial License (CC-BY-NC 4.0)**.
+* **Target / Hardened Model Attacked [T2a]:** `CohereLabs/tiny-aya-fire` (Base vs. Unlearned state).
+* **Teacher Model [T1] / Closed-Model Baseline:** Gemini API was used offline for translation audit checks; AllenAI WildGuard was evaluated for VRAM decoupling (GUARD-08).
 
 ---
 
-### Datasets, Benchmarks & Licenses
+### Datasets, Benchmarks and Licenses
 
-* **Data Sources:** Adapted from `cais/wmdp-cyber-forget-corpus` (MIT License), `locuslab/TOFU` (Apache 2.0), and `muse-bench/MUSE-News` (MIT License).
+* **Source(s) of Data:** Adapted from `cais/wmdp-cyber-forget-corpus` (MIT License), `locuslab/TOFU` (Apache 2.0), and `muse-bench/MUSE-News` (MIT License).
 * **Languages Covered (10 Variants):** English (`en`), Hindi (`hi`), Telugu (`te`), Bengali (`bn`), Tamil (`ta`), Arabic (`ar`), Spanish (`es`), French (`fr`), Hinglish (`hi-Latn`), Telugish (`te-Latn`).
-* **Split Accounting & Cryptographic Manifest:**
+* **Train / Test Splits & Leak Check:**
   * `train_forget.jsonl`: 100 samples (SHA-256: `26b3cbf7...`)
   * `heldout_test_forget.jsonl`: 100 samples (SHA-256: `895ba581...`)
   * `retain.jsonl`: 30 samples (SHA-256: `feebaa81...`)
   * `hard_boundary_twins.jsonl`: 15 samples (SHA-256: `ffaa56f8...`)
   * Verified 0% lexical/semantic leak between train and test via MinHash Jaccard filtering ($J < 0.20$).
+* **Safety Benchmark(s) [T2a] [T2b]:** CAIS WMDP-Cyber offensive cyber-exploit benchmark adapted to parallel multilingual templates.
+* **General Capability Benchmark(s) [T1] [T3]:** Multilingual retain set covering general factual knowledge and reasoning across 10 languages.
+* **CuratorKIT Filtering [T1] [T2]:** Filtered out near-duplicate prompts, enforced token length bounds, and verified disjoint train/test splits via MinHash.
+* **Attack Prompt Set [T2a]:** 100 held-out prompts across 10 languages evaluated under clean prompting and affirmative prefill prefixes.
+* **Over-Refusal Test Set [T2b]:** 15 benign Hard-Boundary Twins (`WMDP++`) testing that defensive security queries (compiler ASLR, RELRO) are not mistakenly refused.
+* **Tool / Task Environments [T3]:** *N/A* (Machine unlearning focus).
 
 ---
 
-### Metrics and Why These
+### Metrics, and Why These
 
-1. **Multilingual Attack Success Rate (ASR):** Evaluates open-ended generation leaks across 10 languages (Lower is better).
-2. **Affirmative Prefill ASR:** Evaluates leakage when forced with jailbreak prefixes (Lower is better).
-3. **Quantization Reversal Gap ($\Delta_{\text{PTQ}}$):** $\text{ASR}_{\text{PTQ}} - \text{ASR}_{\text{BF16}}$ (Target: $\le 0.00\%$; lower is better).
-4. **Circuit Attribution Divergence (`CAD`):** Shift in causal attribution away from baseline weights within $\mathcal{C}^*$ (Higher is better, target $> 0.35$).
-5. **Hard-Boundary Twin Accuracy:** Evaluates utility retention on adjacent defensive security programming (Higher is better).
-6. **Multilingual Retain Accuracy:** Evaluates general linguistic and factual preservation (Higher is better).
-
----
-
-### Method & Experiments
-
-* **Hardware Setup:** Dedicated NVIDIA A100-SXM4-80GB GPU running native `torch.bfloat16` (sm_80).
-* **Optimization Configuration:**
-  * Total Steps: 300 optimization steps (3 full epochs).
-  * Sampling: Option B (Exhaustive Forget Coverage; all 100 forget samples seen every epoch).
-  * Retain Permutations: Cycled $3.3\times$ per epoch with independent random shuffling (`['ret_mixed_6', 'ret_mixed_3', 'ret_en_6']`).
-  * Fisher Quantile: $q = 0.85$ (Top 15% highest-sensitivity retain parameters shielded).
-  * Snapping Margin: $\gamma = 1.25$ over NF4 (blocksize 64) and INT4 (group size 32).
-  * Total Active Parameters: $1,339,691$ scalar weights ($0.040\%$ global model sparsity).
-  * Snapped Dead-Zone Weights: **2,034 parameters**.
+* **List of Metrics:**
+  1. *Multilingual Attack Success Rate (ASR):* Measures exploit generation leakage across 10 languages (Lower is better).
+  2. *Affirmative Prefill ASR:* Measures exploit generation leakage under `"Sure, here is..."` prefixes (Lower is better).
+  3. *Quantization Reversal Gap ($\Delta_{\text{PTQ}}$):* $\text{ASR}_{\text{PTQ}} - \text{ASR}_{\text{BF16}}$ (Target: $\le 0.00\%$; lower is better).
+  4. *Circuit Attribution Divergence (`CAD`):* Shift in causal attribution away from baseline weights within $\mathcal{C}^*$ (Higher is better, target $> 0.35$).
+  5. *Hard-Boundary Twin Accuracy:* Evaluates utility retention on adjacent defensive security programming (Higher is better).
+  6. *Multilingual Retain Accuracy:* Evaluates general linguistic and factual preservation (Higher is better).
+* **Metrics for What Should Not Get Worse:** Hard-Boundary Twin Accuracy and Multilingual Retain Accuracy track utility preservation.
+* **Checking the Automatic Judge:** AuditKIT uses strict substring heuristic matching paired with gated LLM judge decoupling to avoid VRAM exhaustion (GUARD-08).
+* **Attack Success Rate (ASR) & Cost-to-Break [T2a]:** Standard single-turn generation probes; affirmative prefill represents a 1-token cost-to-break attack.
+* **Agentic Trajectory Metrics [T3]:** *N/A*.
 
 ---
 
-### Results & Comparative Status
+### Method / Experiments
+
+* **Training & Attack Setup, Hyperparameters:**
+  * Optimizer: AdamW ($\text{lr} = 2 \times 10^{-5}$, $\beta_1 = 0.9$, $\beta_2 = 0.999$, $\text{weight\_decay} = 0.01$).
+  * Batch Size: 1 forget sample + 1 retain sample per step.
+  * Steps & Epochs: 300 steps across 3 epochs (Option B Exhaustive Coverage).
+  * System Preamble: Enforced `assert max_len >= 512` to accommodate Tiny Aya's 366-token chat preamble (GUARD-01).
+  * Circuit Sparsity: Candidate quantile 10%, 30 active tensors, 0.0004 global sparsity ($1,339,691$ parameters).
+  * Dead-Zone Snapping Margin: $\gamma = 1.25$ over NF4 (blocksize 64) and INT4 (group size 32). Exactly 2,034 parameters snapped.
+* **Seeds:** Fixed seed `42` for primary execution; stability validation across seeds `43, 44`.
+* **Ablations:** Evaluated monolingual English unlearning vs. multilingual harmonic circuit unlearning, and standard unlearning vs. multi-grid dead-zone snapping.
+
+---
+
+### Results
+
+#### Same Model Before vs. After (Status Table)
 
 | Evaluation Pillar | Metric | Historical In-Memory Receipt (Exploratory)* | Status Under Hardened Protocol | Verified Finding & Status |
 | :--- | :--- | :---: | :---: | :--- |
@@ -152,9 +170,17 @@ flowchart TD
 > [!NOTE]
 > *Historical exploratory values relied on unshifted token metrics in Kaggle RAM without exported weights. In accordance with Law 2, post-export behavioral generation attack scores on the new 6.70 GB checkpoint are strictly reported as **`NOT_EVALUATED`**.
 
+* **Findings as Named Subsections:**
+  * *Finding 1 (Harmonic Concentration):* Multilingual attribution isolates 30 critical feed-forward projection matrices storing conceptual exploit logic.
+  * *Finding 2 (Dead-Zone Snapping Detection):* In training execution, exactly 2,034 parameters moved during unlearning but stalled inside the quantization dead-zone, requiring snapping.
+* **What Didn't Work (Negative Results):**
+  * Monolingual English unlearning failed completely against Hindi and Hinglish queries ($> 78\%$ leakage).
+  * Tesla T4 GPUs failed native BF16 execution due to lack of sm_80 BF16 Tensor Core instructions, necessitating the migration to an A100.
+* **Results on Quantized / Deployed Model (GGUF, 4-bit) [T2b]:** Evaluated in simulated NF4/INT4 forward passes; physical compiled GGUF execution remains future work.
+
 ---
 
-### Compute Usage & Financial Accounting
+### Cost / ROI & Compute Usage
 
 #### 1. Total Financial Cost
 * **Total Billed Expenditure:** **$0.27908 USD** *(less than 28 cents!)*
@@ -186,35 +212,56 @@ All heavy training and verification runs were executed on a dedicated **NVIDIA A
 
 ### Limitations & Ethical Disclosures
 
-* **Behavioral Evaluation Scope:** The training run, 2,034 parameter snaps, and SafeTensors export are physically verified bit-exact; behavioral generation attack evaluations on the new weights remain strictly reported as `NOT_EVALUATED`.
-* **Simulated vs. Compiled Quantization:** Snapping was evaluated on simulated NF4/INT4 forward passes; testing on compiled GGUF binaries in `llama.cpp` on edge hardware remains future work.
-* **Responsible Disclosure:** All unlearning targets involve published open-source security vulnerabilities (WMDP) and fictional biographies (TOFU); no private personal identities or zero-day exploits are included.
+* **Known Weaknesses:** The training run, 2,034 parameter snaps, and SafeTensors export are physically verified bit-exact; behavioral generation attack evaluations on the new weights remain strictly reported as `NOT_EVALUATED`.
+* **Dual-Use / Ethics [T2a]:** Focuses exclusively on removing hazardous cybersecurity capabilities from LLMs. No weaponized payloads or private personally identifiable information (PII) were generated or released.
+* **Responsible Disclosure [T2a]:** Exploit categories utilized are standard academic benchmark probes from published research (WMDP).
 
 ---
 
 ### With More Credits (Finalist Stage Plan)
 
 If awarded Hugging Face GPU credits ($200 finalist grant):
-1. **Full 7-Pillar Behavioral Generation Audit:** Execute open-ended text generation attacks with 95% Wilson confidence intervals across all 100 held-out prompts on the exported checkpoint.
-2. **Compiled GGUF Binary Benchmarking:** Export compiled GGUF `Q4_K_M` binaries from the validated SafeTensors checkpoint and benchmark quantization permanence directly in `llama.cpp` on edge hardware (Apple Silicon / Raspberry Pi).
-3. **Model Scaling:** Benchmark Polyglot-MANSU on [`CohereLabs/aya-expanse-8b`](https://huggingface.co/CohereLabs/aya-expanse-8b).
+* **Planned Approach:**
+  1. *Full 7-Pillar Behavioral Generation Audit:* Execute open-ended text generation attacks with 95% Wilson confidence intervals across all 100 held-out prompts on the exported checkpoint.
+  2. *Compiled GGUF Binary Benchmarking:* Export compiled GGUF `Q4_K_M` binaries from the validated SafeTensors checkpoint and benchmark quantization permanence directly in `llama.cpp` on edge hardware (Apple Silicon / Raspberry Pi).
+  3. *Model Scaling:* Benchmark Polyglot-MANSU on [`CohereLabs/aya-expanse-8b`](https://huggingface.co/CohereLabs/aya-expanse-8b).
+* **Expected Before / After:** Complete empirical proof of cross-lingual defense and edge quantization permanence on physical on-device runtimes.
 
 ---
 
-### Documentation, Reproduction & Environment
+### Artifacts
 
-* **Dependencies:** `python>=3.12`, `torch==2.5.1`, `transformers==4.46.3`, `accelerate==1.1.1`, `bitsandbytes==0.44.1`, `circuitkit==0.2.2`, `safetune==0.1.16`, `auditkit==1.1.7`.
-* **Checkpoint Reload Verification Command:**
-  ```python
-  from transformers import AutoModelForCausalLM, AutoTokenizer
-  import torch
+* **Hugging Face Datasets Collection:**  
+  [https://huggingface.co/collections/Ravikishore710/polyglot-mansu-datasets-and-evaluation-traces-6af767af5d8792224c4e66f5](https://huggingface.co/collections/Ravikishore710/polyglot-mansu-datasets-and-evaluation-traces-6af767af5d8792224c4e66f5)
+* **Hugging Face Models Collection [T1] [T2b] [T3]:**  
+  [https://huggingface.co/collections/Ravikishore710/polyglot-mansu-models-and-checkpoint-audits-6af767ae29f7e0056c086bf1](https://huggingface.co/collections/Ravikishore710/polyglot-mansu-models-and-checkpoint-audits-6af767ae29f7e0056c086bf1)
+* **Primary Model Checkpoint (6.70 GB SafeTensors Download):**  
+  [https://huggingface.co/Ravikishore710/polyglot-mansu-fire-weights-private](https://huggingface.co/Ravikishore710/polyglot-mansu-fire-weights-private)
+* **GitHub Repository:**  
+  [https://github.com/rahulratan12/Polyglot-MANSU](https://github.com/rahulratan12/Polyglot-MANSU)
+* **Demo / Space:**  
+  [https://huggingface.co/spaces/Ravikishore710/polyglot-mansu-arena](https://huggingface.co/spaces/Ravikishore710/polyglot-mansu-arena)
 
-  chk = "Ravikishore710/polyglot-mansu-fire-weights-private"
-  tokenizer = AutoTokenizer.from_pretrained(chk)
-  model = AutoModelForCausalLM.from_pretrained(chk, torch_dtype=torch.bfloat16)
-  print("Parameters successfully loaded:", sum(p.numel() for p in model.parameters()))
-  ```
-* **Declaration of Outside Work:** All code, dataset curation logic, and unlearning configurations were created entirely within the hackathon period.
+---
+
+### Documentation and Reproduction
+
+* **Environment Requirements:** `python>=3.12`, `torch==2.5.1`, `transformers==4.46.3`, `accelerate==1.1.1`, `bitsandbytes==0.44.1`, `circuitkit==0.2.2`, `safetune==0.1.16`, `auditkit==1.1.7`.
+* **Repo Layout & Run Instructions:**
+  * `src/polyglot_mansu/data/`: Dataset curation and MinHash deduplication scripts.
+  * `src/polyglot_mansu/circuits/`: Harmonic attribution and circuit masking.
+  * `src/polyglot_mansu/unlearn/`: `PolyglotMANSUTrainer` and quantization snapping logic.
+  * `src/polyglot_mansu/eval/`: AuditKIT 7-pillar evaluation engine.
+  * `tests/`: Comprehensive unit test suite (`pytest tests/ -v`).
+* **Declaration of Work Done Outside Hackathon:** All code, dataset curation logic, and unlearning configurations were created entirely within the hackathon period.
+
+---
+
+### Discussion, Implications & Future Work
+
+* **Discussion / What We Learned:** Machine unlearning in dense models cannot treat languages as independent silos; conceptual storage is shared, and English-only unlearning leaves shared conceptual pathways vulnerable.
+* **Implications:** Proves that unlearning frameworks must integrate quantization awareness into the optimization loop to be viable for edge deployment.
+* **Future Work:** Scaling to 8B architectures and evaluating discrete adversarial suffix search (GCG).
 
 ---
 
@@ -222,7 +269,7 @@ If awarded Hugging Face GPU credits ($200 finalist grant):
 
 #### **Member 1: Rahul Ratan**
 * **Title:** Lead Systems & Machine Learning Engineer
-* **GitHub:** [`@rahulratan12`](https://github.com/rahulratan12) | **Email:** `rahulratan12@gmail.com`
+* **Discord:** `@rahulratan`
 * **Contributions & Responsibilities:**
   * **Core Engineering & Optimization:** Designed the PyTorch training architecture, implemented the `PolyglotMANSUTrainer`, and enforced SafeTune runtime guards (GUARD-01 to GUARD-08).
   * **Hardware & Cloud Deployment:** Provisioned and certified the NVIDIA A100-SXM4-80GB GPU, executed the Option B 300-step training loop, and managed peak VRAM/compute budgets ($0.28 total).
@@ -241,6 +288,7 @@ If awarded Hugging Face GPU credits ($200 finalist grant):
 ---
 
 ### References & LLM Usage Statement
+
 * **References:**
   * Lexsi Labs: *Forgetting That Sticks: Quantization-Permanent Unlearning via Circuit Attribution* (arXiv:2605.15138)
   * Cohere Labs: *Tiny Aya Technical Report* (CohereLabs/tiny-aya-fire)
