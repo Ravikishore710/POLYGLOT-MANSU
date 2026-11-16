@@ -1,0 +1,46 @@
+{
+  "status": "STAGE_B2_SUCCESS",
+  "model_id": "CohereLabs/tiny-aya-fire",
+  "model_name": "tiny_aya_fire_mansu",
+  "hardware": "NVIDIA A100-SXM4-80GB",
+  "compute_capability": "8.0",
+  "sampling_methodology": "Option B: Exhaustive Forget Coverage (300 optimization steps)",
+  "epochs": 3,
+  "steps_trained": 300,
+  "unique_forget_samples_seen": 100,
+  "total_forget_corpus_size": 100,
+  "per_epoch_retain_initial_ids": [
+    "ret_mixed_6",
+    "ret_mixed_3",
+    "ret_en_6"
+  ],
+  "runtime_seconds": 191.97,
+  "peak_vram_gb": 18.9345,
+  "hourly_rate_usd": 2.5,
+  "estimated_cost_usd": 0.13331,
+  "snapping_stats": {
+    "snapped_count": 2034,
+    "status": "CONSOLIDATED"
+  },
+  "checkpoint_export": {
+    "path": "checkpoint_fire",
+    "files": [
+      "chat_template.jinja",
+      "config.json",
+      "generation_config.json",
+      "model.safetensors",
+      "tokenizer.json",
+      "tokenizer_config.json"
+    ],
+    "checksums": {
+      "chat_template.jinja": "2147c474f41b522b7296f74692b9f31e45f49a31465960576a9d321339c5915a",
+      "config.json": "f1eba457bf81b133aa4816eb906daa5797f491656a018db17bfb3b0d0bb84cc2",
+      "generation_config.json": "b5424ac1545b2d6f76602862e0f316273d0e012c9594f8ce39830bb9d1371fac",
+      "model.safetensors": "ee461df48eee3a31c35e62cb957cc4c2fe83d8812d424d152df75374bdd2f5ec",
+      "tokenizer.json": "d80fa65cdce1ebb9e13b3de476d58ef60fde9533f0cacec1d758c59bba0447a2",
+      "tokenizer_config.json": "cd98275e0786e6fca40f6f062e28b136483be6a4b784dab3fb6d2f053a79045e"
+    },
+    "reload_verification": "PASS",
+    "max_parameter_difference": 0.0
+  }
+}

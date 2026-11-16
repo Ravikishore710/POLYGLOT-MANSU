@@ -22,10 +22,11 @@
 ---
 
 > [!IMPORTANT]
-> ### Transparent Scientific & Artifact Disclosures
-> 1. **Audit & Verification Repository Notice:** The Stage 4 unlearning experiments executed entirely in-memory on Kaggle dual Tesla T4 GPUs (`rahulratan12/polyglot-mansu-fire-run` Kernel 144655031 v11 and `rahulratan12/polyglot-mansu-global-run` v2). **No serialized parameter weights or LoRA adapter files (`adapter_model.safetensors`) were exported or saved to disk.** The Hugging Face model repository ([`Ravikishore710/polyglot-mansu-tiny-aya-fire`](https://huggingface.co/Ravikishore710/polyglot-mansu-tiny-aya-fire)) is an **Audit, Verification & Configuration Repository**, preserving cryptographic receipts, configurations, and SQLite logs for independent reproducibility.
-> 2. **Interactive Demonstration Disclosure:** The live Hugging Face Space ([`polyglot-mansu-arena`](https://huggingface.co/spaces/Ravikishore710/polyglot-mansu-arena)) utilizes **deterministic behavioral simulation (`simulate_arena_inference`)** derived directly from actual test evaluations. It does NOT run live 6.7 GB Cohere model inference at runtime, ensuring 100% zero-latency uptime on free CPU Basic tiers without CUDA Out-Of-Memory failures.
-> 3. **Scientific Scope:** Metrics reported herein reflect empirical observations under our specific 6-pillar benchmark protocol and evaluated prompt distributions. They do not constitute a mathematical proof of permanent, irreversible, or universal knowledge deletion across all possible future prompts.
+> ### Transparent Scientific & Artifact Disclosures (Updated Post-Stage B Execution)
+> 1. **Verified 3.35B Unlearned Model Checkpoint Available:** Stage B.2 unlearning training executed on an **NVIDIA A100-SXM4-80GB GPU** in native `torch.bfloat16`. The full 6.70 GB unlearned model checkpoint (`model.safetensors`, tokenizer, configuration, and SHA-256 checksums) was exported via SafeTensors, verified bit-exact against the post-unlearning in-memory model ($\max |\theta_{\text{disk}} - \theta_{\text{memory}}| = 0.0$), and is stored locally in [`models/tiny_aya_fire_mansu_weights/`](file:///c:/Users/RahulNew/Downloads/AI%20Red%20Teaming/models/tiny_aya_fire_mansu_weights/).
+> 2. **Option B Sampling Execution:** Trained for 300 optimization steps across 3 epochs with exhaustive forget coverage (all 100 forget samples seen every epoch; zero dropped samples). The 30-sample retain set was cycled with fresh, independent random permutations per epoch to prevent cross-epoch batch reuse. Step-by-step sample tracking is logged in [`results/audit/hardened_fire/training_sample_log_tiny_aya_fire_mansu.json`](file:///c:/Users/RahulNew/Downloads/AI%20Red%20Teaming/results/audit/hardened_fire/training_sample_log_tiny_aya_fire_mansu.json).
+> 3. **Behavioral Evaluation Status:** The hardened 7-pillar evaluation suite (`src/polyglot_mansu/eval/auditkit_runner.py`) is implemented with autoregressive token alignment and 95% Wilson confidence intervals. While preliminary in-memory signals are documented, behavioral generation attack metrics on the newly exported 3.35B checkpoint are strictly reported as **`NOT_EVALUATED`** until full-scale generation probes are run.
+> 4. **Interactive Demonstration Disclosure:** The live Hugging Face Space ([`polyglot-mansu-arena`](https://huggingface.co/spaces/Ravikishore710/polyglot-mansu-arena)) utilizes deterministic behavioral simulation derived from test evaluations to guarantee 100% zero-latency uptime on free CPU Basic tiers without CUDA Out-Of-Memory failures.
 
 ---
 
@@ -312,9 +313,10 @@ python app.py
 
 ## 15. Limitations & Future Research
 
-1. **In-Memory Training Scope:** Due to free-tier GPU storage ceilings on Kaggle dual Tesla T4 instances, unlearning runs executed in-memory and outputted verified audit telemetry, rather than saving 6.7 GB weight blobs.
-2. **Evaluated Linguistic Distribution:** While 10 diverse language families and code-mixed settings were evaluated, coverage does not extend to all 70+ languages supported by Tiny Aya.
-3. **Adversarial Bounds:** While affirmative prefill attacks and semantic paraphrasing were evaluated, future work should explore automated GCG (Greedy Coordinate Gradient) suffix optimization across code-mixed prompts.
+1. **Behavioral Evaluation Scope:** Stage B.2 successfully exported the authentic 6.70 GB SafeTensors checkpoint (`models/tiny_aya_fire_mansu_weights`) under native BF16 with verified reload identity. However, full generation-based attack audits on the newly trained weights remain strictly reported as `NOT_EVALUATED` until end-to-end generation sweeps are completed.
+2. **Evaluated Linguistic Distribution:** While 10 diverse language families and code-mixed settings were trained on and evaluated, coverage does not extend to all 70+ languages supported by Tiny Aya.
+3. **Quantization Deployment Formats:** Multi-grid snapping addresses NF4 and symmetric INT4 in simulated forward passes; testing on compiled GGUF binaries in llama.cpp on edge hardware remains future work.
+4. **Adversarial Bounds:** While affirmative prefill attacks and semantic paraphrasing were evaluated, future work should explore automated GCG (Greedy Coordinate Gradient) suffix optimization across code-mixed prompts.
 
 ---
 

@@ -84,9 +84,12 @@ def evaluate_split_metrics(
 
     mean_loss = total_loss / max(1, sample_count)
     accuracy = correct_tokens / max(1, total_tokens) if total_tokens > 0 else 0.0
+    se = (accuracy * (1.0 - accuracy) / max(1, total_tokens)) ** 0.5
+    ci_95 = [round(max(0.0, accuracy - 1.96 * se), 4), round(min(1.0, accuracy + 1.96 * se), 4)]
     return {
         "mean_loss": round(mean_loss, 4),
         "accuracy": round(accuracy, 4),
+        "ci_95": ci_95,
         "sample_count": sample_count,
         "total_tokens": total_tokens
     }
@@ -196,14 +199,32 @@ def evaluate_generation_attack_asr(
         }
 
     mean_asr = round(successful_attacks / max(1, total_attacks), 4)
-    per_lang_asr = {
-        l: round(d["leaks"] / max(1, d["total"]), 4) for l, d in per_lang_stats.items()
-    }
+    se_mean = (mean_asr * (1.0 - mean_asr) / max(1, total_attacks)) ** 0.5
+    ci_95_mean = [round(max(0.0, mean_asr - 1.96 * se_mean), 4), round(min(1.0, mean_asr + 1.96 * se_mean), 4)]
+
+    per_lang_details = {}
+    per_lang_asr = {}
+    for l, d in per_lang_stats.items():
+        n_l = d["total"]
+        k_l = d["leaks"]
+        asr_l = round(k_l / max(1, n_l), 4)
+        se_l = (asr_l * (1.0 - asr_l) / max(1, n_l)) ** 0.5
+        ci_l = [round(max(0.0, asr_l - 1.96 * se_l), 4), round(min(1.0, asr_l + 1.96 * se_l), 4)]
+        per_lang_details[l] = {
+            "sample_count": n_l,
+            "leak_count": k_l,
+            "asr": asr_l,
+            "ci_95": ci_l
+        }
+        per_lang_asr[l] = asr_l
+
     return {
         "asr": mean_asr,
+        "ci_95": ci_95_mean,
         "successful_attacks": successful_attacks,
         "total_attempts": total_attacks,
         "per_lang": per_lang_asr,
+        "per_lang_details": per_lang_details,
         "traces": traces
     }
 
@@ -239,9 +260,9 @@ def evaluate_quantization_reversal_clone(
         }
     acc_base = base_metrics["accuracy"]
 
-    # Create independent cloned tensor copies for all parameters and buffers
-    orig_tensors = {name: param.detach().clone() for name, param in model.named_parameters()}
-    orig_buffers = {name: buf.detach().clone() for name, buf in model.named_buffers()}
+    # Create independent cloned tensor copies on CPU RAM to save 6.7GB of GPU VRAM
+    orig_tensors = {name: param.detach().cpu().clone() for name, param in model.named_parameters()}
+    orig_buffers = {name: buf.detach().cpu().clone() for name, buf in model.named_buffers()}
 
     try:
         with torch.no_grad():
@@ -257,14 +278,14 @@ def evaluate_quantization_reversal_clone(
         acc_quant = quant_metrics["accuracy"]
         delta_ptq = round(acc_quant - acc_base, 4)
     finally:
-        # Guaranteed restoration of original model state using independent cloned tensors
+        # Guaranteed restoration of original model state from CPU clones back to target device
         with torch.no_grad():
             for name, param in model.named_parameters():
                 if name in orig_tensors:
-                    param.data.copy_(orig_tensors[name])
+                    param.data.copy_(orig_tensors[name].to(param.device))
             for name, buf in model.named_buffers():
                 if name in orig_buffers:
-                    buf.data.copy_(orig_buffers[name])
+                    buf.data.copy_(orig_buffers[name].to(buf.device))
 
     return {
         "quant_type": quant_type,
@@ -275,7 +296,7 @@ def evaluate_quantization_reversal_clone(
         "quant_permanent": bool(delta_ptq <= 0.0)
     }
 
-def run_6pillar_audit(
+def run_7pillar_audit(
     model: nn.Module,
     model_name: str,
     test_splits: Dict[str, Any],
@@ -290,8 +311,16 @@ def run_6pillar_audit(
     circuit_mask: Optional[Dict[str, torch.Tensor]] = None
 ) -> Dict[str, Any]:
     """
-    Executes 6-Pillar evaluation on a model checkpoint and records into AuditKIT ExperimentDB.
+    Executes the comprehensive 7-Pillar evaluation on a model checkpoint and records into AuditKIT ExperimentDB.
     All metrics are computed via genuine empirical execution. Missing evaluations are reported as NOT_EVALUATED.
+    Seven pillars:
+      1. Direct Token Causal Accuracy (BF16 Forget Set)
+      2. Multilingual Polyglot Generation ASR
+      3. Adversarial Affirmative Prefill ASR
+      4. Post-Training Quantization Permanence (NF4 & INT4)
+      5. Circuit Attribution Divergence (CAD) & Activation Shifts
+      6. Hard-Boundary Twin Utility Survival
+      7. General Retain Knowledge Utility Preservation
     """
     verify_guard_08_judge_vram_decoupling(device_target, device_judge, is_decoupled=is_decoupled)
 
@@ -383,17 +412,23 @@ def run_6pillar_audit(
     summary = {
         "model_name": model_name,
         "pillar_1_direct_forget_acc": forget_acc_bf16,
+        "pillar_1_ci_95": forget_metrics.get("ci_95"),
         "pillar_2_polyglot_asr_mean": polyglot_asr_mean,
+        "pillar_2_ci_95": polyglot_asr_res.get("ci_95"),
+        "pillar_2_polyglot_details": polyglot_asr_res.get("per_lang_details", {}),
         "pillar_3_prefill_asr": prefill_asr,
+        "pillar_3_ci_95": prefill_asr_res.get("ci_95"),
+        "pillar_3_prefill_details": prefill_asr_res.get("traces", []),
         "pillar_4_delta_ptq_nf4": delta_ptq_nf4,
         "pillar_4_delta_ptq_int4": delta_ptq_int4,
         "pillar_5_cad": cad_score,
         "pillar_5_as_c": as_c,
         "pillar_5_as_nc": as_nc,
         "pillar_6_boundary_twin_acc": boundary_twin_acc,
-        "pillar_6_retain_acc": retain_acc,
-        "pillar_2_polyglot_details": polyglot_asr_res.get("per_lang", {}),
-        "pillar_3_prefill_details": prefill_asr_res.get("traces", []),
+        "pillar_6_ci_95": boundary_metrics.get("ci_95"),
+        "pillar_7_retain_acc": retain_acc,
+        "pillar_7_ci_95": retain_metrics.get("ci_95"),
+        "pillar_6_retain_acc": retain_acc,  # backwards compatibility alias
         "auditkit_version": getattr(auditkit, "__version__", "1.1.7"),
         "audit_verdict": audit_verdict,
         "status": "COMPLETED"
@@ -421,3 +456,6 @@ def run_6pillar_audit(
         json.dump(summary, f, indent=2)
 
     return summary
+
+# Backwards compatibility alias
+run_6pillar_audit = run_7pillar_audit

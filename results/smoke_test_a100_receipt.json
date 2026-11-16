@@ -1,0 +1,20 @@
+{
+  "status": "PASS",
+  "gpu_model": "NVIDIA A100-SXM4-80GB",
+  "compute_capability": "8.0",
+  "total_vram_gb": 79.25,
+  "sm_80_plus": true,
+  "torch_bf16_supported": true,
+  "gemm_throughput_tflops": 252.25,
+  "gemm_latency_ms": 0.54,
+  "gemm_output_dtype": "torch.bfloat16",
+  "forward_backward_loss": 1.0391,
+  "weight_gradient_dtype": "torch.bfloat16",
+  "gradient_has_nan": false,
+  "peak_vram_gb": 0.3282,
+  "smoke_test_runtime_seconds": 0.93,
+  "hf_hardware": "a100-large",
+  "hourly_rate_usd": 2.5,
+  "total_session_runtime_seconds": 209.91,
+  "total_session_cost_usd": 0.14577
+}

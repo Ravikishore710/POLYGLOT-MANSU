@@ -44,7 +44,7 @@ from polyglot_mansu.guards import verify_guard_01_max_len
 from polyglot_mansu.circuits.discover_polyglot import run_polyglot_discovery
 from polyglot_mansu.circuits.harmonic_intersect import compute_harmonic_score, extract_circuit_mask
 from polyglot_mansu.unlearn.polyglot_mansu_trainer import PolyglotMANSUTrainer, PolyglotMANSUConfig
-from polyglot_mansu.eval.auditkit_runner import run_6pillar_audit
+from polyglot_mansu.eval.auditkit_runner import run_7pillar_audit
 from polyglot_mansu.compression.ptq_nf4 import quantize_model_nf4
 from polyglot_mansu.compression.ptq_int4_gguf import quantize_model_int4
 
@@ -136,6 +136,7 @@ def main():
         "es": [{"input_ids": tokenizer("Historial confidencial de Aarav Sharma", return_tensors="pt")["input_ids"].to(device)}]
     }
     lang_attributions = run_polyglot_discovery(model, discovery_data, ig_steps=3)
+    scores_base = {k: v.detach().cpu().clone() for k, v in lang_attributions["en"].items()}
     harmonic_scores = compute_harmonic_score(lang_attributions)
     circuit_mask, sparsity = extract_circuit_mask(harmonic_scores, sparsity_ratio=0.10)
     print(f"[Account 2] Isolated Harmonic Circuit C*: {len(circuit_mask)} tensors, Sparsity: {sparsity:.4f}")
@@ -192,24 +193,61 @@ def main():
     snap_stats = trainer.post_train_quant_snapping()
     print(f"[Account 2] Snapping Result: {snap_stats}")
 
+    # Export unlearned BF16 model and tokenizer before any PTQ in-place quantization
+    export_dir = Path("models/tiny_aya_global_mansu_weights")
+    export_dir.mkdir(parents=True, exist_ok=True)
+    print(f"[Account 2] Exporting unlearned model weights & tokenizer to {export_dir}...")
+    model.save_pretrained(str(export_dir), safe_serialization=True)
+    tokenizer.save_pretrained(str(export_dir))
+    
+    # Compute SHA-256 manifest of exported checkpoint files
+    checkpoint_checksums = {}
+    for f in sorted(export_dir.glob("*")):
+        if f.is_file():
+            checkpoint_checksums[f.name] = compute_sha256(f)
+    checksum_manifest_path = export_dir / "checksums.json"
+    with open(checksum_manifest_path, "w", encoding="utf-8") as f:
+        json.dump(checkpoint_checksums, f, indent=2)
+    print(f"[Account 2] Checkpoint export complete ({len(checkpoint_checksums)} files). Checksums saved.")
+
     # Free reference model to liberate GPU 1 for evaluation judges
     del reference_model
     del trainer.reference_model
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
 
-    results_dir = Path("results/audit")
+    results_dir = Path("results/audit/hardened_global")
     results_dir.mkdir(parents=True, exist_ok=True)
 
-    print("[Account 2] Running Cross-Model Validation Audit on Unlearned Model...")
-    audit_summary = run_6pillar_audit(
+    # Load raw heldout prompts for empirical ASR and prefill generation attacks
+    heldout_raw_prompts = []
+    with open(data_dir / "heldout_test_forget.jsonl", "r", encoding="utf-8") as f:
+        for line in f:
+            if line.strip():
+                heldout_raw_prompts.append(json.loads(line))
+
+    # Compute post-unlearning circuit attribution on target unlearned model for genuine CAD
+    print("[Account 2] Computing post-unlearning circuit attributions for CAD...")
+    scores_unlearned = run_polyglot_discovery(model, discovery_data, ig_steps=3)["en"]
+
+    print("[Account 2] Running Hardened Cross-Model Validation 7-Pillar Audit on Unlearned Model...")
+    audit_summary = run_7pillar_audit(
         model=model,
         model_name="tiny_aya_global_mansu",
-        test_splits={"forget_heldout": heldout_ds, "boundary_twins": boundary_ds},
+        test_splits={
+            "forget_heldout": heldout_ds,
+            "boundary_twins": boundary_ds,
+            "retain": retain_ds
+        },
         output_dir=str(results_dir),
         device_target=str(device),
         device_judge="cuda:1" if torch.cuda.device_count() > 1 else "cpu",
-        is_decoupled=True
+        is_decoupled=True,
+        tokenizer=tokenizer,
+        raw_prompts_heldout=heldout_raw_prompts,
+        scores_base=scores_base,
+        scores_unlearned=scores_unlearned,
+        circuit_mask=circuit_mask
     )
     print(f"[Account 2] Global Audit Summary: {audit_summary}")
 
@@ -222,6 +260,11 @@ def main():
         "device": str(device),
         "steps_trained": step,
         "snapping_stats": snap_stats,
+        "checkpoint_export": {
+            "path": str(export_dir),
+            "files": list(checkpoint_checksums.keys()),
+            "checksums_json": str(checksum_manifest_path)
+        },
         "nf4_permanence": nf4_res.get("permanence_status", "CONFIRMED"),
         "int4_permanence": int4_res.get("permanence_status", "CONFIRMED"),
         "audit_verdict": audit_summary.get("audit_verdict", "PASSED_UNLEARNED")

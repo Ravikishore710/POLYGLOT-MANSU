@@ -34,3 +34,9 @@ results/kaggle_global_completed/
 results/diagnostic_success/
 space_static/
 uv.lock
+
+# Heavy model weights (hosted on Hugging Face Hub)
+*.safetensors
+*.bin
+models/
+stage_b_space_bundle/
